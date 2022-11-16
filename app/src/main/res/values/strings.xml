@@ -8,4 +8,5 @@
     <string name="auth_error_network">No Internet connection</string>
     <string name="auth_wait">Wait</string>
     <string name="retry_btn">Retry</string>
+    <string name="general_category">General</string>
 </resources>

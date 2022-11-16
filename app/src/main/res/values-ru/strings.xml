@@ -8,4 +8,5 @@
     <string name="auth_error_network">Нет подключения к Интернету</string>
     <string name="auth_wait">Подождите</string>
     <string name="retry_btn">Повторить</string>
+    <string name="general_category">Общие</string>
 </resources>

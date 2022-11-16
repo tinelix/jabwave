@@ -21,6 +21,7 @@ import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
+import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smack.util.TLSUtils;
@@ -35,6 +36,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.user_interface.activities.AuthActivity;
 import dev.tinelix.jabwave.user_interface.activities.MainActivity;
 import dev.tinelix.jabwave.user_interface.list_items.EntityList;
@@ -199,9 +201,20 @@ public class XMPPService extends IntentService {
             if (conn.isConnected() && conn.isAuthenticated()) {
                 Roster roster = Roster.getInstanceFor(conn);
                 Collection<RosterEntry> entries = roster.getEntries();
+                Collection<RosterGroup> groups = roster.getGroups();
                 status = "getting_conversations_list";
                 sendMessageToActivity(status);
+                String previous_group_name = "";
+                els.add(new EntityList(0, getResources().getString(R.string.general_category)));
                 for (RosterEntry entry : entries) {
+                    for (RosterGroup group : groups) {
+                        if(entry.getGroups().size() > 0) {
+                            if(entry.getGroups().get(0).equals(group) && !group.getName().equals(previous_group_name)) {
+                                previous_group_name = group.getName();
+                                els.add(new EntityList(0, group.getName()));
+                            }
+                        }
+                    }
                     if(entry.getName() != null) {
                         els.add(new EntityList(1, entry.getName()));
                     } else {
