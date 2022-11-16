@@ -1,0 +1,89 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="ApplicationTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/actionBarColor</item>
+        <item name="colorPrimaryVariant">@color/actionBarColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/actionBarColor</item>
+        <item name="colorSecondaryVariant">@color/actionBarColor</item>
+        <item name="colorOnSecondary">@color/black</item>
+    </style>
+
+    <style name="ApplicationTheme.Dark" parent="Theme.MaterialComponents">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/actionBarColor</item>
+        <item name="colorPrimaryVariant">@color/actionBarColor</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/actionBarColor</item>
+        <item name="colorSecondaryVariant">@color/actionBarColor</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="ApplicationTheme.Dark.AMOLED" parent="Theme.MaterialComponents">
+        <item name="android:windowBackground">@color/backgroundDarkAmoled</item>
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/actionBarColor</item>
+        <item name="colorPrimaryVariant">@color/actionBarColor</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/actionBarColor</item>
+        <item name="colorSecondaryVariant">@color/actionBarColor</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="ApplicationTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="RosterGroupName">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:drawableLeft">@drawable/ic_group_background</item>
+    </style>
+
+    <style name="RosterGroupItem">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="RosterGroupItem.Light">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="RosterMessageCounter">
+        <item name="android:visibility">gone</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginRight">4dip</item>
+        <item name="android:layout_marginEnd">4dip</item>
+        <item name="android:layout_marginLeft">4dip</item>
+        <item name="android:layout_marginStart">4dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">2dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:paddingLeft">5dip</item>
+        <item name="android:paddingStart">5dip</item>
+        <item name="android:paddingRight">5dip</item>
+        <item name="android:paddingEnd">5dip</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textSize">11dip</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:text"></item>
+    </style>
+
+    <style name="ApplicationTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="ApplicationTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

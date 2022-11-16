@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- From yaxim 0.9.9 source code: https://github.com/yaxim-org/yaxim (GPLv3)
+    Improved by Dmitry Tretyakov conformity with the Material Design language
+!-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="25dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <TextView
+        android:id="@+id/groupname"
+        style="@style/RosterGroupName"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:paddingEnd="4dp"
+        android:paddingRight="4dp"
+        android:singleLine="true"
+        android:text="group_name"
+        android:textColor="@color/accentColor"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/loading_progress"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/members"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="4dp"
+        android:paddingLeft="4dp"
+        android:paddingEnd="6dp"
+        android:paddingRight="6dp"
+        android:text="2/10"
+        android:textSize="14sp" />
+
+</LinearLayout>

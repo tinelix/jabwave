@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- From yaxim 0.9.9 source code: https://github.com/yaxim-org/yaxim (GPLv3)
+    Improved by Dmitry Tretyakov conformity with the Material Design language
+!-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="fill_parent"
+    android:layout_height="wrap_content" android:gravity="center_vertical">
+
+    <RelativeLayout android:layout_width="52dp" android:layout_height="wrap_content">
+        <TextView android:id="@+id/roster_unreadmsg_cnt"
+            style="@style/RosterMessageCounter" />
+        <ImageView android:id="@+id/roster_icon"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:longClickable="false"
+            android:paddingStart="12sp"
+            android:paddingLeft="12sp"
+            />
+    </RelativeLayout>
+
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:orientation="vertical"
+        android:minHeight="52dp" android:layout_gravity="center_vertical"
+        android:gravity="center_vertical">
+
+        <LinearLayout android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/roster_screenname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:longClickable="false"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:text="Screenname"
+                android:textSize="16sp" />
+
+            <TextView android:id="@+id/roster_nusers"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:singleLine="true" />
+        </LinearLayout>
+
+        <TextView android:id="@+id/roster_statusmsg"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:textSize="13sp" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:singleLine="true"
+            android:ellipsize="end" android:visibility="gone"
+            />
+
+    </LinearLayout>
+</LinearLayout>
