@@ -135,6 +135,7 @@ public class AuthActivity extends AppCompatActivity {
             editor.apply();
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
+            finish();
         } else {
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.dynamic_fragment_layout, authFragment);

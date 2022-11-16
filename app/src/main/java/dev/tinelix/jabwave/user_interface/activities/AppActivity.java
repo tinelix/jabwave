@@ -45,7 +45,11 @@ public class AppActivity extends AppCompatActivity {
         findViewById(R.id.entityview).setVisibility(View.GONE);
         findViewById(R.id.progress).setVisibility(View.VISIBLE);
         registerBroadcastReceiver();
-        connect();
+        if(!app.xmpp.isConnected()) {
+            connect();
+        } else {
+            getConversations();
+        }
     }
 
     private void registerBroadcastReceiver() {
