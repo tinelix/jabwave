@@ -149,7 +149,11 @@ public class XMPPService extends IntentService {
                                 conn.connect();
                                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
                                 status = "authorizing";
-                                conn.login();
+                                conn.login(
+                                        username,
+                                        password,
+                                        XMPPAuthorization.generateXMPPResource()
+                                );
                                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                                 status = "authorized";
                                 buildHelloPresence(conn);
@@ -192,7 +196,6 @@ public class XMPPService extends IntentService {
                 .build();
             conn.sendStanza(presence);
             ServiceDiscoveryManager sdm = ServiceDiscoveryManager.getInstanceFor(conn);
-            sdm.setIdentity(new DiscoverInfo.Identity());
         } catch (SmackException.NotConnectedException | InterruptedException e) {
             e.printStackTrace();
         }

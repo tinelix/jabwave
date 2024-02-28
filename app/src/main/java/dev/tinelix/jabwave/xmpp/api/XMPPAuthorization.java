@@ -6,14 +6,19 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smack.util.SslContextFactory;
 import org.jivesoftware.smack.util.TLSUtils;
+import org.jxmpp.jid.parts.Resourcepart;
+import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import dev.tinelix.jabwave.Global;
 
 public class XMPPAuthorization {
     public static XMPPTCPConnectionConfiguration buildConnectionConfig(
@@ -73,5 +78,21 @@ public class XMPPAuthorization {
             e.printStackTrace();
         }
         return configBuilder;
+    }
+
+    public static Resourcepart generateXMPPResource() {
+        try {
+            byte[] random_resource_binary = new byte[] {
+                    (byte) new Random().nextInt(255),
+                    (byte) new Random().nextInt(255),
+                    (byte) new Random().nextInt(255),
+                    (byte) new Random().nextInt(255),
+            };
+            String hex4 = Global.bytesToHex(random_resource_binary);
+            return Resourcepart.from(String.format("TinelixJabwave-%s", hex4));
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
