@@ -19,7 +19,6 @@
         <item name="colorSecondary">@color/actionBarColor</item>
         <item name="colorSecondaryVariant">@color/actionBarColor</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="ApplicationTheme.Dark.AMOLED" parent="Theme.MaterialComponents">
@@ -32,7 +31,6 @@
         <item name="colorSecondary">@color/actionBarColor</item>
         <item name="colorSecondaryVariant">@color/actionBarColor</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="ApplicationTheme.NoActionBar">

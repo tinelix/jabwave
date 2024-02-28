@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="default_xmpp_statuses">
+        <item name="offline">Offline</item>
+        <item name="online">Online</item>
+        <item name="idle">Idle</item>
+        <item name="na">Not available</item>
+        <item name="dnd">Do not disturb</item>
+    </string-array>
+</resources>

@@ -2,33 +2,40 @@ package dev.tinelix.jabwave.xmpp.services;
 
 import android.annotation.SuppressLint;
 import android.app.IntentService;
-import android.content.ComponentName;
-import android.content.Entity;
 import android.content.Intent;
 import android.content.Context;
-import android.content.ServiceConnection;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
+import android.os.Bundle;
 import android.os.Messenger;
-import android.os.RemoteException;
 import android.util.Log;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.SmackConfiguration;
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.packet.MessageOrPresenceBuilder;
+import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.PresenceBuilder;
+import org.jivesoftware.smack.packet.StanzaBuilder;
 import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
+import org.jivesoftware.smack.roster.RosterListener;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smack.util.SslContextFactory;
 import org.jivesoftware.smack.util.TLSUtils;
+import org.jivesoftware.smack.util.ToStringUtil;
+import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
+import org.jivesoftware.smackx.disco.packet.DiscoverInfo;
+import org.jxmpp.jid.Jid;
 
-import java.lang.reflect.Array;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import javax.net.ssl.SSLContext;
@@ -36,10 +43,9 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.user_interface.activities.AuthActivity;
-import dev.tinelix.jabwave.user_interface.activities.MainActivity;
-import dev.tinelix.jabwave.user_interface.list_items.EntityList;
+import dev.tinelix.jabwave.xmpp.api.XMPPAuthorization;
+import dev.tinelix.jabwave.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.xmpp.api.models.Presences;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 
 /**
@@ -50,7 +56,7 @@ import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
  * TODO: Customize class - update intent actions, extra parameters and static
  * helper methods.
  */
-@SuppressWarnings("deprecation")
+
 public class XMPPService extends IntentService {
 
     private static final String ACTION_START = "start_service";
@@ -69,6 +75,7 @@ public class XMPPService extends IntentService {
     private Messenger activityMessenger;
     private ConnectionListener connListener;
     private Intent intent;
+    private Roster roster;
 
     public XMPPService() {
         super("XMPPService");
@@ -123,60 +130,41 @@ public class XMPPService extends IntentService {
         if(action.equals(ACTION_START)) {
             Log.d("XMPPService", "Preparing...");
             status = "preparing";
+            SmackConfiguration.DEBUG = true;
             try {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            XMPPTCPConnectionConfiguration.Builder configBuilder = XMPPTCPConnectionConfiguration.builder()
-                                    .setUsernameAndPassword(username, password)
-                                    .setXmppDomain(server)
-                                    .setHost(server)
-                                    .setPort(5222)
-                                    .setLanguage(Locale.getDefault())
-                                    .setSendPresence(false)
-                                    .setCompressionEnabled(false)
-                                    .setSecurityMode(ConnectionConfiguration.SecurityMode.required);
-                            TLSUtils.setEnabledTlsProtocolsToRecommended(configBuilder);
-                            SSLContext sc = SSLContext.getInstance("TLS");
-                            @SuppressLint("CustomX509TrustManager") TrustManager[] trustAllCerts = new TrustManager[]{
-                                    new X509TrustManager() {
-                                        @Override
-                                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
-                                        }
-
-                                        @Override
-                                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
-                                        }
-
-                                        @Override
-                                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                            return new java.security.cert.X509Certificate[]{};
-                                        }
-                                    }
-                            };
-                            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-                            configBuilder.setCustomSSLContext(sc);
-                            XMPPTCPConnectionConfiguration config = configBuilder.build();
-
+                            XMPPTCPConnectionConfiguration config =
+                                    XMPPAuthorization.buildConnectionConfig(
+                                            server,
+                                            username,
+                                            password,
+                                            true
+                                    );
                             conn = new XMPPTCPConnection(config);
                             try {
                                 listenConnection();
                                 conn.connect();
-                                Log.d("XMPPService", "Authorizing...");
+                                Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
                                 status = "authorizing";
                                 conn.login();
-                                Log.d("XMPPService", "OK!");
+                                Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                                 status = "authorized";
+                                buildHelloPresence(conn);
+                                roster = getRoster();
                                 sendMessageToActivity(status);
                             } catch (Exception ex) {
                                 if (ex.getClass().getSimpleName().equals("EndpointConnectionException")) {
                                     status = "error";
                                 }
+                                ex.printStackTrace();
                                 sendMessageToActivity(status);
                             }
                         } catch (Exception ex) {
                             status = "error";
+                            ex.printStackTrace();
                             sendMessageToActivity(status);
                         }
                     }
@@ -195,31 +183,138 @@ public class XMPPService extends IntentService {
         }
     }
 
-    public ArrayList<EntityList> getConversations() {
-        ArrayList<EntityList> els = new ArrayList<>();
+    private void buildHelloPresence(XMPPConnection conn) {
+        try {
+            Presence presence = conn
+                .getStanzaFactory()
+                .buildPresenceStanza()
+                .setMode(Presence.Mode.available)
+                .build();
+            conn.sendStanza(presence);
+            ServiceDiscoveryManager sdm = ServiceDiscoveryManager.getInstanceFor(conn);
+            sdm.setIdentity(new DiscoverInfo.Identity());
+        } catch (SmackException.NotConnectedException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private Roster getRoster() {
+        Roster roster = Roster.getInstanceFor(conn);
+        roster.addRosterListener(new RosterListener() {
+            @Override
+            public void entriesAdded(Collection<Jid> addresses) {
+
+            }
+
+            @Override
+            public void entriesUpdated(Collection<Jid> addresses) {
+
+            }
+
+            @Override
+            public void entriesDeleted(Collection<Jid> addresses) {
+
+            }
+
+            @Override
+            public void presenceChanged(Presence presence) {
+                Bundle data = new Bundle();
+                data.putInt("presence_priority", presence.getPriority());
+                data.putString("presence_status", presence.getStatus());
+                data.putString("presence_element_name", presence.getElementName());
+                data.putString("presence_jid", presence.getFrom().toString());
+                Log.d(JabwaveApp.XMPP_SERV_TAG,
+                        String.format(
+                                "Changed presence in roster." +
+                                "\r\n" +
+                                "\r\n\"%s\" (%s)" +
+                                "\r\nFrom: %s",
+                                presence.getStatus(),
+                                presence.getPriority(),
+                                presence.getFrom().toString()
+                        )
+                );
+                sendMessageToActivity("presence_changed", data);
+            }
+        });
+        return roster;
+    }
+
+    public ArrayList<Contact> getContacts() {
+        ArrayList<Contact> els = new ArrayList<>();
         if(conn != null) {
             if (conn.isConnected() && conn.isAuthenticated()) {
-                Roster roster = Roster.getInstanceFor(conn);
                 Collection<RosterEntry> entries = roster.getEntries();
                 Collection<RosterGroup> groups = roster.getGroups();
-                status = "getting_conversations_list";
-                sendMessageToActivity(status);
-                String previous_group_name = "";
-                els.add(new EntityList(0, getResources().getString(R.string.general_category)));
                 for (RosterEntry entry : entries) {
-                    for (RosterGroup group : groups) {
-                        if(entry.getGroups().size() > 0) {
-                            if(entry.getGroups().get(0).equals(group) && !group.getName().equals(previous_group_name)) {
-                                previous_group_name = group.getName();
-                                els.add(new EntityList(0, group.getName()));
-                            }
+                    Contact entity = new Contact("");
+                    entity.jid = entry.getJid().toString();
+                    List<Presence> presences = roster.getAllPresences(entry.getJid());
+                    String custom_status = "";
+                    int status = 0;
+                    if(presences.size() > 0) {
+                        Presences presencesModel = new Presences(entity, presences);
+                        Presence hpPresence = presencesModel.getHighestPriorityPresence();
+                        if(hpPresence != null) {
+                            custom_status = hpPresence.getStatus();
+                            status = presencesModel.getStatusEnum(hpPresence);
                         }
                     }
                     if(entry.getName() != null) {
-                        els.add(new EntityList(1, entry.getName()));
+                        if(custom_status != null)
+                            entity = new Contact(
+                                    entry.getName(),
+                                    entry.getJid().toString(),
+                                    new ArrayList<>(),
+                                    custom_status
+                            );
+                        else
+                            entity = new Contact(
+                                    entry.getName(),
+                                    entry.getJid().toString(),
+                                    new ArrayList<>(),
+                                    status
+                            );
                     } else {
-                        els.add(new EntityList(1, entry.getJid().toString()));
+                        if(custom_status != null)
+                            entity = new Contact(
+                                    entry.getJid().toString(),
+                                    entry.getJid().toString(),
+                                    new ArrayList<>(),
+                                    custom_status
+                            );
+                        else
+                            entity = new Contact(
+                                    entry.getJid().toString(),
+                                    entry.getJid().toString(),
+                                    new ArrayList<>(),
+                                    status
+                            );
                     }
+
+                    for (RosterGroup group : groups) {
+                        if(entry.getGroups().contains(group)) {
+                            entity.groups.add(group.getName());
+                        }
+                    }
+
+                    els.add(entity);
+                }
+            }
+        }
+        status = "getting_contacts_list";
+        sendMessageToActivity(status);
+        return els;
+    }
+
+    public ArrayList<Contact> getChatGroups() {
+        ArrayList<Contact> els = new ArrayList<>();
+        if(conn != null) {
+            if (conn.isConnected() && conn.isAuthenticated()) {
+                Collection<RosterGroup> groups = roster.getGroups();
+                for (RosterGroup group : groups) {
+                    els.add(new Contact(group.getName()));
                 }
             }
         }
@@ -242,14 +337,16 @@ public class XMPPService extends IntentService {
             @Override
             public void connected(XMPPConnection connection) {
                 ConnectionListener.super.connected(connection);
-                Log.d("XMPPService", "Connected!");
+                Log.d(JabwaveApp.XMPP_SERV_TAG, "Connected!");
                 status = "connected";
             }
 
             @Override
             public void connecting(XMPPConnection connection) {
                 ConnectionListener.super.connecting(connection);
-                Log.d("XMPPService", String.format("Connecting to %s...", connection.getXMPPServiceDomain()));
+                Log.d(JabwaveApp.XMPP_SERV_TAG,
+                        String.format("Connecting to %s...", connection.getXMPPServiceDomain())
+                );
                 status = "connecting";
             }
 
@@ -264,7 +361,9 @@ public class XMPPService extends IntentService {
             @Override
             public void connectionClosedOnError(Exception e) {
                 ConnectionListener.super.connectionClosedOnError(e);
-                Log.d("XMPPService", "Connection error: " + e.getMessage());
+                Log.d(
+                        "XMPPService", "Connection error: " + e.getMessage()
+                );
                 status = "connection_error";
                 sendMessageToActivity(status);
             }
@@ -274,21 +373,34 @@ public class XMPPService extends IntentService {
 
     private void sendMessageToActivity(String status) {
         Intent intent = new Intent();
-        if(status.equals("error")) {
-            intent.putExtra("msg", HandlerMessages.NO_INTERNET_CONNECTION);
-        } else if(status.equals("authorized")) {
-            intent.putExtra("msg", HandlerMessages.AUTHORIZED);
-        } else if(status.equals("done")) {
-            intent.putExtra("msg", HandlerMessages.DONE);
-        } else {
-            intent.putExtra("msg", HandlerMessages.UNKNOWN_ERROR);
+        switch (status) {
+            case "error":
+                intent.putExtra("msg", HandlerMessages.NO_INTERNET_CONNECTION);
+                break;
+            case "authorized":
+                intent.putExtra("msg", HandlerMessages.AUTHORIZED);
+                break;
+            case "done":
+                intent.putExtra("msg", HandlerMessages.DONE);
+                break;
+            default:
+                intent.putExtra("msg", HandlerMessages.UNKNOWN_ERROR);
+                break;
         }
         intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
         sendBroadcast(intent);
     }
 
-    public void setParentContext(Context ctx) {
-        this.ctx = ctx;
+    private void sendMessageToActivity(String status, Bundle data) {
+        Intent intent = new Intent();
+        switch (status) {
+            case "presence_changed":
+                intent.putExtra("msg", HandlerMessages.ROSTER_CHANGED);
+                intent.putExtra("data", data);
+                break;
+        }
+        intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
+        sendBroadcast(intent);
     }
 
     public String getStatus() {

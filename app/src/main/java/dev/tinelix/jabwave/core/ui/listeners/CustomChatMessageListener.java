@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.user_interface.listeners;
+package dev.tinelix.jabwave.core.ui.listeners;
 
 import android.util.Log;
 
@@ -6,7 +6,7 @@ import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
 
-import dev.tinelix.jabwave.user_interface.activities.AppActivity;
+import dev.tinelix.jabwave.core.ui.activities.AppActivity;
 
 /*
 * MyChatMessageListener directs the incoming messages to the appropriate container.

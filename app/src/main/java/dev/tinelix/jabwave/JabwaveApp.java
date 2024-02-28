@@ -11,6 +11,8 @@ public class JabwaveApp extends Application {
     private SharedPreferences global_prefs;
     private SharedPreferences xmpp_prefs;
     public XMPPService xmpp;
+    public static final String XMPP_SERV_TAG = "XMPPService";
+    public static final String APP_TAG = "Jabwave";
     @Override
     public void onCreate() {
         super.onCreate();

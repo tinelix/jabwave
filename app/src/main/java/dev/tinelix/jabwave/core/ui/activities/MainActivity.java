@@ -1,41 +1,27 @@
-package dev.tinelix.jabwave.user_interface.activities;
+package dev.tinelix.jabwave.core.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.user_interface.list_adapters.EntityListAdapter;
-import dev.tinelix.jabwave.user_interface.list_items.EntityList;
+import dev.tinelix.jabwave.core.ui.activities.base.JabwaveActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends JabwaveActivity {
 
     private AppBarConfiguration appBarConfiguration;
-    private JabwaveApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = ((JabwaveApp) getApplicationContext());
+        JabwaveApp app = ((JabwaveApp) getApplicationContext());
         if(app.getXmppPreferences().getString("server", "").length() == 0 ||
                 app.getXmppPreferences().getString("username", "").length() == 0 ||
                 app.getXmppPreferences().getString("account_password_sha256", "").length() == 0 ||

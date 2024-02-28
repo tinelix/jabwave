@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="default_xmpp_statuses">
+        <item name="offline">Не в сети</item>
+        <item name="online">В сети</item>
+        <item name="idle">Отсутствует</item>
+        <item name="na">Недоступен</item>
+        <item name="dnd">Не беспокоить</item>
+    </string-array>
+</resources>

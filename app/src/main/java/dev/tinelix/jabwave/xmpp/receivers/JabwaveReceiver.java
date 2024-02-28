@@ -4,11 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 
-import dev.tinelix.jabwave.user_interface.activities.AuthActivity;
-import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
+import dev.tinelix.jabwave.core.ui.activities.AppActivity;
 
 public class JabwaveReceiver extends BroadcastReceiver {
 
@@ -37,6 +35,13 @@ public class JabwaveReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive " + intent);
+        if(ctx instanceof AppActivity) {
+            AppActivity activity = (AppActivity) ctx;
+            activity.receiveState(
+                    intent.getIntExtra("msg", 0),
+                    intent.getBundleExtra("data")
+            );
+        }
     }
 
     // From yaxim XMPP client (GPLv3)

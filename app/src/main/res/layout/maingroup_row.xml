@@ -4,11 +4,19 @@
 !-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="25dp"
+    android:layout_height="38dip"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingLeft="8dp"
     android:paddingRight="8dp">
+
+    <ProgressBar
+        android:id="@+id/loading_progress"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/groupname"
@@ -26,23 +34,16 @@
         android:textSize="14sp"
         android:textStyle="bold" />
 
-    <ProgressBar
-        android:id="@+id/loading_progress"
-        style="@android:style/Widget.ProgressBar.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
     <TextView
         android:id="@+id/members"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="4dp"
-        android:paddingLeft="4dp"
         android:paddingEnd="6dp"
+        android:paddingLeft="4dp"
         android:paddingRight="6dp"
+        android:paddingStart="4dp"
         android:text="2/10"
+        android:textAlignment="textEnd"
         android:textSize="14sp" />
 
 </LinearLayout>

@@ -1,19 +1,13 @@
-package dev.tinelix.jabwave.user_interface.activities;
+package dev.tinelix.jabwave.core.ui.activities;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -29,10 +23,10 @@ import com.google.android.material.snackbar.Snackbar;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.user_interface.fragments.auth.AuthFragment;
-import dev.tinelix.jabwave.user_interface.fragments.auth.AuthProgressFragment;
-import dev.tinelix.jabwave.user_interface.layouts.XConstraintLayout;
-import dev.tinelix.jabwave.user_interface.listeners.OnKeyboardStateListener;
+import dev.tinelix.jabwave.core.ui.fragments.auth.AuthFragment;
+import dev.tinelix.jabwave.core.ui.fragments.auth.AuthProgressFragment;
+import dev.tinelix.jabwave.core.ui.layouts.XConstraintLayout;
+import dev.tinelix.jabwave.core.ui.listeners.OnKeyboardStateListener;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.xmpp.receivers.JabwaveReceiver;
 
@@ -46,7 +40,6 @@ public class AuthActivity extends AppCompatActivity {
     private AuthFragment authFragment;
     private SharedPreferences xmpp_prefs;
     private SharedPreferences global_prefs;
-    private String TAG = "Jabwave";
     private JabwaveReceiver jwReceiver;
 
     @Override
@@ -102,7 +95,8 @@ public class AuthActivity extends AppCompatActivity {
         ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.dynamic_fragment_layout, new AuthProgressFragment());
         ft.commit();
-        ((JabwaveApp) getApplicationContext()).xmpp.start(AuthActivity.this, server, this.username, password);
+        ((JabwaveApp) getApplicationContext())
+                .xmpp.start(AuthActivity.this, server, this.username, password);
     }
 
     public void receiveState(int message, Bundle data) {
@@ -111,20 +105,20 @@ public class AuthActivity extends AppCompatActivity {
             ft.replace(R.id.dynamic_fragment_layout, authFragment);
             authFragment.setAuthorizationData(server, username, password);
             ft.commit();
-            Snackbar snackbar = Snackbar.make(auth_layout, R.string.auth_error_network, Snackbar.LENGTH_INDEFINITE).setAction(R.string.retry_btn, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    signIn(username, password);
-                }
-            });
+            Snackbar snackbar = Snackbar.make(auth_layout,
+                    R.string.auth_error_network,
+                    Snackbar.LENGTH_INDEFINITE
+            ).setAction(R.string.retry_btn, view -> signIn(username, password));
             View snackbarView = snackbar.getView();
-            TextView snackTextView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+            TextView snackTextView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
             snackTextView.setMaxLines(3);
             snackTextView.setTextColor(getResources().getColor(R.color.black));
             snackbar.setBackgroundTint(Color.WHITE);
             snackbar.setActionTextColor(getResources().getColor(R.color.accentColor));
-            Button snackActionBtn = (Button) snackbarView.findViewById(com.google.android.material.R.id.snackbar_action);
-            snackActionBtn.setLetterSpacing(0);
+            Button snackActionBtn = snackbarView.findViewById(com.google.android.material.R.id.snackbar_action);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                snackActionBtn.setLetterSpacing(0);
+            }
             snackbar.show();
         } else if(message == HandlerMessages.AUTHORIZED) {
             SharedPreferences.Editor editor = xmpp_prefs.edit();
@@ -141,21 +135,25 @@ public class AuthActivity extends AppCompatActivity {
             ft.replace(R.id.dynamic_fragment_layout, authFragment);
             authFragment.setAuthorizationData(server, username, password);
             ft.commit();
-            Snackbar snackbar = Snackbar.make(auth_layout, R.string.auth_error_network, Snackbar.LENGTH_INDEFINITE).setAction(R.string.retry_btn, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    signIn(username, password);
-                }
-            });
+            Snackbar snackbar = Snackbar.make(auth_layout,
+                    R.string.auth_error_network,
+                    Snackbar.LENGTH_INDEFINITE
+            ).setAction(R.string.retry_btn, view -> signIn(username, password));
             Log.d("ConnectionState", "State: " + ((JabwaveApp) getApplicationContext()).xmpp.getStatus());
             View snackbarView = snackbar.getView();
-            TextView snackTextView = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+            TextView snackTextView = snackbarView.findViewById(
+                    com.google.android.material.R.id.snackbar_text
+            );
             snackTextView.setMaxLines(3);
             snackTextView.setTextColor(getResources().getColor(R.color.black));
             snackbar.setBackgroundTint(Color.WHITE);
             snackbar.setActionTextColor(getResources().getColor(R.color.accentColor));
-            Button snackActionBtn = (Button) snackbarView.findViewById(com.google.android.material.R.id.snackbar_action);
-            snackActionBtn.setLetterSpacing(0);
+            Button snackActionBtn = snackbarView.findViewById(
+                    com.google.android.material.R.id.snackbar_action
+            );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                snackActionBtn.setLetterSpacing(0);
+            }
             snackbar.show();
         }
     }

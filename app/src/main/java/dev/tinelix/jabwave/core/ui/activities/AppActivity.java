@@ -1,7 +1,5 @@
-package dev.tinelix.jabwave.user_interface.activities;
+package dev.tinelix.jabwave.core.ui.activities;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,21 +15,26 @@ import java.util.ArrayList;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.user_interface.list_adapters.EntityListAdapter;
-import dev.tinelix.jabwave.user_interface.list_items.EntityList;
+import dev.tinelix.jabwave.core.list.adapters.ContactsAdapter;
+import dev.tinelix.jabwave.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.core.list.sections.EntityGroupSection;
+import dev.tinelix.jabwave.core.ui.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.xmpp.receivers.JabwaveReceiver;
 
-public class AppActivity extends AppCompatActivity {
+public class AppActivity extends JabwaveActivity {
 
     private static AppActivity inst;
+    private ContactsAdapter contactsAdapter;
+
     public static AppActivity getInstance() {
         return inst;
     }
 
     private AppBarConfiguration appBarConfiguration;
-    private ArrayList<EntityList> entityLists;
-    private EntityListAdapter entityAdapter;
+    private ArrayList<Contact> contacts;
+    private ArrayList<Contact> groups;
+    private EntityGroupSection entityGroupSection;
     private LinearLayoutManager llm;
     private JabwaveReceiver jwReceiver;
     private JabwaveApp app;
@@ -48,39 +50,45 @@ public class AppActivity extends AppCompatActivity {
         if(!app.xmpp.isConnected()) {
             connect();
         } else {
-            getConversations();
+            getContacts();
         }
     }
 
     private void registerBroadcastReceiver() {
-        jwReceiver = new JabwaveReceiver(this) {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                super.onReceive(context, intent);
-                Bundle data = intent.getExtras();
-                receiveState(data.getInt("msg"), data);
-            }
-        };
-        registerReceiver(jwReceiver, new IntentFilter(
-                "dev.tinelix.jabwave.XMPP_RECEIVE"));
+        jwReceiver = new JabwaveReceiver(this);
+        registerReceiver(
+                jwReceiver,
+                new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
+        );
     }
 
     private void connect() {
         if(!app.xmpp.isConnected()) {
-            app.xmpp.start(this, app.getXmppPreferences().getString("server", ""),
-                    app.getXmppPreferences().getString("username", ""), app.getXmppPreferences().getString("account_password", ""));
+            app.xmpp.start(
+                    this, app.getXmppPreferences().getString("server", ""),
+                    app.getXmppPreferences().getString("username", ""),
+                    app.getXmppPreferences().getString("account_password", "")
+            );
         }
     }
 
-    private void getConversations() {
-        entityLists = app.xmpp.getConversations();
+    private void getContacts() {
+        contacts = app.xmpp.getContacts();
+        groups = app.xmpp.getChatGroups();
         createEntityListAdapter();
     }
 
-    private void receiveState(int message, Bundle data) {
+    public void receiveState(int message, Bundle data) {
         if(message == HandlerMessages.AUTHORIZED) {
-            Log.d("App", "Loading converstaions...");
-            getConversations();
+            Log.d(JabwaveApp.APP_TAG, "Loading contacts...");
+            getContacts();
+        } else if(message == HandlerMessages.ROSTER_CHANGED) {
+            String jid = data.getString("presence_jid");
+            Contact contact = contactsAdapter.searchByJid(jid);
+            if(contact != null) {
+                contact.custom_status = data.getString("presence_status");
+                contactsAdapter.setByJid(jid.split("/")[0], contact);
+            }
         }
     }
 
@@ -107,11 +115,28 @@ public class AppActivity extends AppCompatActivity {
     }
 
     public void createEntityListAdapter() {
-        entityAdapter = new EntityListAdapter(this, entityLists);
+        contactsAdapter = new ContactsAdapter();
+        if(groups.size() > 0) {
+            for (Contact group : groups) {
+                ArrayList<Contact> groupContacts = new ArrayList<>();
+                for (Contact contact : contacts) {
+                    if (contact.groups.contains(group.title)) {
+                        groupContacts.add(contact);
+                    }
+                }
+                entityGroupSection = new EntityGroupSection(group, groupContacts);
+                contactsAdapter.addSection(entityGroupSection);
+            }
+        } else {
+            Contact group = new Contact(getResources().getString(R.string.general_category));
+            entityGroupSection = new EntityGroupSection(group, contacts);
+            contactsAdapter.addSection(entityGroupSection);
+        }
+
         llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         ((RecyclerView) findViewById(R.id.entityview)).setLayoutManager(llm);
-        ((RecyclerView) findViewById(R.id.entityview)).setAdapter(entityAdapter);
+        ((RecyclerView) findViewById(R.id.entityview)).setAdapter(contactsAdapter);
         findViewById(R.id.entityview).setVisibility(View.VISIBLE);
         findViewById(R.id.progress).setVisibility(View.GONE);
     }

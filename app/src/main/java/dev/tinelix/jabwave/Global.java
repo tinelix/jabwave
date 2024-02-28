@@ -5,9 +5,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class Global {
     public static String bytesToHex(byte[] bytes) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < bytes.length; i++) {
-            String hex = Integer.toHexString(0xFF & bytes[i]);
+        StringBuilder sb = new StringBuilder();
+        for (byte aByte : bytes) {
+            String hex = Integer.toHexString(0xFF & aByte);
             if (hex.length() == 1) {
                 sb.append('0');
             }
@@ -17,7 +17,7 @@ public class Global {
     }
 
     public static String generateSHA256Hash(String text) {
-        MessageDigest digest=null;
+        MessageDigest digest;
         String hash = "";
         try {
             digest = MessageDigest.getInstance("SHA-256");
