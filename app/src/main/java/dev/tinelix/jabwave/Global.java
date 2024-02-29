@@ -28,4 +28,18 @@ public class Global {
         }
         return hash;
     }
+
+    public static String generateMD5Hash(final String text) {
+        MessageDigest digest;
+        String hash = "";
+        try {
+            digest = MessageDigest.getInstance("MD5");
+            digest.update(text.getBytes());
+            byte[] messageDigest = digest.digest();
+            hash = bytesToHex(digest.digest());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return hash;
+    }
 }
