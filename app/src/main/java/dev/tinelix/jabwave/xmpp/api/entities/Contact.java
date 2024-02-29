@@ -1,5 +1,7 @@
 package dev.tinelix.jabwave.xmpp.api.entities;
 
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
+
 import java.util.ArrayList;
 
 public class Contact {
@@ -10,6 +12,7 @@ public class Contact {
     public String custom_status;
     public ArrayList<String> groups;
     public int status;
+    private VCard vCard;
 
     public Contact(String title) {
         this.title = title;
@@ -35,5 +38,13 @@ public class Contact {
         this.jid = jid;
         this.groups = groups;
         this.status = status;
+    }
+
+    public VCard getVCard() {
+        return vCard;
+    }
+
+    public void setVCard(VCard vCard) {
+        this.vCard = vCard;
     }
 }

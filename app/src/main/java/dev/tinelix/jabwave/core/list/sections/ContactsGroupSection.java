@@ -1,10 +1,15 @@
 package dev.tinelix.jabwave.core.list.sections;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
@@ -17,16 +22,18 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 
 public class ContactsGroupSection extends Section {
     private final ContactsAdapter adapter;
+    private final Context ctx;
     private ArrayList<Contact> contacts_exp;
     private final ArrayList<Contact> contacts;
     private Contact header;
     private boolean isOpen = true;
 
-    public ContactsGroupSection(Contact header, ArrayList<Contact> contacts, ContactsAdapter adapter) {
+    public ContactsGroupSection(Context ctx, Contact header, ArrayList<Contact> contacts, ContactsAdapter adapter) {
         super(SectionParameters.builder()
                 .headerResourceId(R.layout.list_item_contacts_group)
                 .itemResourceId(R.layout.list_item_contacts)
                 .build());
+        this.ctx = ctx;
         this.contacts = contacts;
         this.contacts_exp = new ArrayList<>();
         this.contacts_exp.addAll(contacts);
@@ -93,14 +100,17 @@ public class ContactsGroupSection extends Section {
 
     class EntityViewHolder extends RecyclerView.ViewHolder {
         private final View view;
-        private final TextView roster_screenname;
-        private final TextView roster_status;
+        private final ShapeableImageView contact_avatar;
+        private final TextView contact_screenname;
+        private final TextView contact_status;
 
         public EntityViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
-            roster_screenname = view.findViewById(R.id.roster_screenname);
-            roster_status = view.findViewById(R.id.roster_status);
+
+            contact_screenname = view.findViewById(R.id.contact_name);
+            contact_status = view.findViewById(R.id.contact_status);
+            contact_avatar = view.findViewById(R.id.contact_avatar);
         }
 
         public Resources getResources() {
@@ -109,14 +119,25 @@ public class ContactsGroupSection extends Section {
 
         public void bind(int position) {
             Contact contact = contacts_exp.get(position);
-            ((TextView) view.findViewById(R.id.roster_screenname))
+            ((TextView) view.findViewById(R.id.contact_name))
                     .setText(contact.title);
             if (contact.status == 0) {
-                roster_status.setVisibility(View.GONE);
+                contact_status.setVisibility(View.GONE);
             } else if(contact.status > 0) {
-                roster_status.setText(
+                contact_status.setText(
                         getResources().getStringArray(R.array.default_xmpp_statuses)[contact.status]
                 );
+            }
+
+
+            if(contact.getVCard() != null) {
+                Glide.with(ctx)
+                        .load(contact.getVCard().getAvatar())
+                        .apply(new RequestOptions()
+                                .override(400, 400)
+                                .placeholder(R.drawable.ic_person_accent)
+                                .error(R.drawable.ic_person_accent))
+                        .into(contact_avatar);
             }
         }
     }

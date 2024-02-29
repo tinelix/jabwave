@@ -57,12 +57,12 @@ public class ContactsListFragment extends Fragment {
                         groupContacts.add(contact);
                     }
                 }
-                entityGroupSection = new ContactsGroupSection(group, groupContacts, contactsAdapter);
+                entityGroupSection = new ContactsGroupSection(getActivity(), group, groupContacts, contactsAdapter);
                 contactsAdapter.addSection(entityGroupSection);
             }
         } else {
             Contact group = new Contact(getResources().getString(R.string.general_category));
-            entityGroupSection = new ContactsGroupSection(group, contacts, contactsAdapter);
+            entityGroupSection = new ContactsGroupSection(getActivity(), group, contacts, contactsAdapter);
             contactsAdapter.addSection(entityGroupSection);
         }
 

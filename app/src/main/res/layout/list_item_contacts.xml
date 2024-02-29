@@ -21,8 +21,8 @@
             android:paddingEnd="8dip"
             tools:ignore="RtlSymmetry">
 
-            <ImageView
-                android:id="@+id/roster_icon"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/contact_avatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
@@ -35,7 +35,7 @@
                 android:longClickable="false"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/ic_person"
-                app:tint="@color/accentColor"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Circle"
                 tools:ignore="HardcodedText" />
 
             <TextView
@@ -59,7 +59,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/roster_screenname"
+                    android:id="@+id/contact_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
@@ -81,7 +81,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/roster_status"
+                android:id="@+id/contact_status"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"

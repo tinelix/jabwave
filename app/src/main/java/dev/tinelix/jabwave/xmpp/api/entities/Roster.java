@@ -1,9 +1,14 @@
 package dev.tinelix.jabwave.xmpp.api.entities;
 
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
+import org.jivesoftware.smackx.vcardtemp.VCardManager;
+import org.jivesoftware.smackx.vcardtemp.packet.VCard;
+import org.jxmpp.jid.EntityBareJid;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,10 +18,12 @@ import dev.tinelix.jabwave.xmpp.api.models.Presences;
 
 public class Roster {
 
+    private final XMPPConnection conn;
     private final org.jivesoftware.smack.roster.Roster roster;
 
     public Roster(XMPPConnection conn) {
         this.roster = org.jivesoftware.smack.roster.Roster.getInstanceFor(conn);
+        this.conn = conn;
         try { Thread.sleep(2000); } catch (InterruptedException ignored) { }
     }
 
@@ -77,7 +84,18 @@ public class Roster {
                     entity.groups.add(group.getName());
                 }
             }
-
+            try {
+                entity.setVCard(
+                        VCardManager
+                                .getInstanceFor(conn)
+                                .loadVCard((EntityBareJid) entry.getJid().asBareJid())
+                );
+            } catch (SmackException.NoResponseException |
+                    XMPPException.XMPPErrorException |
+                    SmackException.NotConnectedException |
+                    InterruptedException e) {
+                e.printStackTrace();
+            }
             contacts.add(entity);
         }
 
