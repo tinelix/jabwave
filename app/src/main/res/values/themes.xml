@@ -38,6 +38,21 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="ApplicationTheme.Toolbar">
+
+    </style>
+
+    <style name="ApplicationTheme.Toolbar.Dark">
+        <item name="backgroundColor">?attr/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">#86ffffff</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">#86ffffff</item>
+        <item name="titleTextStyle">?attr/textAppearanceHeadline3</item>
+        <item name="navigationIconTint">@color/white</item>
+        <item name="iconTint">@color/white</item>
+    </style>
+
     <style name="RosterGroupName">
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>

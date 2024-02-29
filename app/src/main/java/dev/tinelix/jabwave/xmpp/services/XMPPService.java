@@ -107,6 +107,7 @@ public class XMPPService extends IntentService {
             Log.d("XMPPService", "Preparing...");
             status = "preparing";
             SmackConfiguration.DEBUG = true;
+            JabwaveApp app = (JabwaveApp) getApplicationContext();
             try {
                 new Thread(new Runnable() {
                     @Override
@@ -128,7 +129,7 @@ public class XMPPService extends IntentService {
                                 conn.login(
                                         username,
                                         password,
-                                        XMPPAuthorization.generateXMPPResource()
+                                        app.getXMPPResource()
                                 );
                                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                                 status = "authorized";

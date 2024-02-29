@@ -1,12 +1,17 @@
 package dev.tinelix.jabwave.core.ui.activities;
 
 import android.content.IntentFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -14,11 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.list.adapters.ContactsAdapter;
 import dev.tinelix.jabwave.core.ui.fragments.app.ContactsListFragment;
+import dev.tinelix.jabwave.core.ui.views.base.JabwaveActionBar;
 import dev.tinelix.jabwave.xmpp.api.entities.Contact;
 import dev.tinelix.jabwave.core.list.sections.ContactsGroupSection;
 import dev.tinelix.jabwave.core.ui.activities.base.JabwaveActivity;
@@ -54,6 +61,13 @@ public class AppActivity extends JabwaveActivity {
             getContacts();
         }
         createMainFragment();
+        setActionBar();
+    }
+
+    private void setActionBar() {
+        JabwaveActionBar actionbar = findViewById(R.id.actionbar);
+        actionbar.setNavigationIconTint(R.color.white);
+        setSupportActionBar(actionbar);
     }
 
     private void createMainFragment() {

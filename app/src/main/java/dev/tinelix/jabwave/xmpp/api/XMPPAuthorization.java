@@ -95,4 +95,13 @@ public class XMPPAuthorization {
         }
         return null;
     }
+
+    public static Resourcepart generateXMPPResource(String res_name) {
+        try {
+            return Resourcepart.from(res_name);
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

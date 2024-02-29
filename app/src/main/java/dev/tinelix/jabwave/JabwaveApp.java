@@ -4,6 +4,11 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.jxmpp.jid.parts.Resourcepart;
+
+import java.util.Random;
+
+import dev.tinelix.jabwave.xmpp.api.XMPPAuthorization;
 import dev.tinelix.jabwave.xmpp.services.XMPPService;
 
 public class JabwaveApp extends Application {
@@ -13,6 +18,7 @@ public class JabwaveApp extends Application {
     public XMPPService xmpp;
     public static final String XMPP_SERV_TAG = "XMPPService";
     public static final String APP_TAG = "Jabwave";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -53,6 +59,33 @@ public class JabwaveApp extends Application {
 
     public SharedPreferences getXmppPreferences() {
         return xmpp_prefs;
+    }
+
+    public Resourcepart getXMPPResource() {
+        try {
+            if (getXmppPreferences().contains("jid_resource")) {
+                return Resourcepart.from(
+                        getXmppPreferences().getString("jid_resource", "")
+                );
+            } else {
+                byte[] random_resource_binary = new byte[] {
+                        (byte) new Random().nextInt(255),
+                        (byte) new Random().nextInt(255),
+                        (byte) new Random().nextInt(255),
+                        (byte) new Random().nextInt(255),
+                };
+                String hex4 = Global.bytesToHex(random_resource_binary);
+                String res_name = String.format("TinelixJabwave-%s", hex4);
+                Resourcepart res_part = XMPPAuthorization.generateXMPPResource(res_name);
+                SharedPreferences.Editor editor = getXmppPreferences().edit();
+                editor.putString("jid_resource", res_name);
+                editor.apply();
+                return res_part;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @Override

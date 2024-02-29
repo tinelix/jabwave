@@ -58,7 +58,7 @@
         <activity
             android:name=".core.ui.activities.AppActivity"
             android:exported="true"
-            android:theme="@style/ApplicationTheme"
+            android:theme="@style/ApplicationTheme.NoActionBar"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mcc|mnc|uiMode"
             android:hardwareAccelerated="true">
         </activity>

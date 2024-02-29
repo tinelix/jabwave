@@ -25,7 +25,7 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.ui.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.ui.fragments.auth.AuthProgressFragment;
-import dev.tinelix.jabwave.core.ui.layouts.XConstraintLayout;
+import dev.tinelix.jabwave.core.ui.views.base.XConstraintLayout;
 import dev.tinelix.jabwave.core.ui.listeners.OnKeyboardStateListener;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.xmpp.receivers.JabwaveReceiver;

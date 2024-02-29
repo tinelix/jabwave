@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <dev.tinelix.jabwave.core.ui.views.base.JabwaveActionBar
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_menu"
+        app:subtitleTextColor="?android:attr/textColorSecondaryInverse"
+        android:theme="@style/ApplicationTheme.Toolbar.Dark"
+        app:title="@string/app_name" />
+
     <include
         android:id="@+id/progress"
         layout="@layout/layout_progress"
@@ -24,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/actionbar">
 
     </FrameLayout>
 

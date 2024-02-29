@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.core.ui.layouts;
+package dev.tinelix.jabwave.core.ui.views.base;
 
 import android.app.Activity;
 import android.content.Context;
