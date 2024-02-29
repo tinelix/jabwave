@@ -3,7 +3,7 @@ package dev.tinelix.jabwave.xmpp.api.entities;
 import java.util.ArrayList;
 
 public class Contact {
-    // Entity Class used in Contacts list (AppActivity)
+    // Contact Class used in Contacts list (AppActivity)
     public int type;
     public String title;
     public String jid;
@@ -15,12 +15,12 @@ public class Contact {
         this.title = title;
     }
 
-    public Contact(String title, String jid, ArrayList<String> groups, String custom_status) {
+    public Contact(String title, String jid, ArrayList<String> groups, String custom_status, int status) {
         this.title = title;
         this.jid = jid;
         this.groups = groups;
         this.custom_status = custom_status;
-        this.status = -1;
+        this.status = status;
     }
 
     public Contact(String title, String jid, ArrayList<String> groups, int status) {

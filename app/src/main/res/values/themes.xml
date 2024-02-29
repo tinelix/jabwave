@@ -43,7 +43,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:paddingTop">2dp</item>
         <item name="android:paddingBottom">2dp</item>
-        <item name="android:drawableLeft">@drawable/ic_group_background</item>
+        <item name="android:drawableLeft">@drawable/ic_arrow_down</item>
     </style>
 
     <style name="RosterGroupItem">

@@ -22,8 +22,7 @@ public class Presences {
     public Presence getHighestPriorityPresence() {
         int highest_priority = -127;
         for (Presence presence: presences) {
-            if(presence.getType() == Presence.Type.unavailable &&
-                    presence.getPriority() >= highest_priority) {
+            if(presence.getPriority() >= highest_priority) {
                 return presence;
             }
         }
@@ -38,17 +37,19 @@ public class Presences {
                         presence.getType().toString()
                 )
         );
-        switch (presence.getMode()) {
-            case available:     // Available
-                return 1;
-            case away:          // Away
-                return 2;
-            case xa:            // Extended Away (Not available)
-                return 3;
-            case dnd:           // Do not disturb
-                return 4;
-            default:            // Default value (also for 'chat')
-                return 0;
+        if(presence.getType() == Presence.Type.available) {
+            switch (presence.getMode()) {
+                case away:          // Away
+                    return 2;
+                case xa:            // Extended Away (Not available)
+                    return 3;
+                case dnd:           // Do not disturb
+                    return 4;
+                default:            // Default value (also for 'chat')
+                    return 1;
+            }
+        } else {
+            return 0;               // Offline
         }
     }
 }

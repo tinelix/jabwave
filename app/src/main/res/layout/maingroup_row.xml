@@ -7,8 +7,8 @@
     android:layout_height="38dip"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp">
 
     <ProgressBar
         android:id="@+id/loading_progress"
@@ -35,7 +35,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/members"
+        android:id="@+id/members_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingEnd="6dp"

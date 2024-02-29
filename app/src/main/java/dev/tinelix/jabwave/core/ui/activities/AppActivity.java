@@ -17,7 +17,7 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.list.adapters.ContactsAdapter;
 import dev.tinelix.jabwave.xmpp.api.entities.Contact;
-import dev.tinelix.jabwave.core.list.sections.EntityGroupSection;
+import dev.tinelix.jabwave.core.list.sections.ContactsGroupSection;
 import dev.tinelix.jabwave.core.ui.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.xmpp.receivers.JabwaveReceiver;
@@ -34,7 +34,7 @@ public class AppActivity extends JabwaveActivity {
     private AppBarConfiguration appBarConfiguration;
     private ArrayList<Contact> contacts;
     private ArrayList<Contact> groups;
-    private EntityGroupSection entityGroupSection;
+    private ContactsGroupSection entityGroupSection;
     private LinearLayoutManager llm;
     private JabwaveReceiver jwReceiver;
     private JabwaveApp app;
@@ -124,12 +124,12 @@ public class AppActivity extends JabwaveActivity {
                         groupContacts.add(contact);
                     }
                 }
-                entityGroupSection = new EntityGroupSection(group, groupContacts);
+                entityGroupSection = new ContactsGroupSection(group, groupContacts, contactsAdapter);
                 contactsAdapter.addSection(entityGroupSection);
             }
         } else {
             Contact group = new Contact(getResources().getString(R.string.general_category));
-            entityGroupSection = new EntityGroupSection(group, contacts);
+            entityGroupSection = new ContactsGroupSection(group, contacts, contactsAdapter);
             contactsAdapter.addSection(entityGroupSection);
         }
 
@@ -140,4 +140,5 @@ public class AppActivity extends JabwaveActivity {
         findViewById(R.id.entityview).setVisibility(View.VISIBLE);
         findViewById(R.id.progress).setVisibility(View.GONE);
     }
+
 }
