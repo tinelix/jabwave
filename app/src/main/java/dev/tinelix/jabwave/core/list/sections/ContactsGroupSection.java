@@ -3,14 +3,12 @@ package dev.tinelix.jabwave.core.list.sections;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
-import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.list.adapters.ContactsAdapter;
 import dev.tinelix.jabwave.xmpp.api.entities.Contact;
@@ -26,8 +24,8 @@ public class ContactsGroupSection extends Section {
 
     public ContactsGroupSection(Contact header, ArrayList<Contact> contacts, ContactsAdapter adapter) {
         super(SectionParameters.builder()
-                .headerResourceId(R.layout.maingroup_row)
-                .itemResourceId(R.layout.mainchild_row)
+                .headerResourceId(R.layout.list_item_contacts_group)
+                .itemResourceId(R.layout.list_item_contacts)
                 .build());
         this.contacts = contacts;
         this.contacts_exp = new ArrayList<>();

@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,9 +18,11 @@ import java.util.ArrayList;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.list.adapters.ContactsAdapter;
+import dev.tinelix.jabwave.core.ui.fragments.app.ContactsListFragment;
 import dev.tinelix.jabwave.xmpp.api.entities.Contact;
 import dev.tinelix.jabwave.core.list.sections.ContactsGroupSection;
 import dev.tinelix.jabwave.core.ui.activities.base.JabwaveActivity;
+import dev.tinelix.jabwave.xmpp.api.entities.ContactsGroup;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.xmpp.receivers.JabwaveReceiver;
 
@@ -26,25 +30,22 @@ public class AppActivity extends JabwaveActivity {
 
     private static AppActivity inst;
     private ContactsAdapter contactsAdapter;
+    private Fragment fragment;
+    private FragmentTransaction ft;
 
     public static AppActivity getInstance() {
         return inst;
     }
 
-    private AppBarConfiguration appBarConfiguration;
-    private ArrayList<Contact> contacts;
-    private ArrayList<Contact> groups;
-    private ContactsGroupSection entityGroupSection;
-    private LinearLayoutManager llm;
     private JabwaveReceiver jwReceiver;
     private JabwaveApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.activity_main);
         app = ((JabwaveApp) getApplicationContext());
-        findViewById(R.id.entityview).setVisibility(View.GONE);
+        findViewById(R.id.app_fragment).setVisibility(View.GONE);
         findViewById(R.id.progress).setVisibility(View.VISIBLE);
         registerBroadcastReceiver();
         if(!app.xmpp.isConnected()) {
@@ -52,6 +53,14 @@ public class AppActivity extends JabwaveActivity {
         } else {
             getContacts();
         }
+        createMainFragment();
+    }
+
+    private void createMainFragment() {
+        fragment = new ContactsListFragment();
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.app_fragment, fragment);
+        ft.commit();
     }
 
     private void registerBroadcastReceiver() {
@@ -73,9 +82,10 @@ public class AppActivity extends JabwaveActivity {
     }
 
     private void getContacts() {
-        contacts = app.xmpp.getContacts();
-        groups = app.xmpp.getChatGroups();
-        createEntityListAdapter();
+        if(fragment instanceof ContactsListFragment) {
+            ((ContactsListFragment) fragment).loadContacts();
+            findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
+        }
     }
 
     public void receiveState(int message, Bundle data) {
@@ -114,31 +124,10 @@ public class AppActivity extends JabwaveActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void createEntityListAdapter() {
-        contactsAdapter = new ContactsAdapter();
-        if(groups.size() > 0) {
-            for (Contact group : groups) {
-                ArrayList<Contact> groupContacts = new ArrayList<>();
-                for (Contact contact : contacts) {
-                    if (contact.groups.contains(group.title)) {
-                        groupContacts.add(contact);
-                    }
-                }
-                entityGroupSection = new ContactsGroupSection(group, groupContacts, contactsAdapter);
-                contactsAdapter.addSection(entityGroupSection);
-            }
-        } else {
-            Contact group = new Contact(getResources().getString(R.string.general_category));
-            entityGroupSection = new ContactsGroupSection(group, contacts, contactsAdapter);
-            contactsAdapter.addSection(entityGroupSection);
-        }
-
-        llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        ((RecyclerView) findViewById(R.id.entityview)).setLayoutManager(llm);
-        ((RecyclerView) findViewById(R.id.entityview)).setAdapter(contactsAdapter);
-        findViewById(R.id.entityview).setVisibility(View.VISIBLE);
-        findViewById(R.id.progress).setVisibility(View.GONE);
+    @Override
+    protected void onDestroy() {
+        app.xmpp.stopService();
+        unregisterReceiver(jwReceiver);
+        super.onDestroy();
     }
-
 }

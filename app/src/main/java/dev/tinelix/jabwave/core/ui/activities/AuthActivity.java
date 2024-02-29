@@ -46,7 +46,7 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.ApplicationTheme_NoActionBar);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.auth_screen);
+        setContentView(R.layout.activity_auth);
         auth_layout = findViewById(R.id.auth_layout);
         auth_layout.setOnKeyboardStateListener(new OnKeyboardStateListener() {
             @Override

@@ -24,7 +24,7 @@ public class AuthFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.auth_fragment, container, false);
+        view = inflater.inflate(R.layout.fragment_auth, container, false);
         Button sign_in_btn = view.findViewById(R.id.sign_in_btn);
         TextInputEditText username_edit = view.findViewById(R.id.username_edit);
         TextInputEditText password_edit = view.findViewById(R.id.password_edit);
