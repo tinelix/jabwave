@@ -8,13 +8,10 @@ import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 import org.jivesoftware.smack.SmackConfiguration;
-import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.packet.Presence;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.telegram.api.entities.Authorization;
+import dev.tinelix.jabwave.telegram.api.entities.Authentication;
 import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
 
 /**
@@ -39,7 +36,7 @@ public class TelegramService extends IntentService {
     private String status = "done";
 
     private TDLibClient client = null;
-    public Authorization authorization;
+    public Authentication authorization;
 
     private Intent intent;
 
@@ -101,22 +98,26 @@ public class TelegramService extends IntentService {
                     this.phone_number = phone_number;
                     new Thread(() -> {
                         client = new TDLibClient();
-                        Authorization authorization = new Authorization(client);
-                        authorization.checkPhoneNumber(phone_number,
-                                new TDLibClient.ApiHandler() {
-                                    @Override
-                                    public void onSuccess(TdApi.Object object) {
-                                        status = "required_auth_code";
-                                        sendMessageToActivity(status);
-                                    }
+                        Authentication authentication = new Authentication(client, new TDLibClient.ApiHandler() {
+                            @Override
+                            public void onSuccess(TdApi.Object object) {
+                                if(object instanceof TdApi.UpdateAuthorizationState) {
+                                    status = "required_auth_code";
+                                    sendMessageToActivity(status);
+                                }
+                            }
 
-                                    @Override
-                                    public void onFail(Throwable throwable) {
-                                        throwable.printStackTrace();
-                                        status = "error";
-                                        sendMessageToActivity(status);
-                                    }
-                                });
+                            @Override
+                            public void onFail(Throwable throwable) {
+                                if(throwable instanceof TDLibClient.Error) {
+                                    status = ((TDLibClient.Error) throwable).getTag();
+                                } else {
+                                    status = "error";
+                                }
+                                sendMessageToActivity(status);
+                            }
+                        });
+                        authentication.checkPhoneNumber(phone_number);
                     }).start();
                 } catch (Exception ex) {
                     ex.printStackTrace();

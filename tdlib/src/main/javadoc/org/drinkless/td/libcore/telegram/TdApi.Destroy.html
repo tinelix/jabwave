@@ -123,7 +123,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public static class <span class="typeNameLabel">TdApi.Destroy</span>
 extends <a href="../../../../../org/drinkless/td/libcore/telegram/TdApi.Function.html" title="class in org.drinkless.td.libcore.telegram">TdApi.Function</a></pre>
-<div class="block">Closes the TDLib instance, destroying all local data without a proper logout. The current user session will remain in the list of all active sessions. All local data will be destroyed. After the destruction completes updateAuthorizationState with authorizationStateClosed will be sent. Can be called before authorization.
+<div class="block">Closes the TDLib instance, destroying all local data without a proper logout. The current user session will remain in the list of all active sessions. All local data will be destroyed. After the destruction completes updateAuthorizationState with authorizationStateClosed will be sent. Can be called before authentication.
 
  <p> Returns <a href="../../../../../org/drinkless/td/libcore/telegram/TdApi.Ok.html" title="class in org.drinkless.td.libcore.telegram"><code>Ok</code></a> </p></div>
 </li>
@@ -261,7 +261,7 @@ extends <a href="../../../../../org/drinkless/td/libcore/telegram/TdApi.Function
 <li class="blockList">
 <h4>Destroy</h4>
 <pre>public&nbsp;Destroy()</pre>
-<div class="block">Default constructor for a function, which closes the TDLib instance, destroying all local data without a proper logout. The current user session will remain in the list of all active sessions. All local data will be destroyed. After the destruction completes updateAuthorizationState with authorizationStateClosed will be sent. Can be called before authorization.
+<div class="block">Default constructor for a function, which closes the TDLib instance, destroying all local data without a proper logout. The current user session will remain in the list of all active sessions. All local data will be destroyed. After the destruction completes updateAuthorizationState with authorizationStateClosed will be sent. Can be called before authentication.
 
  <p> Returns <a href="../../../../../org/drinkless/td/libcore/telegram/TdApi.Ok.html" title="class in org.drinkless.td.libcore.telegram"><code>Ok</code></a> </p></div>
 </li>
