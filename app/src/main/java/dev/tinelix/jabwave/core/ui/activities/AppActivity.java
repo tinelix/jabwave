@@ -70,7 +70,7 @@ public class AppActivity extends JabwaveActivity
         }
         createMainFragment();
         setActionBar();
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         getOnBackPressedDispatcher().addCallback(
                 new OnBackPressedCallback(true) {
                     @Override
