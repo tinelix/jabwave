@@ -2,6 +2,33 @@ plugins {
     id 'com.android.application'
 }
 
+def getGitHubCommit = {
+    try {
+        def hashOutput = new ByteArrayOutputStream()
+        def changeOutput = new ByteArrayOutputStream()
+        def gitVersionName
+        exec {
+            commandLine 'git', 'rev-list', '--max-count=1', 'HEAD'
+            standardOutput = hashOutput
+        }
+        exec {
+            commandLine 'git', 'diff-index', '--shortstat', 'HEAD'
+            standardOutput = changeOutput
+        }
+        gitVersionName = hashOutput.toString().trim().substring(0, 7);
+        if (!changeOutput.toString().trim().empty) {
+            def pattern = Pattern.compile("\\d+");
+            def matcher = pattern.matcher(changeOutput.toString().trim())
+            if (matcher.find()) {
+                gitVersionName += "-" + matcher.group()
+            }
+        }
+        return gitVersionName
+    } catch (ignored) {
+        return "UNKNOWN";
+    }
+}
+
 android {
     namespace 'dev.tinelix.jabwave'
     compileSdk 34
@@ -18,6 +45,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
+            buildConfigField "String", "APP_TOKEN", "${getTDAppToken()}"
         }
     }
     compileOptions {
@@ -42,8 +71,17 @@ dependencies {
     implementation "org.igniterealtime.smack:smack-tcp:4.4.0"
     implementation "org.igniterealtime.smack:smack-im:4.4.0"
     implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation project(path: ':tdlib')
     annotationProcessor ('com.github.bumptech.glide:compiler:4.12.0')
     implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v3.2.0'
     implementation "androidx.emoji2:emoji2:1.4.0"
 
+}
+
+def getTDAppToken = {
+    Properties tdlib_props = new Properties();
+    // Create 'tdlib.prop' file inside '.signing' directory and
+    // store in a place inaccessible to third parties (!)
+    props.load(new FileInputStream(file(".signing/tdlib.prop")))
+    return "${tdlib_props['APP_ID']}|${tdlib_props['APP_HASH']}"
 }

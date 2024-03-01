@@ -4,17 +4,16 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Messenger;
 import android.util.Log;
 
-import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.ConnectionListener;
+import org.drinkless.td.libcore.telegram.TdApi;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.telegram.api.TelegramClient;
 import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
 
 /**
@@ -39,10 +38,9 @@ public class TelegramService extends IntentService {
 
     private String status = "done";
 
-    private AbstractXMPPConnection conn;
-    private Messenger serviceMessenger;
-    private Messenger activityMessenger;
-    private ConnectionListener connListener;
+    private TelegramClient client = null;
+    private TdApi.AuthorizationState authorizationState = null;
+
     private Intent intent;
 
     public TelegramService() {
@@ -106,8 +104,8 @@ public class TelegramService extends IntentService {
                     public void run() {
                         try {
                             try {
+                                client = new TelegramClient();
                                 status = "authorized";
-                                buildHelloPresence(conn);
                                 sendMessageToActivity(status);
                             } catch (Exception ex) {
                                 if (ex.getClass().getSimpleName().equals("EndpointConnectionException")) {
@@ -128,7 +126,6 @@ public class TelegramService extends IntentService {
             }
         } else if(action.equals(ACTION_STOP)) {
             try {
-                conn.disconnect();
                 status = "done";
                 sendMessageToActivity(status);
             } catch (Exception ex) {
@@ -266,11 +263,6 @@ public class TelegramService extends IntentService {
     }
 
     public void stopService() {
-        if(conn != null) {
-            if (conn.isConnected()) {
-                conn.disconnect();
-            }
-        }
         stopSelf();
     }
 
