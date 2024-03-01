@@ -1,6 +1,6 @@
-# Jabwave
+# Jabwave with XMPP support
 
-XMPP messenger for Android, designed for modern Android versions with Material Design 2.
+Yet another XMPP/Telegram (unofficial) messenger for Android, designed for modern Android versions with Material Design 2.
 
 **Development stage:** pre-alpha\
 **Minimal Android version:** Android 5.0 Lollipop (API 21) and higher.
