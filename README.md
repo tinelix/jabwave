@@ -7,7 +7,8 @@ Yet another XMPP/Telegram (unofficial) messenger for Android, designed for moder
 
 ### Credits
 1. [yaxim](https://github.com/yaxim-org/yaxim) (GPLv3)
-2. [Telegram Database Library](https://github.com/tdlib/td) (Boost License v1.0)
+2. [JXMPP](https://github.com/igniterealtime/jxmpp) (Apache License v2.0)
+3. [Smack XMPP Client](https://github.com/igniterealtime/Smack) (Apache License v2.0)
 
 ### Jabwave License
 GNU Affero GPL version 3
