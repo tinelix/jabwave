@@ -26,14 +26,12 @@ public class AuthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_auth, container, false);
         Button sign_in_btn = view.findViewById(R.id.sign_in_btn);
-        TextInputEditText username_edit = view.findViewById(R.id.username_edit);
-        TextInputEditText password_edit = view.findViewById(R.id.password_edit);
+        TextInputEditText phonenumber_edit = view.findViewById(R.id.phonenumber_edit);
         sign_in_btn.setOnClickListener(view -> {
             if (getActivity() != null) {
                 if (getActivity() instanceof AuthActivity) {
                     ((AuthActivity) getActivity()).signIn(
-                            Objects.requireNonNull(username_edit.getText()).toString(),
-                            Objects.requireNonNull(password_edit.getText()).toString()
+                            Objects.requireNonNull(phonenumber_edit.getText()).toString()
                     );
                 }
             }
@@ -43,10 +41,8 @@ public class AuthFragment extends Fragment {
         return view;
     }
 
-    public void setAuthorizationData(String instance, String username, String password) {
-        TextInputEditText username_edit = view.findViewById(R.id.username_edit);
-        TextInputEditText password_edit = view.findViewById(R.id.password_edit);
-        username_edit.setText(username);
-        password_edit.setText(password);
+    public void setAuthorizationData(String phone_number) {
+        TextInputEditText username_edit = view.findViewById(R.id.phonenumber_edit);
+        username_edit.setText(phone_number);
     }
 }

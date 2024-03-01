@@ -41,6 +41,7 @@ public class AuthActivity extends AppCompatActivity {
     private SharedPreferences xmpp_prefs;
     private SharedPreferences global_prefs;
     private JabwaveReceiver jwReceiver;
+    private String phone_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,37 +79,32 @@ public class AuthActivity extends AppCompatActivity {
             }
         };
         registerReceiver(jwReceiver, new IntentFilter(
-                "dev.tinelix.jabwave.XMPP_RECEIVE"));
+                "dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
     }
 
     public void unregisterBroadcastReceiver() {
         unregisterReceiver(jwReceiver);
     }
 
-    public void signIn(String username, String password) {
-        String[] username_mask = username.split("@");
-        if(username_mask.length == 2) {
-            this.username = username_mask[0];
-            this.server = username_mask[1];
-        }
-        this.password = password;
+    public void signIn(String phone_number) {
+        this.phone_number = phone_number;
         ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.dynamic_fragment_layout, new AuthProgressFragment());
         ft.commit();
         ((JabwaveApp) getApplicationContext())
-                .telegram.start(AuthActivity.this, server, this.username, password);
+                .telegram.start(AuthActivity.this, phone_number);
     }
 
     public void receiveState(int message, Bundle data) {
         if(message == HandlerMessages.NO_INTERNET_CONNECTION) {
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.dynamic_fragment_layout, authFragment);
-            authFragment.setAuthorizationData(server, username, password);
+            authFragment.setAuthorizationData(phone_number);
             ft.commit();
             Snackbar snackbar = Snackbar.make(auth_layout,
                     R.string.auth_error_network,
                     Snackbar.LENGTH_INDEFINITE
-            ).setAction(R.string.retry_btn, view -> signIn(username, password));
+            ).setAction(R.string.retry_btn, view -> signIn(phone_number));
             View snackbarView = snackbar.getView();
             TextView snackTextView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
             snackTextView.setMaxLines(3);
@@ -133,12 +129,12 @@ public class AuthActivity extends AppCompatActivity {
         } else {
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.dynamic_fragment_layout, authFragment);
-            authFragment.setAuthorizationData(server, username, password);
+            authFragment.setAuthorizationData(phone_number);
             ft.commit();
             Snackbar snackbar = Snackbar.make(auth_layout,
                     R.string.auth_error_network,
                     Snackbar.LENGTH_INDEFINITE
-            ).setAction(R.string.retry_btn, view -> signIn(username, password));
+            ).setAction(R.string.retry_btn, view -> signIn(phone_number));
             Log.d("ConnectionState", "State: " +
                     ((JabwaveApp) getApplicationContext()).telegram.getStatus()
             );

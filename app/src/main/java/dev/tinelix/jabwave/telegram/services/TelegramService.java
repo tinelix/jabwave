@@ -13,7 +13,8 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
 
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.telegram.api.TelegramClient;
+import dev.tinelix.jabwave.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.telegram.api.entities.Authorization;
 import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
 
 /**
@@ -28,41 +29,40 @@ import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
 public class TelegramService extends IntentService {
 
     private static final String ACTION_START = "start_service";
+    private static final String ACTION_SEND_CLIENT_CMD = "sendClientCmd";
     private static final String ACTION_STOP = "stop_service";
 
-    private static final String SERVER = "server";
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
+    private static final String PHONE_NUMBER = "phone_number";
 
     private Context ctx;
 
     private String status = "done";
 
-    private TelegramClient client = null;
-    private TdApi.AuthorizationState authorizationState = null;
+    private TDLibClient client = null;
+    public Authorization authorization;
 
     private Intent intent;
 
+    private String phone_number;
+
     public TelegramService() {
-        super("XMPPService");
+        super(JabwaveApp.TELEGRAM_SERV_TAG);
     }
 
-    public void start(Context context, String server, String username, String password) {
+    public void start(Context context, String phone_number) {
         ctx = context;
         if(status.equals("done")) {
             intent = new Intent(context, TelegramService.class);
             intent.setAction(ACTION_START);
-            intent.putExtra(SERVER, server);
-            intent.putExtra(USERNAME, username);
-            intent.putExtra(PASSWORD, password);
+            intent.putExtra(PHONE_NUMBER, phone_number);
             context.startService(intent);
-            Log.d("XMPPService", "Service started.");
+            Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Service started.");
         } else {
-            Log.w("XMPPService", "Service already started.");
+            Log.w(JabwaveApp.TELEGRAM_SERV_TAG, "Service already started.");
         }
     }
 
-    public void stop(Context context, String server, String username, String password) {
+    public void stop(Context context) {
         ctx = context;
         if(intent == null) {
             intent = new Intent(context, getClass());
@@ -85,68 +85,55 @@ public class TelegramService extends IntentService {
         if (intent != null) {
             ((JabwaveApp) getApplicationContext()).telegram = this;
             final String action = intent.getAction();
-            final String server = intent.getStringExtra(SERVER);
-            final String username = intent.getStringExtra(USERNAME);
-            final String password = intent.getStringExtra(PASSWORD);
-            handleAction(action, server, username, password);
+            final String phone_number = intent.getStringExtra(PHONE_NUMBER);
+            handleAction(action, phone_number);
         }
     }
 
-    private void handleAction(String action, String server, String username, String password) {
-        if(action.equals(ACTION_START)) {
-            Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Preparing...");
-            status = "preparing";
-            SmackConfiguration.DEBUG = true;
-            JabwaveApp app = (JabwaveApp) getApplicationContext();
-            try {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            try {
-                                client = new TelegramClient();
-                                status = "authorized";
-                                sendMessageToActivity(status);
-                            } catch (Exception ex) {
-                                if (ex.getClass().getSimpleName().equals("EndpointConnectionException")) {
-                                    status = "error";
-                                }
-                                ex.printStackTrace();
-                                sendMessageToActivity(status);
-                            }
-                        } catch (Exception ex) {
-                            status = "error";
-                            ex.printStackTrace();
-                            sendMessageToActivity(status);
-                        }
-                    }
-                }).start();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        } else if(action.equals(ACTION_STOP)) {
-            try {
-                status = "done";
-                sendMessageToActivity(status);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
+    private void handleAction(String action, String phone_number) {
+        switch (action) {
+            case ACTION_START:
+                Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Preparing...");
+                status = "preparing";
+                SmackConfiguration.DEBUG = true;
+                JabwaveApp app = (JabwaveApp) getApplicationContext();
+                try {
+                    this.phone_number = phone_number;
+                    new Thread(() -> {
+                        client = new TDLibClient();
+                        Authorization authorization = new Authorization(client);
+                        authorization.checkPhoneNumber(phone_number,
+                                new TDLibClient.ApiHandler() {
+                                    @Override
+                                    public void onSuccess(TdApi.Object object) {
+                                        status = "required_auth_code";
+                                        sendMessageToActivity(status);
+                                    }
 
-    private void buildHelloPresence(XMPPConnection conn) {
-        try {
-            Presence presence = conn
-                .getStanzaFactory()
-                .buildPresenceStanza()
-                .setMode(Presence.Mode.available)
-                .ofType(Presence.Type.available)
-                .build();
-            conn.sendStanza(presence);
-        } catch (SmackException.NotConnectedException | InterruptedException e) {
-            e.printStackTrace();
-        }
+                                    @Override
+                                    public void onFail(Throwable throwable) {
+                                        throwable.printStackTrace();
+                                        status = "error";
+                                        sendMessageToActivity(status);
+                                    }
+                                });
+                    }).start();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case ACTION_SEND_CLIENT_CMD:
 
+                break;
+            case ACTION_STOP:
+                try {
+                    status = "done";
+                    sendMessageToActivity(status);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+        }
     }
 /*
     private Roster getRoster() {
@@ -232,6 +219,12 @@ public class TelegramService extends IntentService {
             case "error":
                 intent.putExtra("msg", HandlerMessages.NO_INTERNET_CONNECTION);
                 break;
+            case "required_auth_code":
+                intent.putExtra("msg", HandlerMessages.REQUIRED_AUTH_CODE);
+                break;
+            case "required_cloud_password":
+                intent.putExtra("msg", HandlerMessages.REQUIRED_CLOUD_PASSWORD);
+                break;
             case "authorized":
                 intent.putExtra("msg", HandlerMessages.AUTHORIZED);
                 break;
@@ -242,7 +235,7 @@ public class TelegramService extends IntentService {
                 intent.putExtra("msg", HandlerMessages.UNKNOWN_ERROR);
                 break;
         }
-        intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
+        intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
         sendBroadcast(intent);
     }
 
@@ -254,7 +247,7 @@ public class TelegramService extends IntentService {
                 intent.putExtra("data", data);
                 break;
         }
-        intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
+        intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
         sendBroadcast(intent);
     }
 
