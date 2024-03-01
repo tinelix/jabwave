@@ -7,6 +7,8 @@ XMPP messenger for Android, designed for modern Android versions with Material D
 
 ### Credits
 1. [yaxim](https://github.com/yaxim-org/yaxim) (GPLv3)
+2. [JXMPP](https://github.com/igniterealtime/jxmpp)(Apache License v2.0)
+3. [Smack XMPP Client](https://github.com/igniterealtime/Smack)(Apache License v2.0)
 
 ### Jabwave License
 GNU Affero GPL version 3
