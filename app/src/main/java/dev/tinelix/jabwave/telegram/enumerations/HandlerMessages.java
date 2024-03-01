@@ -14,4 +14,5 @@ public class HandlerMessages {
     public static int UNKNOWN_ERROR                     =  -3;
     public static int REQUIRED_AUTH_CODE                =  -4;
     public static int REQUIRED_CLOUD_PASSWORD           =  -5;
+    public static int AUTHENTICATION_ERROR        =  -6;
 }

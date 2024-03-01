@@ -41,6 +41,7 @@ public class TelegramService extends IntentService {
     private Intent intent;
 
     private String phone_number;
+    private boolean isConnected;
 
     public TelegramService() {
         super(JabwaveApp.TELEGRAM_SERV_TAG);
@@ -48,7 +49,7 @@ public class TelegramService extends IntentService {
 
     public void start(Context context, String phone_number) {
         ctx = context;
-        if(status.equals("done")) {
+        if(status.equals("done") || isConnected()) {
             intent = new Intent(context, TelegramService.class);
             intent.setAction(ACTION_START);
             intent.putExtra(PHONE_NUMBER, phone_number);
@@ -97,7 +98,8 @@ public class TelegramService extends IntentService {
                 try {
                     this.phone_number = phone_number;
                     new Thread(() -> {
-                        client = new TDLibClient();
+                        client = new TDLibClient(getApplicationContext());
+                        isConnected = true;
                         Authentication authentication = new Authentication(client, new TDLibClient.ApiHandler() {
                             @Override
                             public void onSuccess(TdApi.Object object) {
@@ -109,12 +111,9 @@ public class TelegramService extends IntentService {
 
                             @Override
                             public void onFail(Throwable throwable) {
-                                if(throwable instanceof TDLibClient.Error) {
-                                    status = ((TDLibClient.Error) throwable).getTag();
-                                } else {
-                                    status = "error";
-                                }
-                                sendMessageToActivity(status);
+                                status = "auth_error";
+                                Bundle data = new Bundle();
+                                sendMessageToActivity(status, data);
                             }
                         });
                         authentication.checkPhoneNumber(phone_number);
@@ -243,6 +242,10 @@ public class TelegramService extends IntentService {
     private void sendMessageToActivity(String status, Bundle data) {
         Intent intent = new Intent();
         switch (status) {
+            case "auth_error":
+                intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
+                intent.putExtra("data", data);
+                break;
             case "presence_changed":
                 intent.putExtra("msg", HandlerMessages.ROSTER_CHANGED);
                 intent.putExtra("data", data);
@@ -257,10 +260,13 @@ public class TelegramService extends IntentService {
     }
 
     public void stopService() {
-        stopSelf();
+        if(isConnected()) {
+            client.destroy();
+            stopSelf();
+        }
     }
 
     public boolean isConnected() {
-        return false;
+        return isConnected;
     }
 }

@@ -5,19 +5,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import dev.tinelix.jabwave.Global;
@@ -49,16 +55,21 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         auth_layout = findViewById(R.id.auth_layout);
-        auth_layout.setOnKeyboardStateListener(new OnKeyboardStateListener() {
-            @Override
-            public void onKeyboardStateChanged(boolean state) {
-                ConstraintLayout app_title = findViewById(R.id.app_title);
-                if (state) {
-                    app_title.setVisibility(View.GONE);
-                } else {
-                    app_title.setVisibility(View.VISIBLE);
-                }
+        auth_layout.setOnKeyboardStateListener(state -> {
+            AppBarLayout appbar = findViewById(R.id.appbar);
+            NestedScrollView.LayoutParams lp = (NestedScrollView.LayoutParams) auth_layout.getLayoutParams();
+            Rect r = new Rect();
+            View view = getWindow().getDecorView();
+            view.getWindowVisibleDisplayFrame(r);
+            if (state) {
+                lp.gravity = Gravity.TOP;
+                appbar.setVisibility(View.GONE);
+            } else {
+                lp.gravity = Gravity.CENTER;
+                appbar.setVisibility(View.VISIBLE);
             }
+            lp.height = r.height();
+            findViewById(R.id.dynamic_fragment_layout).setLayoutParams(lp);
         });
         authFragment = new AuthFragment();
         ft = getSupportFragmentManager().beginTransaction();
@@ -126,17 +137,14 @@ public class AuthActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
-        } else {
+        } else if(message == HandlerMessages.AUTHENTICATION_ERROR){
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.dynamic_fragment_layout, authFragment);
             authFragment.setAuthorizationData(phone_number);
             ft.commit();
             Snackbar snackbar = Snackbar.make(auth_layout,
-                    R.string.auth_error_network,
-                    Snackbar.LENGTH_INDEFINITE
-            ).setAction(R.string.retry_btn, view -> signIn(phone_number));
-            Log.d("ConnectionState", "State: " +
-                    ((JabwaveApp) getApplicationContext()).telegram.getStatus()
+                    R.string.invalid_phone_number_or_password,
+                    Snackbar.LENGTH_SHORT
             );
             View snackbarView = snackbar.getView();
             TextView snackTextView = snackbarView.findViewById(
@@ -158,6 +166,7 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        ((JabwaveApp) getApplicationContext()).telegram.stopService();
         unregisterBroadcastReceiver();
         super.onDestroy();
     }

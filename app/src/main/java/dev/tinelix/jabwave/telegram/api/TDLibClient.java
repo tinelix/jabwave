@@ -1,11 +1,14 @@
 package dev.tinelix.jabwave.telegram.api;
 
 
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
+
+import java.util.Locale;
 
 import androidx.annotation.Nullable;
 import dev.tinelix.jabwave.BuildConfig;
@@ -16,21 +19,23 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
    private final Client client;
    private TdApi.TdlibParameters params;
 
-   public TDLibClient() {
+   public TDLibClient(Context app_ctx) {
       this.params = new TdApi.TdlibParameters();
       params.applicationVersion = BuildConfig.VERSION_NAME;
       params.deviceModel = Build.MODEL;
       params.systemVersion = Build.VERSION.RELEASE;
       try {
-         if (!BuildConfig.APP_TOKEN.equals("UNKNOWN.UNKNOWN")) {
-            params.apiId = Integer.parseInt(BuildConfig.APP_TOKEN.split("\\.")[0]);
-            params.apiHash = BuildConfig.APP_TOKEN.split("\\.")[1];
-         }
+         params.apiId = Integer.parseInt(BuildConfig.APP_TOKEN.split("\\.")[0]);
+         params.apiHash = BuildConfig.APP_TOKEN.split("\\.")[1];
+         params.databaseDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
+         params.filesDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
+         params.systemLanguageCode = Locale.getDefault().toString();
       } catch (Exception ex) {
          ex.printStackTrace();
       }
       this.client = Client.create(this, null,this);
       send(new TdApi.SetTdlibParameters(params), null);
+      send(new TdApi.CheckDatabaseEncryptionKey(), null);
    }
 
    public TDLibClient(TdApi.TdlibParameters params) {
@@ -62,6 +67,10 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
       } else {
          client.send(function, null);
       }
+   }
+
+   public void destroy() {
+      client.close();
    }
 
    public interface ApiHandler {

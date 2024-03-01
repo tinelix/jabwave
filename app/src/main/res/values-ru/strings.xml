@@ -4,7 +4,7 @@
     <string name="auth_password">Пароль</string>
     <string name="auth_sign_in">Вход</string>
     <string name="auth_register">Регистрация</string>
-    <string name="invalid_jid_or_password">Неверный Jabber ID и/или пароль.</string>
+    <string name="invalid_phone_number_or_password">Неверный номер телефона и/или пароль.</string>
     <string name="auth_error_network">Нет подключения к Интернету</string>
     <string name="auth_wait">Подождите</string>
     <string name="retry_btn">Повторить</string>
