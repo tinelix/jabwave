@@ -11,7 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -33,12 +39,14 @@ import dev.tinelix.jabwave.xmpp.api.entities.ContactsGroup;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.xmpp.receivers.JabwaveReceiver;
 
-public class AppActivity extends JabwaveActivity {
+public class AppActivity extends JabwaveActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private static AppActivity inst;
     private ContactsAdapter contactsAdapter;
     private Fragment fragment;
     private FragmentTransaction ft;
+    private DrawerLayout drawer;
 
     public static AppActivity getInstance() {
         return inst;
@@ -62,6 +70,15 @@ public class AppActivity extends JabwaveActivity {
         }
         createMainFragment();
         setActionBar();
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        getOnBackPressedDispatcher().addCallback(
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        AppActivity.this.handleOnBackPressed();
+                    }
+                }
+        );
     }
 
     private void setActionBar() {
@@ -130,12 +147,17 @@ public class AppActivity extends JabwaveActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        //if (id == R.id.action_settings) {
-            //return true;
-        //}
+        if(id == android.R.id.home) {
+            drawer.openDrawer(GravityCompat.START);
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        drawer.closeDrawer(GravityCompat.START);
+        return false;
     }
 
     @Override
@@ -143,5 +165,18 @@ public class AppActivity extends JabwaveActivity {
         app.xmpp.stopService();
         unregisterReceiver(jwReceiver);
         super.onDestroy();
+    }
+
+    @Override
+    public void handleOnBackPressed() {
+        super.handleOnBackPressed();
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }

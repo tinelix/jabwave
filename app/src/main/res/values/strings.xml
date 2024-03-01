@@ -9,4 +9,5 @@
     <string name="auth_wait">Wait</string>
     <string name="retry_btn">Retry</string>
     <string name="general_category">General</string>
+    <string name="global_search_hint">Global search</string>
 </resources>

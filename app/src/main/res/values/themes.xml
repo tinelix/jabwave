@@ -53,6 +53,16 @@
         <item name="iconTint">@color/white</item>
     </style>
 
+    <style name="ApplicationTheme.BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="backgroundTint">@color/white</item>
+        <item name="elevation">8dp</item>
+    </style>
+
+    <style name="ApplicationTheme.Navigation" parent="Widget.MaterialComponents.NavigationView">
+        <item name="itemTextAppearance">?attr/textAppearanceSubtitle2</item>
+        <item name="listPreferredItemHeightSmall">36dp</item>
+    </style>
+
     <style name="RosterGroupName">
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">bold</item>

@@ -8,6 +8,8 @@ import org.jxmpp.jid.parts.Resourcepart;
 
 import java.util.Random;
 
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import dev.tinelix.jabwave.xmpp.api.XMPPAuthorization;
 import dev.tinelix.jabwave.xmpp.services.XMPPService;
 

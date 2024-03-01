@@ -15,4 +15,8 @@ public class JabwaveActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(getResources().getColor(R.color.statusBarColor));
         }
     }
+
+    public void handleOnBackPressed() {
+
+    }
 }

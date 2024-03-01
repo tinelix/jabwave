@@ -16,4 +16,8 @@ public class JabwaveFragmentActivity extends FragmentActivity {
             getWindow().setStatusBarColor(getResources().getColor(R.color.statusBarColor));
         }
     }
+
+    public void handleOnBackPressed() {
+
+    }
 }
