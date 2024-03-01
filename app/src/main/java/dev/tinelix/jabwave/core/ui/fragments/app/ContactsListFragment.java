@@ -17,7 +17,7 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.list.adapters.ContactsAdapter;
 import dev.tinelix.jabwave.core.list.sections.ContactsGroupSection;
-import dev.tinelix.jabwave.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.telegram.api.entities.Contact;
 
 public class ContactsListFragment extends Fragment {
     private JabwaveApp app;
@@ -41,9 +41,9 @@ public class ContactsListFragment extends Fragment {
     }
 
     public void loadContacts() {
-        contacts = app.xmpp.getContacts();
-        groups = app.xmpp.getChatGroups();
-        createContactsAdapter();
+//        contacts = app.xmpp.getContacts();
+//        groups = app.xmpp.getChatGroups();
+//        createContactsAdapter();
     }
 
     private void createContactsAdapter() {

@@ -22,10 +22,8 @@ public class MainActivity extends JabwaveActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         JabwaveApp app = ((JabwaveApp) getApplicationContext());
-        if(app.getXmppPreferences().getString("server", "").length() == 0 ||
-                app.getXmppPreferences().getString("username", "").length() == 0 ||
-                app.getXmppPreferences().getString("account_password_sha256", "").length() == 0 ||
-                app.getXmppPreferences().getString("account_password", "").length() == 0) {
+        if(app.getTelegramPreferences().getString("username", "").length() == 0 ||
+                app.getTelegramPreferences().getString("account_password_sha256", "").length() == 0) {
             Intent intent = new Intent(getApplicationContext(), AuthActivity.class);
             startActivity(intent);
             finish();

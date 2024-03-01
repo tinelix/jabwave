@@ -2,7 +2,7 @@ package dev.tinelix.jabwave.core.list.adapters;
 
 import android.annotation.SuppressLint;
 
-import dev.tinelix.jabwave.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.telegram.api.entities.Contact;
 import dev.tinelix.jabwave.core.list.sections.ContactsGroupSection;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 

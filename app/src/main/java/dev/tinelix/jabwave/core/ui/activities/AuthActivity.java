@@ -27,8 +27,8 @@ import dev.tinelix.jabwave.core.ui.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.ui.fragments.auth.AuthProgressFragment;
 import dev.tinelix.jabwave.core.ui.views.base.XConstraintLayout;
 import dev.tinelix.jabwave.core.ui.listeners.OnKeyboardStateListener;
-import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
-import dev.tinelix.jabwave.xmpp.receivers.JabwaveReceiver;
+import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
+import dev.tinelix.jabwave.telegram.receivers.JabwaveReceiver;
 
 public class AuthActivity extends AppCompatActivity {
     public Handler handler;
@@ -96,7 +96,7 @@ public class AuthActivity extends AppCompatActivity {
         ft.replace(R.id.dynamic_fragment_layout, new AuthProgressFragment());
         ft.commit();
         ((JabwaveApp) getApplicationContext())
-                .xmpp.start(AuthActivity.this, server, this.username, password);
+                .telegram.start(AuthActivity.this, server, this.username, password);
     }
 
     public void receiveState(int message, Bundle data) {
@@ -139,7 +139,9 @@ public class AuthActivity extends AppCompatActivity {
                     R.string.auth_error_network,
                     Snackbar.LENGTH_INDEFINITE
             ).setAction(R.string.retry_btn, view -> signIn(username, password));
-            Log.d("ConnectionState", "State: " + ((JabwaveApp) getApplicationContext()).xmpp.getStatus());
+            Log.d("ConnectionState", "State: " +
+                    ((JabwaveApp) getApplicationContext()).telegram.getStatus()
+            );
             View snackbarView = snackbar.getView();
             TextView snackTextView = snackbarView.findViewById(
                     com.google.android.material.R.id.snackbar_text

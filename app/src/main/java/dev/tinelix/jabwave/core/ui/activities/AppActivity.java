@@ -1,43 +1,30 @@
 package dev.tinelix.jabwave.core.ui.activities;
 
 import android.content.IntentFilter;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.list.adapters.ContactsAdapter;
 import dev.tinelix.jabwave.core.ui.fragments.app.ContactsListFragment;
 import dev.tinelix.jabwave.core.ui.views.base.JabwaveActionBar;
-import dev.tinelix.jabwave.xmpp.api.entities.Contact;
-import dev.tinelix.jabwave.core.list.sections.ContactsGroupSection;
+import dev.tinelix.jabwave.telegram.api.entities.Contact;
 import dev.tinelix.jabwave.core.ui.activities.base.JabwaveActivity;
-import dev.tinelix.jabwave.xmpp.api.entities.ContactsGroup;
-import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
-import dev.tinelix.jabwave.xmpp.receivers.JabwaveReceiver;
+import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
+import dev.tinelix.jabwave.telegram.receivers.JabwaveReceiver;
 
 public class AppActivity extends JabwaveActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,7 +50,7 @@ public class AppActivity extends JabwaveActivity
         findViewById(R.id.app_fragment).setVisibility(View.GONE);
         findViewById(R.id.progress).setVisibility(View.VISIBLE);
         registerBroadcastReceiver();
-        if(!app.xmpp.isConnected()) {
+        if(!app.telegram.isConnected()) {
             connect();
         } else {
             getContacts();
@@ -103,13 +90,12 @@ public class AppActivity extends JabwaveActivity
     }
 
     private void connect() {
-        if(!app.xmpp.isConnected()) {
-            app.xmpp.start(
-                    this, app.getXmppPreferences().getString("server", ""),
-                    app.getXmppPreferences().getString("username", ""),
-                    app.getXmppPreferences().getString("account_password", "")
-            );
-        }
+//        if(!app.telegram.isConnected()) {
+//            app.telegram.start(this,
+//                    app.getTelegramPreferences().getString("username", ""),
+//                    app.getTelegramPreferences().getString("account_password", "")
+//            );
+//        }
     }
 
     private void getContacts() {
@@ -162,7 +148,7 @@ public class AppActivity extends JabwaveActivity
 
     @Override
     protected void onDestroy() {
-        app.xmpp.stopService();
+        app.telegram.stopService();
         unregisterReceiver(jwReceiver);
         super.onDestroy();
     }

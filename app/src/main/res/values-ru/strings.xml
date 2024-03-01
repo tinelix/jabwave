@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="auth_jid">Jabber ID</string>
+    <string name="auth_phone_number">Номер телефона</string>
     <string name="auth_password">Пароль</string>
     <string name="auth_sign_in">Вход</string>
     <string name="auth_register">Регистрация</string>

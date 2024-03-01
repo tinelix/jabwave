@@ -25,8 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/username_edit"
-                android:hint="@string/auth_jid"
-                android:inputType="textEmailAddress"
+                android:hint="@string/auth_phone_number"
+                android:inputType="phone"
                 tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
