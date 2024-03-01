@@ -29,6 +29,18 @@ def getGitHubCommit = {
     }
 }
 
+def getTDAppToken = {
+    Properties tdlib_props = new Properties();
+    // Create 'tdlib.prop' file inside '.signing' directory and
+    // store in a place inaccessible to third parties (!)
+    if (file('.signing/app-debug.prop').exists()) {
+        props.load(new FileInputStream(file(".signing/app-debug.prop")))
+        return "${tdlib_props['APP_ID']}.${tdlib_props['APP_HASH']}"
+    } else {
+        return "UNKNOWN.UNKNOWN"
+    }
+}
+
 android {
     namespace 'dev.tinelix.jabwave'
     compileSdk 34
@@ -46,7 +58,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
-            buildConfigField "String", "APP_TOKEN", "${getTDAppToken()}"
+            buildConfigField "String", "APP_TOKEN", "\"${getTDAppToken()}\""
         }
     }
     compileOptions {
@@ -76,12 +88,4 @@ dependencies {
     implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v3.2.0'
     implementation "androidx.emoji2:emoji2:1.4.0"
 
-}
-
-def getTDAppToken = {
-    Properties tdlib_props = new Properties();
-    // Create 'tdlib.prop' file inside '.signing' directory and
-    // store in a place inaccessible to third parties (!)
-    props.load(new FileInputStream(file(".signing/tdlib.prop")))
-    return "${tdlib_props['APP_ID']}|${tdlib_props['APP_HASH']}"
 }

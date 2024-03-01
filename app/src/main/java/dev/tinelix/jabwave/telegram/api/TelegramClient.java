@@ -8,6 +8,7 @@ import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import androidx.annotation.NonNull;
+import dev.tinelix.jabwave.BuildConfig;
 import dev.tinelix.jabwave.JabwaveApp;
 
 public class TelegramClient implements Client.ResultHandler, Client.ExceptionHandler {
@@ -17,6 +18,8 @@ public class TelegramClient implements Client.ResultHandler, Client.ExceptionHan
 
    public TelegramClient() {
       this.params = new TdApi.TdlibParameters();
+      this.params.apiId = BuildConfig.APP_TOKEN.split(".")[0];
+      this.params.apiHash = BuildConfig.APP_TOKEN.split(".")[1];
       this.client = Client.create(this, null ,this);
    }
 
@@ -37,10 +40,5 @@ public class TelegramClient implements Client.ResultHandler, Client.ExceptionHan
       Log.e(JabwaveApp.TELEGRAM_SERV_TAG,
               String.format("[ERROR] %s: %s", e.getClass().getSimpleName(), e.getMessage())
       );
-   }
-
-   @Override
-   public boolean handleMessage(@NonNull Message msg) {
-      return false;
    }
 }
