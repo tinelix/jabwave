@@ -19,7 +19,8 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import java.util.ArrayList;
 
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.xmpp.api.XMPPAuthorization;
+import dev.tinelix.jabwave.xmpp.api.XMPPClient;
+import dev.tinelix.jabwave.xmpp.api.entities.Authentication;
 import dev.tinelix.jabwave.xmpp.api.entities.Contact;
 import dev.tinelix.jabwave.xmpp.api.entities.Roster;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
@@ -46,12 +47,10 @@ public class XMPPService extends IntentService {
 
     private String status = "done";
 
-    private AbstractXMPPConnection conn;
-    private Messenger serviceMessenger;
-    private Messenger activityMessenger;
-    private ConnectionListener connListener;
+    private XMPPClient client;
     private Intent intent;
     private dev.tinelix.jabwave.xmpp.api.entities.Roster roster;
+    private XMPPTCPConnection conn;
 
     public XMPPService() {
         super("XMPPService");
@@ -109,45 +108,33 @@ public class XMPPService extends IntentService {
             SmackConfiguration.DEBUG = true;
             JabwaveApp app = (JabwaveApp) getApplicationContext();
             try {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            XMPPTCPConnectionConfiguration config =
-                                    XMPPAuthorization.buildConnectionConfig(
-                                            server,
-                                            username,
-                                            password,
-                                            true
-                                    );
-                            conn = new XMPPTCPConnection(config);
-                            try {
-                                listenConnection();
-                                conn.connect();
-                                Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
-                                status = "authorizing";
-                                conn.login(
-                                        username,
-                                        password,
-                                        app.getXMPPResource()
-                                );
-                                Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
-                                status = "authorized";
-                                buildHelloPresence(conn);
-                                roster = getRoster();
-                                sendMessageToActivity(status);
-                            } catch (Exception ex) {
-                                if (ex.getClass().getSimpleName().equals("EndpointConnectionException")) {
-                                    status = "error";
-                                }
-                                ex.printStackTrace();
-                                sendMessageToActivity(status);
+                new Thread(() -> {
+                    try {
+                        createAuthConfig(server, username, password);
+                        client = new XMPPClient(conn, new XMPPClient.ApiHandler() {
+                            @Override
+                            public void onSuccess(XMPPConnection conn, Object object) {
+                                receiveState(conn, object);
                             }
-                        } catch (Exception ex) {
-                            status = "error";
-                            ex.printStackTrace();
-                            sendMessageToActivity(status);
-                        }
+
+                            @Override
+                            public void onFail(Throwable t) {
+                                receiveState(client.getConnection(), t);
+                            }
+                        });
+                        Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
+                        status = "authorizing";
+                        listenConnection(client);
+                        client.start(server, username, password);
+                        Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
+                        status = "authorized";
+                        buildHelloPresence(conn);
+                        roster = getRoster();
+                        sendMessageToActivity(status);
+                    } catch (Exception ex) {
+                        status = "error";
+                        ex.printStackTrace();
+                        sendMessageToActivity(status);
                     }
                 }).start();
             } catch (Exception ex) {
@@ -164,45 +151,46 @@ public class XMPPService extends IntentService {
         }
     }
 
+    private void createAuthConfig(String server, String jid, String password) {
+        XMPPTCPConnectionConfiguration config =
+                Authentication.buildAuthConfig(
+                        server,
+                        jid,
+                        password,
+                        true
+                );
+        conn = new XMPPTCPConnection(config);
+    }
+
+    private void receiveState(XMPPConnection conn, Object object) {
+
+    }
+
+    private void listenConnection(XMPPClient client) {
+        client.listenConnection(new XMPPClient.ApiConnectionHandler() {
+            @Override
+            public void onSuccess(XMPPConnection conn) {
+                status = "connected";
+            }
+
+            @Override
+            public void onFail(Throwable t) {
+                status = "connection_error";
+            }
+
+            @Override
+            public void onDisconnect() {
+                status = "disconnect";
+            }
+        });
+    }
+
     private void buildHelloPresence(XMPPConnection conn) {
-        try {
-            Presence presence = conn
-                .getStanzaFactory()
-                .buildPresenceStanza()
-                .setMode(Presence.Mode.available)
-                .ofType(Presence.Type.available)
-                .build();
-            conn.sendStanza(presence);
-        } catch (SmackException.NotConnectedException | InterruptedException e) {
-            e.printStackTrace();
-        }
 
     }
 
-    private Roster getRoster() {
-        return new Roster(conn);
-    }
-
-    public ArrayList<Contact> getContacts() {
-        ArrayList<Contact> contacts = null;
-        if(conn != null) {
-            if (conn.isConnected() && conn.isAuthenticated()) {
-                contacts = roster.getContacts();
-            }
-        }
-        status = "getting_contacts_list";
-        sendMessageToActivity(status);
-        return contacts;
-    }
-
-    public ArrayList<Contact> getChatGroups() {
-        ArrayList<Contact> groups = new ArrayList<>();
-        if(conn != null) {
-            if (conn.isConnected() && conn.isAuthenticated()) {
-                groups = roster.getGroups();
-            }
-        }
-        return groups;
+    public Roster getRoster() {
+        return client.getRoster();
     }
 
     public boolean isConnected() {
@@ -211,48 +199,6 @@ public class XMPPService extends IntentService {
         } else {
             return false;
         }
-    }
-
-    private void listenConnection() {
-        if(connListener != null) {
-            conn.removeConnectionListener(connListener);
-        }
-        connListener = new ConnectionListener() {
-            @Override
-            public void connected(XMPPConnection connection) {
-                ConnectionListener.super.connected(connection);
-                Log.d(JabwaveApp.XMPP_SERV_TAG, "Connected!");
-                status = "connected";
-            }
-
-            @Override
-            public void connecting(XMPPConnection connection) {
-                ConnectionListener.super.connecting(connection);
-                Log.d(JabwaveApp.XMPP_SERV_TAG,
-                        String.format("Connecting to %s...", connection.getXMPPServiceDomain())
-                );
-                status = "connecting";
-            }
-
-            @Override
-            public void connectionClosed() {
-                ConnectionListener.super.connectionClosed();
-                Log.d("XMPPService", "Disconnected");
-                status = "disconnected";
-                sendMessageToActivity(status);
-            }
-
-            @Override
-            public void connectionClosedOnError(Exception e) {
-                ConnectionListener.super.connectionClosedOnError(e);
-                Log.d(
-                        "XMPPService", "Connection error: " + e.getMessage()
-                );
-                status = "connection_error";
-                sendMessageToActivity(status);
-            }
-        };
-        conn.addConnectionListener(connListener);
     }
 
     private void sendMessageToActivity(String status) {

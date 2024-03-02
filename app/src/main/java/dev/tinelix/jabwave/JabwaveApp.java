@@ -8,9 +8,7 @@ import org.jxmpp.jid.parts.Resourcepart;
 
 import java.util.Random;
 
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import dev.tinelix.jabwave.xmpp.api.XMPPAuthorization;
+import dev.tinelix.jabwave.xmpp.api.entities.Authentication;
 import dev.tinelix.jabwave.xmpp.services.XMPPService;
 
 public class JabwaveApp extends Application {
@@ -78,7 +76,7 @@ public class JabwaveApp extends Application {
                 };
                 String hex4 = Global.bytesToHex(random_resource_binary);
                 String res_name = String.format("TinelixJabwave-%s", hex4);
-                Resourcepart res_part = XMPPAuthorization.generateXMPPResource(res_name);
+                Resourcepart res_part = Authentication.generateXMPPResource(res_name);
                 SharedPreferences.Editor editor = getXmppPreferences().edit();
                 editor.putString("jid_resource", res_name);
                 editor.apply();

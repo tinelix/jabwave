@@ -41,8 +41,8 @@ public class ContactsListFragment extends Fragment {
     }
 
     public void loadContacts() {
-        contacts = app.xmpp.getContacts();
-        groups = app.xmpp.getChatGroups();
+        contacts = app.xmpp.getRoster().getContacts();
+        groups = app.xmpp.getRoster().getGroups();
         createContactsAdapter();
     }
 

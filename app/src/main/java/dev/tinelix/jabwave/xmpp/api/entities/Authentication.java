@@ -1,8 +1,9 @@
-package dev.tinelix.jabwave.xmpp.api;
+package dev.tinelix.jabwave.xmpp.api.entities;
 
 import android.annotation.SuppressLint;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smack.util.SslContextFactory;
 import org.jivesoftware.smack.util.TLSUtils;
@@ -19,9 +20,18 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import dev.tinelix.jabwave.Global;
+import dev.tinelix.jabwave.xmpp.api.XMPPClient;
 
-public class XMPPAuthorization {
-    public static XMPPTCPConnectionConfiguration buildConnectionConfig(
+public class Authentication {
+
+    private final XMPPClient client;
+    private XMPPTCPConnection conn;
+
+    public Authentication(XMPPClient client) {
+        this.client = client;
+    }
+
+    public static XMPPTCPConnectionConfiguration buildAuthConfig(
             String server,
             String jid,
             String password,
