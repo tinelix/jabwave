@@ -7,6 +7,7 @@ import android.os.Build;
 import android.util.Log;
 
 import dev.tinelix.jabwave.core.activities.AppActivity;
+import dev.tinelix.jabwave.core.activities.AuthActivity;
 
 public class JabwaveReceiver extends BroadcastReceiver {
 
@@ -34,9 +35,15 @@ public class JabwaveReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive " + intent);
+        Log.d(TAG, String.format("Received data from %s.", intent.getAction().contains("TELEGRAM") ? "Telegram" : "XMPP instance"));
         if(ctx instanceof AppActivity) {
             AppActivity activity = (AppActivity) ctx;
+            activity.receiveState(
+                    intent.getIntExtra("msg", 0),
+                    intent.getBundleExtra("data")
+            );
+        } else if(ctx instanceof AuthActivity) {
+            AuthActivity activity = (AuthActivity) ctx;
             activity.receiveState(
                     intent.getIntExtra("msg", 0),
                     intent.getBundleExtra("data")

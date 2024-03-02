@@ -61,27 +61,24 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         auth_layout = findViewById(R.id.auth_layout);
-        auth_layout.setOnKeyboardStateListener(new OnKeyboardStateListener() {
-            @Override
-            public void onKeyboardStateChanged(boolean state) {
-                ConstraintLayout app_title = findViewById(R.id.app_title);
-                FrameLayout frame = findViewById(R.id.fragment);
-                Rect r = new Rect();
-                View view = getWindow().getDecorView();
-                view.getWindowVisibleDisplayFrame(r);
-                LinearLayout.LayoutParams lp =
-                        ((LinearLayout.LayoutParams) frame.getLayoutParams());
-                if (state) {
-                    lp.height = r.height();
-                    lp.gravity = Gravity.TOP;
-                    app_title.setVisibility(View.GONE);
-                } else {
-                    lp.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                    lp.gravity = Gravity.CENTER;
-                    app_title.setVisibility(View.VISIBLE);
-                }
-                frame.setLayoutParams(lp);
+        auth_layout.setOnKeyboardStateListener(state -> {
+            ConstraintLayout app_title = findViewById(R.id.app_title);
+            FrameLayout frame = findViewById(R.id.fragment);
+            Rect r = new Rect();
+            View view = getWindow().getDecorView();
+            view.getWindowVisibleDisplayFrame(r);
+            LinearLayout.LayoutParams lp =
+                    ((LinearLayout.LayoutParams) frame.getLayoutParams());
+            if (state) {
+                lp.height = r.height();
+                lp.gravity = Gravity.TOP;
+                app_title.setVisibility(View.GONE);
+            } else {
+                lp.height = LinearLayout.LayoutParams.MATCH_PARENT;
+                lp.gravity = Gravity.CENTER;
+                app_title.setVisibility(View.VISIBLE);
             }
+            frame.setLayoutParams(lp);
         });
         authFragment = new AuthFragment();
         ft = getSupportFragmentManager().beginTransaction();
@@ -94,16 +91,9 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void registerBroadcastReceiver() {
-        jwReceiver = new JabwaveReceiver(this) {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                super.onReceive(context, intent);
-                Bundle data = intent.getExtras();
-                receiveState(data.getInt("msg"), data);
-            }
-        };
-        registerReceiver(jwReceiver, new IntentFilter(
-                "dev.tinelix.jabwave.XMPP_RECEIVE"));
+        jwReceiver = new JabwaveReceiver(this);
+        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
+        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
     }
 
     public void unregisterBroadcastReceiver() {
@@ -131,27 +121,7 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void receiveState(int message, Bundle data) {
-        if(message == HandlerMessages.NO_INTERNET_CONNECTION) {
-            ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment, authFragment);
-            authFragment.setAuthorizationData(server, username, password);
-            ft.commit();
-            Snackbar snackbar = Snackbar.make(auth_layout,
-                    R.string.auth_error_network,
-                    Snackbar.LENGTH_INDEFINITE
-            ).setAction(R.string.retry_btn, view -> signIn(username, password));
-            View snackbarView = snackbar.getView();
-            TextView snackTextView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-            snackTextView.setMaxLines(3);
-            snackTextView.setTextColor(getResources().getColor(R.color.black));
-            snackbar.setBackgroundTint(Color.WHITE);
-            snackbar.setActionTextColor(getResources().getColor(R.color.accentColor));
-            Button snackActionBtn = snackbarView.findViewById(com.google.android.material.R.id.snackbar_action);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                snackActionBtn.setLetterSpacing(0);
-            }
-            snackbar.show();
-        } else if(message == HandlerMessages.AUTHORIZED) {
+        if(message == HandlerMessages.AUTHORIZED) {
             SharedPreferences.Editor editor;
             if(global_prefs.getString("network_type", "").equals("telegram")) {
                 editor = telegram_prefs.edit();
@@ -167,37 +137,60 @@ public class AuthActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
-        } else {
+        } else if(message == HandlerMessages.NO_INTERNET_CONNECTION
+                || message == HandlerMessages.AUTHENTICATION_ERROR) {
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment, authFragment);
             authFragment.setAuthorizationData(server, username, password);
             ft.commit();
-            Snackbar snackbar = Snackbar.make(auth_layout,
-                    R.string.auth_error_network,
-                    Snackbar.LENGTH_INDEFINITE
-            ).setAction(R.string.retry_btn, view -> signIn(username, password));
-            Log.d("ConnectionState", "State: " + ((JabwaveApp) getApplicationContext()).xmpp.getStatus());
-            View snackbarView = snackbar.getView();
-            TextView snackTextView = snackbarView.findViewById(
-                    com.google.android.material.R.id.snackbar_text
-            );
-            snackTextView.setMaxLines(3);
-            snackTextView.setTextColor(getResources().getColor(R.color.black));
-            snackbar.setBackgroundTint(Color.WHITE);
-            snackbar.setActionTextColor(getResources().getColor(R.color.accentColor));
-            Button snackActionBtn = snackbarView.findViewById(
-                    com.google.android.material.R.id.snackbar_action
-            );
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                snackActionBtn.setLetterSpacing(0);
-            }
-            snackbar.show();
+            showSnackBar(message);
         }
+    }
+
+    private void showSnackBar(int message) {
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, authFragment);
+        authFragment.setAuthorizationData(server, username, password);
+        ft.commit();
+        Snackbar snackbar;
+        int error_string_id = R.string.auth_error_network;
+        if(message == HandlerMessages.AUTHENTICATION_ERROR) {
+            if(global_prefs.getString("network_type", "").equals("telegram")) {
+                error_string_id = R.string.invalid_pn_or_passw;
+            } else {
+                error_string_id = R.string.invalid_jid_or_passw;
+            }
+            snackbar = Snackbar.make(auth_layout, error_string_id, Snackbar.LENGTH_LONG);
+        } else {
+            snackbar = Snackbar
+                    .make(auth_layout, error_string_id, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.retry_btn, v -> signIn(username, password));
+        }
+        View snackbarView = snackbar.getView();
+        TextView snackTextView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        snackTextView.setMaxLines(3);
+        snackTextView.setTextColor(getResources().getColor(R.color.black));
+        snackbar.setBackgroundTint(Color.WHITE);
+        snackbar.setActionTextColor(getResources().getColor(R.color.accentColor));
+        Button snackActionBtn = snackbarView.findViewById(com.google.android.material.R.id.snackbar_action);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            snackActionBtn.setLetterSpacing(0);
+        }
+        snackbar.show();
     }
 
     @Override
     protected void onDestroy() {
         unregisterBroadcastReceiver();
+        if(global_prefs.getString("network_type", "").equals("telegram")) {
+            if(((JabwaveApp) getApplication()).telegram.isConnected()) {
+                ((JabwaveApp) getApplication()).telegram.stopService();
+            }
+        } else {
+            if(((JabwaveApp) getApplication()).xmpp.isConnected()) {
+                ((JabwaveApp) getApplication()).xmpp.stopService();
+            }
+        }
         super.onDestroy();
     }
 }

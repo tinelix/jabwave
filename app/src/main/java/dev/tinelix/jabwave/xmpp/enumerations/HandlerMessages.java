@@ -12,4 +12,5 @@ public class HandlerMessages {
     public static int NO_INTERNET_CONNECTION            =  -1;
     public static int CONNECTION_TIMEOUT                =  -2;
     public static int UNKNOWN_ERROR                     =  -3;
+    public static int AUTHENTICATION_ERROR              =  -6;
 }

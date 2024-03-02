@@ -95,22 +95,24 @@ public class TelegramService extends IntentService {
                     new Thread(() -> {
                         client = new TDLibClient(getApplicationContext());
                         isConnected = true;
-                        Authentication authentication = new Authentication(client, new TDLibClient.ApiHandler() {
-                            @Override
-                            public void onSuccess(TdApi.Object object) {
-                                if(object instanceof TdApi.UpdateAuthorizationState) {
-                                    status = "required_auth_code";
-                                    sendMessageToActivity(status);
-                                }
-                            }
+                        Authentication authentication = new Authentication(client,
+                                new TDLibClient.ApiHandler() {
+                                    @Override
+                                    public void onSuccess(TdApi.Object object) {
+                                        if(object instanceof TdApi.UpdateAuthorizationState) {
+                                            status = "required_auth_code";
+                                            sendMessageToActivity(status);
+                                        }
+                                    }
 
-                            @Override
-                            public void onFail(Throwable throwable) {
-                                status = "auth_error";
-                                Bundle data = new Bundle();
-                                sendMessageToActivity(status, data);
-                            }
-                        });
+                                    @Override
+                                    public void onFail(Throwable throwable) {
+                                        status = "auth_error";
+                                        Bundle data = new Bundle();
+                                        sendMessageToActivity(status, data);
+                                    }
+                                }
+                        );
                         authentication.checkPhoneNumber(phone_number);
                     }).start();
                 } catch (Exception ex) {
@@ -211,6 +213,9 @@ public class TelegramService extends IntentService {
     private void sendMessageToActivity(String status) {
         Intent intent = new Intent();
         switch (status) {
+            case "auth_error":
+                intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
+                break;
             case "error":
                 intent.putExtra("msg", HandlerMessages.NO_INTERNET_CONNECTION);
                 break;
