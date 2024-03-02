@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.core.services;
 
+import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,8 @@ import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 import org.jivesoftware.smack.SmackConfiguration;
+
+import java.util.ArrayList;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.telegram.api.TDLibClient;
@@ -31,7 +34,7 @@ public class TelegramService extends IntentService {
     private String status = "done";
 
     private TDLibClient client = null;
-    public Authentication authorization;
+    public Authentication authentication;
 
     private Intent intent;
 
@@ -79,7 +82,15 @@ public class TelegramService extends IntentService {
             ((JabwaveApp) getApplicationContext()).telegram = this;
             final String action = intent.getAction();
             final String phone_number = intent.getStringExtra(PHONE_NUMBER);
-            handleAction(action, phone_number);
+            if(action.equals("ACTION_RUN_FUNCTION")) {
+                if(client != null)
+                    runClientFunction(
+                            intent.getIntExtra("function_constructor", 0),
+                            intent.getBundleExtra("function_parameters")
+                    );
+            } else {
+                handleAction(action, phone_number);
+            }
         }
     }
 
@@ -96,22 +107,35 @@ public class TelegramService extends IntentService {
                         client = new TDLibClient(getApplicationContext());
                         client.sendTdlibParameters();
                         isConnected = true;
-                        Authentication authentication = new Authentication(client,
+                        authentication = new Authentication(client,
                                 new TDLibClient.ApiHandler() {
+                                    @SuppressLint("SwitchIntDef")
                                     @Override
-                                    public void onSuccess(TdApi.Object object) {
-                                        if(object instanceof TdApi.UpdateAuthorizationState) {
-                                            status = "required_auth_code";
+                                    public void onSuccess(TdApi.Function function, TdApi.Object object) {
+                                        Log.d("TelegramApi", String.format("Ok?_%s", function.getClass().getSimpleName()));
+                                        if(object instanceof TdApi.Ok) {
+                                            switch (function.getConstructor()) {
+                                                case TdApi.SetAuthenticationPhoneNumber.CONSTRUCTOR:
+                                                    status = "required_auth_code";
+                                                    break;
+                                                case TdApi.CheckAuthenticationCode.CONSTRUCTOR:
+                                                    status = "required_cloud_password";
+                                                    break;
+                                                default:
+                                                    status = "authorized";
+                                                    break;
+                                            }
                                             sendMessageToActivity(status);
                                         }
                                     }
 
                                     @Override
-                                    public void onFail(Throwable throwable) {
+                                    public void onFail(TdApi.Function function, Throwable throwable) {
                                         if(throwable instanceof TDLibClient.Error) {
                                             status = ((TDLibClient.Error) throwable).getTag();
                                         }
                                         Bundle data = new Bundle();
+                                        data.getInt("function", function.getConstructor());
                                         sendMessageToActivity(status, data);
                                     }
                                 }
@@ -121,9 +145,6 @@ public class TelegramService extends IntentService {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                break;
-            case ACTION_SEND_CLIENT_CMD:
-
                 break;
             case ACTION_STOP:
                 try {
@@ -135,83 +156,21 @@ public class TelegramService extends IntentService {
                 break;
         }
     }
-/*
-    private Roster getRoster() {
-        return new Roster(conn);
-    }
 
-    public ArrayList<Contact> getContacts() {
-        ArrayList<Contact> contacts = null;
-        if(conn != null) {
-            if (conn.isConnected() && conn.isAuthenticated()) {
-                contacts = roster.getContacts();
-            }
-        }
-        status = "getting_contacts_list";
-        sendMessageToActivity(status);
-        return contacts;
-    }
-
-    public ArrayList<Contact> getChatGroups() {
-        ArrayList<Contact> groups = new ArrayList<>();
-        if(conn != null) {
-            if (conn.isConnected() && conn.isAuthenticated()) {
-                groups = roster.getGroups();
-            }
-        }
-        return groups;
-    }
-
-    public boolean isConnected() {
-        if(conn != null) {
-            return conn.isConnected();
-        } else {
-            return false;
-        }
-    }
-
-    private void listenConnection() {
-        if(connListener != null) {
-            conn.removeConnectionListener(connListener);
-        }
-        connListener = new ConnectionListener() {
+    private void runClientFunction(int constructor, Bundle params) {
+        TdApi.Function function = client.createFunction(constructor, params);
+        client.send(function, new TDLibClient.ApiHandler() {
             @Override
-            public void connected(XMPPConnection connection) {
-                ConnectionListener.super.connected(connection);
-                Log.d(JabwaveApp.XMPP_SERV_TAG, "Connected!");
-                status = "connected";
+            public void onSuccess(TdApi.Function function, TdApi.Object object) {
+
             }
 
             @Override
-            public void connecting(XMPPConnection connection) {
-                ConnectionListener.super.connecting(connection);
-                Log.d(JabwaveApp.XMPP_SERV_TAG,
-                        String.format("Connecting to %s...", connection.getXMPPServiceDomain())
-                );
-                status = "connecting";
-            }
+            public void onFail(TdApi.Function function, Throwable throwable) {
 
-            @Override
-            public void connectionClosed() {
-                ConnectionListener.super.connectionClosed();
-                Log.d("XMPPService", "Disconnected");
-                status = "disconnected";
-                sendMessageToActivity(status);
             }
-
-            @Override
-            public void connectionClosedOnError(Exception e) {
-                ConnectionListener.super.connectionClosedOnError(e);
-                Log.d(
-                        "XMPPService", "Connection error: " + e.getMessage()
-                );
-                status = "connection_error";
-                sendMessageToActivity(status);
-            }
-        };
-        conn.addConnectionListener(connListener);
+        });
     }
- */
 
     private void sendMessageToActivity(String status) {
         Intent intent = new Intent();
@@ -245,10 +204,19 @@ public class TelegramService extends IntentService {
     private void sendMessageToActivity(String status, Bundle data) {
         Intent intent = new Intent();
         switch (status) {
+            case "required_auth_code":
+                intent.putExtra("msg", HandlerMessages.REQUIRED_AUTH_CODE);
+                intent.putExtra("data", data);
+                break;
+            case "required_cloud_password":
+                intent.putExtra("msg", HandlerMessages.REQUIRED_CLOUD_PASSWORD);
+                intent.putExtra("data", data);
+                break;
             case "auth_error":
                 intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
                 intent.putExtra("data", data);
                 break;
+
             case "presence_changed":
                 intent.putExtra("msg", HandlerMessages.ROSTER_CHANGED);
                 intent.putExtra("data", data);

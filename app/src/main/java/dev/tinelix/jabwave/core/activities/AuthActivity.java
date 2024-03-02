@@ -36,6 +36,7 @@ import java.util.List;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.fragments.auth.AuthCloudPasswordFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
@@ -124,7 +125,16 @@ public class AuthActivity extends AppCompatActivity {
 
     public void signIn(String signin_code) {
         if(global_prefs.getString("network_type", "").equals("telegram")) {
-            ((JabwaveApp) getApplication()).telegram.authorization.sendAuthCode(signin_code);
+            ((JabwaveApp) getApplication()).telegram.authentication.sendAuthCode(signin_code);
+        }
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, new AuthProgressFragment());
+        ft.commit();
+    }
+
+    public void sendCloudPassword(String password) {
+        if(global_prefs.getString("network_type", "").equals("telegram")) {
+            ((JabwaveApp) getApplication()).telegram.authentication.sendCloudPassword(password);
         }
         ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment, new AuthProgressFragment());
@@ -159,6 +169,11 @@ public class AuthActivity extends AppCompatActivity {
             showSnackBar(message);
         } else if(message == dev.tinelix.jabwave.telegram.enumerations.HandlerMessages.REQUIRED_AUTH_CODE) {
             fragment = new AuthTwoFactorFragment();
+            ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment, fragment);
+            ft.commit();
+        } else if(message == dev.tinelix.jabwave.telegram.enumerations.HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
+            fragment = new AuthCloudPasswordFragment();
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment, fragment);
             ft.commit();

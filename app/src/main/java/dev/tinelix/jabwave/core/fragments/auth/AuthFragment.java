@@ -102,10 +102,14 @@ public class AuthFragment extends Fragment {
     }
 
     public void setAuthorizationData(String instance, String username, String password) {
-        TextInputEditText username_edit = view.findViewById(R.id.username_edit);
-        TextInputEditText password_edit = view.findViewById(R.id.password_edit);
-        username_edit.setText(username);
-        password_edit.setText(password);
+        try {
+            TextInputEditText username_edit = view.findViewById(R.id.username_edit);
+            TextInputEditText password_edit = view.findViewById(R.id.password_edit);
+            username_edit.setText(username);
+            password_edit.setText(password);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     public String getNetworkType() {

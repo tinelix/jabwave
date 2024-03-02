@@ -3,6 +3,7 @@ package dev.tinelix.jabwave.telegram.api;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.Client;
@@ -67,8 +68,8 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
    public void send(TdApi.Function function, ApiHandler handler) {
       if(handler != null) {
          client.send(
-                 function, handler::onSuccess,
-                 handler::onFail
+                 function, object -> handler.onSuccess(function, object),
+                 e -> handler.onFail(function, e)
          );
       } else {
          client.send(function, null);
@@ -79,9 +80,34 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
       client.close();
    }
 
+   public TdApi.Function createFunction(int constructor, Bundle params) {
+      TdApi.Function function = null;
+      switch (constructor) {
+         case TdApi.GetChats.CONSTRUCTOR:
+            function = new TdApi.GetChats();
+            break;
+         case TdApi.GetChat.CONSTRUCTOR:
+            if(params.containsKey("chat_id"))
+               function = new TdApi.GetChat(params.getLong("chat_id"));
+            else
+               function = new TdApi.GetChat();
+            break;
+         case TdApi.GetUser.CONSTRUCTOR:
+            if(params.containsKey("user_id"))
+               function = new TdApi.GetUser();
+            else
+               function = new TdApi.GetUser(params.getLong("user_id"));
+            break;
+         case TdApi.GetMe.CONSTRUCTOR:
+            function = new TdApi.GetMe();
+            break;
+      }
+      return function;
+   }
+
    public interface ApiHandler {
-      void onSuccess(TdApi.Object object);
-      void onFail(Throwable throwable);
+      void onSuccess(TdApi.Function function, TdApi.Object object);
+      void onFail(TdApi.Function function, Throwable throwable);
    }
 
    public static class Error extends java.lang.Error {

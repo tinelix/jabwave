@@ -1,9 +1,11 @@
 package dev.tinelix.jabwave.telegram.api.entities;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.telegram.api.TDLibClient;
 
 public class Authentication implements TDLibClient.ApiHandler {
@@ -29,7 +31,7 @@ public class Authentication implements TDLibClient.ApiHandler {
         );
     }
 
-    public void checkAuthenticationPassword(String password) {
+    public void sendCloudPassword(String password) {
         client.send(
                 new TdApi.CheckAuthenticationPassword(password),
                 this
@@ -47,65 +49,18 @@ public class Authentication implements TDLibClient.ApiHandler {
         return isAuthorized;
     }
 
-    @SuppressLint("SwitchIntDef")
-    public void updateState(TDLibClient client, TdApi.Object object) {
-        switch (object.getConstructor()) {
-            case TdApi.AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
-                this.onFail(
-                        new TDLibClient.Error(
-                                TDLibClient.Error.INVALID_TDLIB_PARAMETERS,
-                                "Invalid TDLib client parameters"
-                        )
-                );
-                break;
-            case TdApi.AuthorizationStateWaitEncryptionKey.CONSTRUCTOR:
-                client.send(new TdApi.CheckDatabaseEncryptionKey(), new TDLibClient.ApiHandler() {
-                    @Override
-                    public void onSuccess(TdApi.Object object) {
-                        isAuthorized = true;
-                        handler.onSuccess(object);
-                    }
-
-                    @Override
-                    public void onFail(Throwable throwable) {
-                        handler.onFail(throwable);
-                    }
-                });
-                break;
-            case TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
-                this.onFail(
-                        new TDLibClient.Error(
-                                TDLibClient.Error.REQUIRED_PHONE_NUMBER,
-                                "Required phone number for authentication."
-                        )
-                );
-                break;
-            case TdApi.AuthorizationStateWaitCode.CONSTRUCTOR:
-                this.onFail(
-                        new TDLibClient.Error(
-                                TDLibClient.Error.REQUIRED_AUTH_CODE,
-                                "Required authentication code."
-                        )
-                );
-                break;
-            default:
-                break;
-        }
-    }
-
     @Override
-    public void onSuccess(TdApi.Object object) {
+    public void onSuccess(TdApi.Function function, TdApi.Object object) {
         if(object instanceof TdApi.Error) {
-            onFail(new TDLibClient.Error("auth_error", ((TdApi.Error) object).message));
+            onFail(function, new TDLibClient.Error("auth_error", ((TdApi.Error) object).message));
         } else {
-            updateState(this.client, object);
-            handler.onSuccess(object);
+            handler.onSuccess(function, object);
         }
     }
 
     @Override
-    public void onFail(Throwable throwable) {
+    public void onFail(TdApi.Function function, Throwable throwable) {
         throwable.printStackTrace();
-        handler.onFail(throwable);
+        handler.onFail(function, throwable);
     }
 }

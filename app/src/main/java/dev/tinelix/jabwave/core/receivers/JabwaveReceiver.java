@@ -35,7 +35,13 @@ public class JabwaveReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, String.format("Received data from %s.", intent.getAction().contains("TELEGRAM") ? "Telegram" : "XMPP instance"));
+        Log.d(
+                TAG,
+                String.format("Received message code %s from %s.",
+                    intent.getIntExtra("msg", 0),
+                    intent.getAction().contains("TELEGRAM") ? "Telegram" : "XMPP instance"
+                )
+        );
         if(ctx instanceof AppActivity) {
             AppActivity activity = (AppActivity) ctx;
             activity.receiveState(
