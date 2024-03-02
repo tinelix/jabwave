@@ -9,7 +9,7 @@ import android.view.ViewTreeObserver;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import dev.tinelix.jabwave.core.ui.listeners.OnKeyboardStateListener;
+import dev.tinelix.jabwave.core.listeners.OnKeyboardStateListener;
 
 public class XConstraintLayout extends ConstraintLayout {
     private OnKeyboardStateListener listener;

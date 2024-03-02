@@ -1,9 +1,16 @@
 package dev.tinelix.jabwave;
 
+import android.content.res.Resources;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Global {
+
+    public static float getScaledDp(Resources res) {
+        return res.getDisplayMetrics().scaledDensity;
+    }
+
     public static String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (byte aByte : bytes) {

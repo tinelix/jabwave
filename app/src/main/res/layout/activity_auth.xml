@@ -43,17 +43,24 @@
             app:layout_constraintTop_toTopOf="@+id/app_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <FrameLayout
-        android:id="@+id/dynamic_fragment_layout"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/fragment_layout"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_title">
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+        </FrameLayout>
+    </LinearLayout>
 
 
 </dev.tinelix.jabwave.core.ui.views.base.XConstraintLayout>

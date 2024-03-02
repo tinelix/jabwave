@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="supported_networks">
+        <item name="tdlib">Telegram (TDLib)</item>
+        <item name="xmpp">XMPP (Smack)</item>
+    </string-array>
+</resources>

@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">Jabwave</string>
-    <string name="auth_jid">Jabber ID</string>
+    <string name="auth_phone_number">Phone number</string>
+    <string name="auth_jid" translatable="false">Jabber ID</string>
     <string name="auth_password">Password</string>
     <string name="auth_sign_in">Sign in</string>
     <string name="auth_register">Register</string>
-    <string name="invalid_jid_or_password">Not a valid Jabber ID and/or password.</string>
+    <string name="invalid_pn_or_passw">Invalid phone number and/or password</string>
+    <string name="invalid_jid_or_passw">Invalid Jabber ID and/or password.</string>
     <string name="auth_error_network">No Internet connection</string>
     <string name="auth_wait">Wait</string>
     <string name="retry_btn">Retry</string>
