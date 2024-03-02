@@ -51,8 +51,8 @@ public class JabwaveApp extends Application {
         if(!xmpp_prefs.contains("username")) {
             editor.putString("username", "");
         }
-        if(!xmpp_prefs.contains("account_password_hash")) {
-            editor.putString("account_password_hash", "");
+        if(!xmpp_prefs.contains("password_hash")) {
+            editor.putString("password_hash", "");
         }
         if(!xmpp_prefs.contains("account_password_sha256")) {
             editor.putString("account_password_sha256", "");
@@ -78,7 +78,7 @@ public class JabwaveApp extends Application {
     }
 
     public boolean isAuthorized() {
-        return getXmppPreferences().getString("server", "").length() > 0 &&
+        return getXmppPreferences().getString("server", "").length() > 0 ||
                 getTelegramPreferences().getString("phone_number", "").length() > 0;
     }
 

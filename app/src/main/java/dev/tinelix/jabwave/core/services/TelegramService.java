@@ -94,6 +94,7 @@ public class TelegramService extends IntentService {
                     this.phone_number = phone_number;
                     new Thread(() -> {
                         client = new TDLibClient(getApplicationContext());
+                        client.sendTdlibParameters();
                         isConnected = true;
                         Authentication authentication = new Authentication(client,
                                 new TDLibClient.ApiHandler() {
@@ -107,7 +108,9 @@ public class TelegramService extends IntentService {
 
                                     @Override
                                     public void onFail(Throwable throwable) {
-                                        status = "auth_error";
+                                        if(throwable instanceof TDLibClient.Error) {
+                                            status = ((TDLibClient.Error) throwable).getTag();
+                                        }
                                         Bundle data = new Bundle();
                                         sendMessageToActivity(status, data);
                                     }
@@ -213,7 +216,7 @@ public class TelegramService extends IntentService {
     private void sendMessageToActivity(String status) {
         Intent intent = new Intent();
         switch (status) {
-            case "auth_error":
+            case "required_phone_number":
                 intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
                 break;
             case "error":

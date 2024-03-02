@@ -48,7 +48,7 @@ public class Authentication implements TDLibClient.ApiHandler {
     }
 
     @SuppressLint("SwitchIntDef")
-    public void updateState(TDLibClient client, TdApi.AuthorizationState object) {
+    public void updateState(TDLibClient client, TdApi.Object object) {
         switch (object.getConstructor()) {
             case TdApi.AuthorizationStateWaitTdlibParameters.CONSTRUCTOR:
                 this.onFail(
@@ -98,7 +98,7 @@ public class Authentication implements TDLibClient.ApiHandler {
         if(object instanceof TdApi.Error) {
             onFail(new TDLibClient.Error("auth_error", ((TdApi.Error) object).message));
         } else {
-            updateState(this.client, (TdApi.AuthorizationState) object);
+            updateState(this.client, object);
             handler.onSuccess(object);
         }
     }

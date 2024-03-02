@@ -8,6 +8,7 @@ import android.os.Messenger;
 import android.util.Log;
 
 import com.mediaparkpk.base58android.Base58;
+import com.mediaparkpk.base58android.Base58Exception;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionListener;
@@ -122,7 +123,14 @@ public class XMPPService extends IntentService {
                         Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
                         status = "authorizing";
                         listenConnection(client);
-                        client.start(server, username, new String(Base58.decode(password)));
+                        try {
+                            client.start(server, username, new String(Base58.decode(password)));
+                        } catch (Base58Exception e) {
+                            Log.e(JabwaveApp.XMPP_SERV_TAG,
+                                    "Authentication with Base58 failed. Retrying with plain password..."
+                            );
+                            client.start(server, username, password);
+                        }
                         Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                         status = "authorized";
                         buildHelloPresence(conn);

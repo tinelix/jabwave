@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +38,7 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
+import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
 import dev.tinelix.jabwave.core.ui.views.base.XConstraintLayout;
 import dev.tinelix.jabwave.core.listeners.OnKeyboardStateListener;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
@@ -49,7 +51,7 @@ public class AuthActivity extends AppCompatActivity {
     private String server;
     private String username;
     private String password;
-    private AuthFragment authFragment;
+    private Fragment fragment;
     private SharedPreferences xmpp_prefs;
     private SharedPreferences telegram_prefs;
     private SharedPreferences global_prefs;
@@ -80,9 +82,9 @@ public class AuthActivity extends AppCompatActivity {
             }
             frame.setLayoutParams(lp);
         });
-        authFragment = new AuthFragment();
+        fragment = new AuthFragment();
         ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment, authFragment);
+        ft.replace(R.id.fragment, fragment);
         ft.commit();
         registerBroadcastReceiver();
         global_prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -112,9 +114,18 @@ public class AuthActivity extends AppCompatActivity {
             }
             this.password = password;
             ((JabwaveApp) getApplication())
-                    .xmpp.start(AuthActivity.this, server, this.username, password);
+                    .xmpp.start(AuthActivity.this, server, this.username, this.password);
         }
 
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, new AuthProgressFragment());
+        ft.commit();
+    }
+
+    public void signIn(String signin_code) {
+        if(global_prefs.getString("network_type", "").equals("telegram")) {
+            ((JabwaveApp) getApplication()).telegram.authorization.sendAuthCode(signin_code);
+        }
         ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment, new AuthProgressFragment());
         ft.commit();
@@ -140,17 +151,27 @@ public class AuthActivity extends AppCompatActivity {
         } else if(message == HandlerMessages.NO_INTERNET_CONNECTION
                 || message == HandlerMessages.AUTHENTICATION_ERROR) {
             ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment, authFragment);
-            authFragment.setAuthorizationData(server, username, password);
+            ft.replace(R.id.fragment, fragment);
+            if(fragment instanceof AuthFragment) {
+                ((AuthFragment) fragment).setAuthorizationData(server, username, password);
+            }
             ft.commit();
             showSnackBar(message);
+        } else if(message == dev.tinelix.jabwave.telegram.enumerations.HandlerMessages.REQUIRED_AUTH_CODE) {
+            fragment = new AuthTwoFactorFragment();
+            ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment, fragment);
+            ft.commit();
         }
     }
 
     private void showSnackBar(int message) {
         ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment, authFragment);
-        authFragment.setAuthorizationData(server, username, password);
+        ft.replace(R.id.fragment, fragment);
+        if(!(fragment instanceof AuthFragment)) {
+            fragment = new AuthFragment();
+        }
+        ((AuthFragment) fragment).setAuthorizationData(server, username, password);
         ft.commit();
         Snackbar snackbar;
         int error_string_id = R.string.auth_error_network;

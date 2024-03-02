@@ -11,4 +11,6 @@
     <string name="retry_btn">Повторить</string>
     <string name="general_category">Общие</string>
     <string name="global_search_hint">Глобальный поиск</string>
+    <string name="auth_twofactor_code_text">Введите код подтверждения, отправленный на другом устройстве.</string>
+    <string name="auth_twofactor_code">Код для входа</string>
 </resources>

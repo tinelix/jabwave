@@ -26,6 +26,7 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
       params.deviceModel = Build.MODEL;
       params.systemVersion = Build.VERSION.RELEASE;
       APISecureStorage.loadAppToken();
+      this.client = Client.create(this, null,this);
       try {
          params.apiId = Integer.parseInt(APISecureStorage.app_id);
          params.apiHash = APISecureStorage.app_key;
@@ -35,15 +36,18 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
       } catch (Exception ex) {
          ex.printStackTrace();
       }
-      this.client = Client.create(this, null,this);
-      send(new TdApi.SetTdlibParameters(params), null);
-      send(new TdApi.CheckDatabaseEncryptionKey(), null);
+      sendTdlibParameters();
    }
 
    public TDLibClient(TdApi.TdlibParameters params) {
       this.params = params;
       this.client = Client.create(this, null,this);
+      sendTdlibParameters();
+   }
+
+   public void sendTdlibParameters() {
       send(new TdApi.SetTdlibParameters(params), null);
+      send(new TdApi.CheckDatabaseEncryptionKey(), null);
    }
 
    @Override
