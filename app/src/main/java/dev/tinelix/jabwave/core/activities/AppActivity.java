@@ -78,23 +78,36 @@ public class AppActivity extends JabwaveActivity
 
     private void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
-        registerReceiver(
-                jwReceiver,
-                new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
-        );
-        registerReceiver(
-                jwReceiver,
-                new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE")
-        );
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            registerReceiver(
+                    jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE")
+            );
+        } else {
+            registerReceiver(
+                    jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
+            );
+        }
     }
 
     private void connect() {
-        if(!app.xmpp.isConnected()) {
-            app.xmpp.start(
-                    this, app.getXmppPreferences().getString("server", ""),
-                    app.getXmppPreferences().getString("username", ""),
-                    app.getXmppPreferences().getString("account_password", "")
-            );
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            if(!app.telegram.isConnected()) {
+                app.telegram.start(
+                        this,
+                        app.getTelegramPreferences().getString("phone_number", "")
+                );
+            }
+        } else {
+            if (!app.xmpp.isConnected()) {
+                app.xmpp.start(
+                        this,
+                        app.getXmppPreferences().getString("server", ""),
+                        app.getXmppPreferences().getString("username", ""),
+                        app.getXmppPreferences().getString("password_hash", "")
+                );
+            }
         }
     }
 

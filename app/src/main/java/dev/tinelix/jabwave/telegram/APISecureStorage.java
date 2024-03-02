@@ -1,7 +1,11 @@
 package dev.tinelix.jabwave.telegram;
 
+import android.util.Log;
+
 import com.mediaparkpk.base58android.Base58;
 import com.mediaparkpk.base58android.Base58Exception;
+
+import java.nio.charset.StandardCharsets;
 
 import dev.tinelix.jabwave.BuildConfig;
 
@@ -20,8 +24,12 @@ public class APISecureStorage {
 
     public static void loadAppToken() {
         try {
-            app_id = new String(Base58.decode(BuildConfig.TDLIB_APP_TOKEN)).split("\\.")[0];
-            app_key = new String(Base58.decode(BuildConfig.TDLIB_APP_TOKEN)).split("\\.")[1];
+            String decoded_token = new String(
+                    Base58.decode(BuildConfig.TDLIB_APP_TOKEN), StandardCharsets.UTF_8
+            );
+            // кек, этот реджекс похож на логотип вкусно и точка
+            app_id = decoded_token.split("\\.")[0];
+            app_key = decoded_token.split("\\.")[1];
         } catch (Base58Exception e) {
             e.printStackTrace();
         }

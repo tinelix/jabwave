@@ -51,6 +51,7 @@ public class AuthActivity extends AppCompatActivity {
     private String password;
     private AuthFragment authFragment;
     private SharedPreferences xmpp_prefs;
+    private SharedPreferences telegram_prefs;
     private SharedPreferences global_prefs;
     private JabwaveReceiver jwReceiver;
 
@@ -89,6 +90,7 @@ public class AuthActivity extends AppCompatActivity {
         registerBroadcastReceiver();
         global_prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         xmpp_prefs = getSharedPreferences("xmpp", 0);
+        telegram_prefs = getSharedPreferences("telegram", 0);
     }
 
     public void registerBroadcastReceiver() {
@@ -109,17 +111,23 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void signIn(String username, String password) {
-        String[] username_mask = username.split("@");
-        if(username_mask.length == 2) {
-            this.username = username_mask[0];
-            this.server = username_mask[1];
+        if(global_prefs.getString("network_type", "").equals("telegram")) {
+            this.username = username;
+            ((JabwaveApp) getApplication()).telegram.start(this, username);
+        } else {
+            String[] username_mask = username.split("@");
+            if (username_mask.length == 2) {
+                this.username = username_mask[0];
+                this.server = username_mask[1];
+            }
+            this.password = password;
+            ((JabwaveApp) getApplication())
+                    .xmpp.start(AuthActivity.this, server, this.username, password);
         }
-        this.password = password;
+
         ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment, new AuthProgressFragment());
         ft.commit();
-        ((JabwaveApp) getApplicationContext())
-                .xmpp.start(AuthActivity.this, server, this.username, password);
     }
 
     public void receiveState(int message, Bundle data) {
@@ -144,12 +152,17 @@ public class AuthActivity extends AppCompatActivity {
             }
             snackbar.show();
         } else if(message == HandlerMessages.AUTHORIZED) {
-            SharedPreferences.Editor editor = xmpp_prefs.edit();
-            editor.putString("server", server);
-            editor.putString("username", username);
-            editor.putString("account_password",
-                    Base58.encode(password.getBytes(StandardCharsets.UTF_8))
-            );
+            SharedPreferences.Editor editor;
+            if(global_prefs.getString("network_type", "").equals("telegram")) {
+                editor = telegram_prefs.edit();
+                editor.putString("phone_number", username);
+            } else {
+                editor = xmpp_prefs.edit();
+                editor.putString("server", server);
+                editor.putString("username", username);
+                editor.putString("password_hash",
+                        Base58.encode(password.getBytes(StandardCharsets.UTF_8)));
+            }
             editor.apply();
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);

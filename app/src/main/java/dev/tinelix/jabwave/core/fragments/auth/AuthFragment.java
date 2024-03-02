@@ -1,7 +1,9 @@
 package dev.tinelix.jabwave.core.fragments.auth;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ import dev.tinelix.jabwave.core.ui.list.items.SimpleListItem;
 
 public class AuthFragment extends Fragment {
     private View view;
+    private SharedPreferences global_prefs;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -47,13 +50,16 @@ public class AuthFragment extends Fragment {
                 }
             }
         });
-
         ((LinearLayoutCompat) view.findViewById(R.id.auth_layout)).setGravity(Gravity.CENTER);
         createNetworksAdapter();
+        global_prefs = PreferenceManager.getDefaultSharedPreferences(
+                Objects.requireNonNull(getContext()).getApplicationContext()
+        );
         return view;
     }
 
     private void createNetworksAdapter() {
+        Spinner network_spinner = view.findViewById(R.id.networks_spinner);
         ArrayList<SimpleListItem> networks_list = new ArrayList<>();
         String[] array = getResources().getStringArray(R.array.supported_networks);
         for (String network_name: array) {
@@ -66,7 +72,8 @@ public class AuthFragment extends Fragment {
                     setAuthNetwork(position);
                 }
         );
-        ((Spinner) view.findViewById(R.id.networks_spinner)).setAdapter(adapter);
+        network_spinner.setAdapter(adapter);
+        network_spinner.setSelection(1);
     }
 
     private void setAuthNetwork(int position) {
@@ -80,14 +87,18 @@ public class AuthFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        SharedPreferences.Editor editor = global_prefs.edit();
         if (position == 0) {
             username_til.setHint(R.string.auth_phone_number);
             password_til.setVisibility(View.GONE);
+            editor.putString("network_type", "telegram");
         } else {
             username_til.setHint(R.string.auth_jid);
             password_til.setVisibility(View.VISIBLE);
+            editor.putString("network_type", "auth");
         }
         network_spinner.setSelection(position);
+        editor.apply();
     }
 
     public void setAuthorizationData(String instance, String username, String password) {

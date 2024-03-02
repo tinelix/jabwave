@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.xmpp.services;
+package dev.tinelix.jabwave.core.services;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Messenger;
 import android.util.Log;
+
+import com.mediaparkpk.base58android.Base58;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionListener;
@@ -26,12 +28,7 @@ import dev.tinelix.jabwave.xmpp.api.entities.Roster;
 import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
+ * XMPP (Smack) client service
  */
 
 public class XMPPService extends IntentService {
@@ -125,7 +122,7 @@ public class XMPPService extends IntentService {
                         Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
                         status = "authorizing";
                         listenConnection(client);
-                        client.start(server, username, password);
+                        client.start(server, username, new String(Base58.decode(password)));
                         Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                         status = "authorized";
                         buildHelloPresence(conn);

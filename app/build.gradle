@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+        classpath project(':app')
+    }
+}
+
 plugins {
     id 'com.android.application'
 }
@@ -30,19 +36,22 @@ def getGitHubCommit = {
 }
 
 def getTDAppToken = {
+    /*
+         HOW TO STORE TELEGRAM API KEY SAFELY?
+
+         1.  Create file named 'tdlib.prop' in '.signing' directory.
+         2.  Generate Base58 hash according to the format of the original string:
+             '<api_id>.<api_hash>'
+             (without quotation marks)
+         3.  Store 'tdlib.prop' in a place inaccessible to third parties.
+    */
     Properties tdlib_props = new Properties();
-    // Create 'tdlib.prop' file inside '.signing' directory and
-    // store in a place inaccessible to third parties (!)
     if (file('.signing/tdlib.prop').exists()) {
         tdlib_props.load(new FileInputStream(file(".signing/tdlib.prop")))
-        return "${com.mediaparkpk.base58android.Base58.encode(getUnhashedToken().getBytes())}"
+        return "${tdlib_props['APP_TOKEN']}"
     } else {
         return "UNKNOWN.UNKNOWN"
     }
-}
-
-def getUnhashedToken = {
-    return "tdlib_props['APP_ID']}.${tdlib_props['APP_HASH']}"
 }
 
 android {

@@ -10,7 +10,7 @@ import java.util.Random;
 
 import dev.tinelix.jabwave.core.services.TelegramService;
 import dev.tinelix.jabwave.xmpp.api.entities.Authentication;
-import dev.tinelix.jabwave.xmpp.services.XMPPService;
+import dev.tinelix.jabwave.core.services.XMPPService;
 
 public class JabwaveApp extends Application {
     public String version;
@@ -26,6 +26,7 @@ public class JabwaveApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        telegram = new TelegramService();
         xmpp = new XMPPService();
         version = BuildConfig.VERSION_NAME;
         global_prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -126,5 +127,9 @@ public class JabwaveApp extends Application {
             xmpp.stopService();
         }
         super.onTerminate();
+    }
+
+    public String getCurrentNetworkType() {
+        return global_prefs.getString("network_type", "");
     }
 }
