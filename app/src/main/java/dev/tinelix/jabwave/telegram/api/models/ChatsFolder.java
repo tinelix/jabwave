@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.telegram.api.entities;
+package dev.tinelix.jabwave.telegram.api.models;
 
 import dev.tinelix.jabwave.core.ui.list.items.base.ChatGroup;
 

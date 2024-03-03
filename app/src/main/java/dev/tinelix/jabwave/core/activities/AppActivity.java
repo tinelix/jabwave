@@ -6,8 +6,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+
+import org.drinkless.td.libcore.telegram.TdApi;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -16,15 +19,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.core.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.core.fragments.app.ContactsListFragment;
 import dev.tinelix.jabwave.core.ui.views.base.JabwaveActionBar;
-import dev.tinelix.jabwave.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.telegram.api.entities.Account;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
-import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
+import dev.tinelix.jabwave.xmpp.api.entities.Contact;
 
 public class AppActivity extends JabwaveActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,7 +54,7 @@ public class AppActivity extends JabwaveActivity
         if(!app.xmpp.isConnected()) {
             connect();
         } else {
-            getContacts();
+            getAccount();
         }
         createMainFragment();
         setActionBar();
@@ -111,6 +117,23 @@ public class AppActivity extends JabwaveActivity
         }
     }
 
+    private void getAccount() {
+        app.telegram.account = new Account(app.telegram.getClient(), new TDLibClient.ApiHandler() {
+            @Override
+            public void onSuccess(TdApi.Function function, TdApi.Object object) {
+                Global.triggerReceiverIntent(
+                        AppActivity.this,
+                        dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages.ACCOUNT_LOADED
+                );
+            }
+
+            @Override
+            public void onFail(TdApi.Function function, Throwable throwable) {
+
+            }
+        });
+    }
+
     private void getContacts() {
         if(fragment instanceof ContactsListFragment) {
             ((ContactsListFragment) fragment).loadContacts();
@@ -119,24 +142,47 @@ public class AppActivity extends JabwaveActivity
     }
 
     public void receiveState(int message, Bundle data) {
-        if(message == HandlerMessages.AUTHORIZED) {
-            Log.d(JabwaveApp.APP_TAG, "Loading contacts...");
-            getContacts();
-        } else if(message == HandlerMessages.ROSTER_CHANGED) {
-            if(app.getCurrentNetworkType().equals("xmpp")) {
-                String jid = data.getString("presence_jid");
-                Contact contact = chatsAdapter.searchByJid(jid);
-                if (contact != null) {
-                    contact.custom_status = data.getString("presence_status");
-                    chatsAdapter.setByJid(jid.split("/")[0], contact);
+        switch (message) {
+            case HandlerMessages.AUTHORIZED:
+                Log.d(JabwaveApp.APP_TAG, "Loading account...");
+                getAccount();
+                break;
+            case HandlerMessages.ACCOUNT_LOADED:
+                updateNavView();
+                getContacts();
+                break;
+            case HandlerMessages.CHATS_LOADED:
+                if(app.getCurrentNetworkType().equals("telegram")) {
+                    if (fragment instanceof ContactsListFragment) {
+                        findViewById(R.id.progress).setVisibility(View.GONE);
+                        findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
+                        ((ContactsListFragment) fragment).loadLocalContacts();
+                    }
+                } else {
+                    String jid = data.getString("presence_jid");
+                    Contact contact = chatsAdapter.searchByJid(jid);
+                    if (contact != null) {
+                        contact.custom_status = data.getString("presence_status");
+                        chatsAdapter.setByJid(jid.split("/")[0], contact);
+                    }
                 }
+        }
+    }
+
+    private void updateNavView() {
+        NavigationView navView = findViewById(R.id.nav_view);
+        View header = navView.getHeaderView(0);
+        TextView profile_name = header.findViewById(R.id.profile_name);
+        TextView profile_id = header.findViewById(R.id.screen_name);
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            Account account = app.telegram.account;
+            profile_name.setText(
+                    String.format("%s %s", account.first_name, account.last_name)
+            );
+            if(account.username != null) {
+                profile_id.setText(String.format("@%s", account.username));
             } else {
-                Log.d(JabwaveApp.APP_TAG, "Loading contacts...");
-                if(fragment instanceof ContactsListFragment) {
-                    findViewById(R.id.progress).setVisibility(View.GONE);
-                    findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
-                    ((ContactsListFragment) fragment).loadLocalContacts();
-                }
+                profile_id.setVisibility(View.GONE);
             }
         }
     }

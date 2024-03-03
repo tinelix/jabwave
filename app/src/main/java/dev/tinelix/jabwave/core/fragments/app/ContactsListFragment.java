@@ -2,9 +2,6 @@ package dev.tinelix.jabwave.core.fragments.app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.ui.list.adapters.ChatsAdapter;
@@ -26,10 +24,8 @@ import dev.tinelix.jabwave.core.ui.list.items.base.Chat;
 import dev.tinelix.jabwave.core.ui.list.items.base.ChatGroup;
 import dev.tinelix.jabwave.core.ui.list.sections.ChatsGroupSection;
 import dev.tinelix.jabwave.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.telegram.api.entities.ChatsFolder;
-import dev.tinelix.jabwave.telegram.api.entities.ChatsList;
-import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
-import dev.tinelix.jabwave.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.telegram.api.models.Chats;
+import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
 
 public class ContactsListFragment extends Fragment {
     private JabwaveApp app;
@@ -54,16 +50,13 @@ public class ContactsListFragment extends Fragment {
 
     public void loadContacts() {
         if(app.getCurrentNetworkType().equals("telegram")) {
-            app.telegram.chatsList = new ChatsList(app.telegram.getClient());
-            app.telegram.chatsList.loadChats(new TDLibClient.ApiHandler() {
+            app.telegram.chats = new Chats(app.telegram.getClient());
+            app.telegram.chats.loadChats(new TDLibClient.ApiHandler() {
                 @Override
                 public void onSuccess(TdApi.Function function, TdApi.Object object) {
-                    contacts = app.telegram.chatsList.chats;
+                    contacts = app.telegram.chats.chats;
                     groups = new ArrayList<>();
-                    Intent intent = new Intent();
-                    intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
-                    intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
-                    Objects.requireNonNull(getActivity()).sendBroadcast(intent);
+                    Global.triggerReceiverIntent(getActivity(), HandlerMessages.CHATS_LOADED);
                 }
 
                 @Override
@@ -78,7 +71,7 @@ public class ContactsListFragment extends Fragment {
     }
 
     public void loadLocalContacts() {
-        contacts = app.telegram.chatsList.chats;
+        contacts = app.telegram.chats.chats;
         groups = new ArrayList<>();
         createContactsAdapter();
     }

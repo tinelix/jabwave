@@ -1,31 +1,24 @@
-package dev.tinelix.jabwave.telegram.api.entities;
+package dev.tinelix.jabwave.telegram.api.models;
 
-import android.os.Build;
-import android.os.Handler;
 import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.telegram.api.TDLibClient;
 
-public class ChatsList {
-
-    public final AtomicBoolean processing = new AtomicBoolean(true);
+public class Chats {
 
     private final TDLibClient client;
     public ArrayList<dev.tinelix.jabwave.core.ui.list.items.base.Chat> chats;
     private int chats_count;
     private static final int CHATS_MAX_LIMIT = 50;
 
-    public ChatsList(TDLibClient client) {
+    public Chats(TDLibClient client) {
         this.client = client;
         this.chats = new ArrayList<>();
     }
@@ -65,7 +58,7 @@ public class ChatsList {
                             new dev.tinelix.jabwave.telegram.api.entities.Chat(
                                     id, td_chat.title, new ArrayList<>(), 0
                             );
-                    ChatsList.this.chats.add(chat);
+                    Chats.this.chats.add(chat);
                     latch.countDown();
                     if(latch.getCount() == 0) {
                         handler.onSuccess(function, object);
@@ -79,10 +72,11 @@ public class ChatsList {
             });
         }
         try {
-            latch.await(10, TimeUnit.SECONDS);
+            latch.await(40, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Log.d(JabwaveApp.TELEGRAM_SERV_TAG, String.format("%s chats loaded.", this.chats.size()));
     }
 
     private void getChat(long chatId, boolean clear) {

@@ -1,6 +1,11 @@
 package dev.tinelix.jabwave;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -48,5 +53,19 @@ public class Global {
             e.printStackTrace();
         }
         return hash;
+    }
+
+    public static void triggerReceiverIntent(Context ctx, int message) {
+        if(ctx.getApplicationContext() instanceof JabwaveApp) {
+            JabwaveApp app = ((JabwaveApp) ctx.getApplicationContext());
+            Intent intent = new Intent();
+            if(app.getCurrentNetworkType().equals("telegram")) {
+                intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
+            } else {
+                intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
+            }
+            intent.putExtra("msg", message);
+            ctx.sendBroadcast(intent);
+        }
     }
 }

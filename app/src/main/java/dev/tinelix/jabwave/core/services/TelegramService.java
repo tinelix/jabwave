@@ -9,14 +9,12 @@ import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
-import java.util.ArrayList;
-
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.telegram.api.entities.Account;
 import dev.tinelix.jabwave.telegram.api.entities.Authentication;
-import dev.tinelix.jabwave.telegram.api.entities.Chat;
-import dev.tinelix.jabwave.telegram.api.entities.ChatsList;
-import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
+import dev.tinelix.jabwave.telegram.api.models.Chats;
+import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
 
 /**
  * Telegram (TDLib) client service
@@ -29,13 +27,14 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
     private static final String ACTION_STOP = "stop_service";
 
     private static final String PHONE_NUMBER = "phone_number";
+    public Account account;
     private Context ctx;
 
     private String status = "done";
 
     private TDLibClient client = null;
 
-    public ChatsList chatsList;
+    public Chats chats;
     public Authentication authentication;
 
     private Intent intent;
@@ -260,15 +259,6 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
                     break;
             }
             sendMessageToActivity(status);
-        } else if(object instanceof TdApi.UpdateUserStatus) {
-            TdApi.UpdateUserStatus updus = (TdApi.UpdateUserStatus) object;
-            for (int i = 0; i < chatsList.chats.size(); i++) {
-                if(((Chat) chatsList.chats.get(i)).id == updus.userId) {
-                    Chat chat = ((Chat) chatsList.chats.get(i));
-                    chat.status = updus.status.getConstructor() == TdApi.UserStatusOnline.CONSTRUCTOR ? 0 : 1;
-                    chatsList.chats.set(i, chat);
-                }
-            }
         }
     }
 

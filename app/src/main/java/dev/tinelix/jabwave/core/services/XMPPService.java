@@ -22,11 +22,10 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import java.util.ArrayList;
 
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.xmpp.api.entities.Authentication;
-import dev.tinelix.jabwave.xmpp.api.entities.Contact;
 import dev.tinelix.jabwave.xmpp.api.entities.Roster;
-import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 
 /**
  * XMPP (Smack) client service
@@ -230,7 +229,7 @@ public class XMPPService extends IntentService {
         Intent intent = new Intent();
         switch (status) {
             case "presence_changed":
-                intent.putExtra("msg", HandlerMessages.ROSTER_CHANGED);
+                intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
                 intent.putExtra("data", data);
                 break;
         }

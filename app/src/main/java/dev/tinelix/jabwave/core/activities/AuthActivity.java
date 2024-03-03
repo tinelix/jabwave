@@ -1,6 +1,5 @@
 package dev.tinelix.jabwave.core.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -10,16 +9,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,18 +25,15 @@ import com.google.android.material.snackbar.Snackbar;
 import com.mediaparkpk.base58android.Base58;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
-import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.fragments.auth.AuthCloudPasswordFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
+import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.core.ui.views.base.XConstraintLayout;
-import dev.tinelix.jabwave.core.listeners.OnKeyboardStateListener;
-import dev.tinelix.jabwave.xmpp.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 
 public class AuthActivity extends AppCompatActivity {
@@ -167,12 +158,12 @@ public class AuthActivity extends AppCompatActivity {
             }
             ft.commit();
             showSnackBar(message);
-        } else if(message == dev.tinelix.jabwave.telegram.enumerations.HandlerMessages.REQUIRED_AUTH_CODE) {
+        } else if(message == dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages.REQUIRED_AUTH_CODE) {
             fragment = new AuthTwoFactorFragment();
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment, fragment);
             ft.commit();
-        } else if(message == dev.tinelix.jabwave.telegram.enumerations.HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
+        } else if(message == dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
             fragment = new AuthCloudPasswordFragment();
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment, fragment);
