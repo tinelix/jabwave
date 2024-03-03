@@ -9,7 +9,7 @@ import org.jxmpp.jid.parts.Resourcepart;
 import java.util.Random;
 
 import dev.tinelix.jabwave.core.services.TelegramService;
-import dev.tinelix.jabwave.xmpp.api.entities.Authentication;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Authentication;
 import dev.tinelix.jabwave.core.services.XMPPService;
 
 public class JabwaveApp extends Application {

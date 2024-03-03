@@ -1,6 +1,5 @@
 package dev.tinelix.jabwave.core.fragments.app;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.ui.list.adapters.ChatsAdapter;
-import dev.tinelix.jabwave.core.ui.list.items.base.Chat;
-import dev.tinelix.jabwave.core.ui.list.items.base.ChatGroup;
-import dev.tinelix.jabwave.core.ui.list.sections.ChatsGroupSection;
-import dev.tinelix.jabwave.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.telegram.api.models.Chats;
-import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
+import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
+import dev.tinelix.jabwave.ui.list.items.base.Chat;
+import dev.tinelix.jabwave.ui.list.items.base.ChatGroup;
+import dev.tinelix.jabwave.ui.list.sections.ChatsGroupSection;
+import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.net.telegram.api.models.Chats;
+import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
 public class ContactsListFragment extends Fragment {
     private JabwaveApp app;

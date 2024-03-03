@@ -9,10 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 
-import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
 
@@ -25,9 +23,8 @@ import java.util.Objects;
 
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.AuthActivity;
-import dev.tinelix.jabwave.core.listeners.OnItemSelectListener;
-import dev.tinelix.jabwave.core.ui.list.adapters.SimpleSpinnerAdapter;
-import dev.tinelix.jabwave.core.ui.list.items.SimpleListItem;
+import dev.tinelix.jabwave.ui.list.adapters.SimpleSpinnerAdapter;
+import dev.tinelix.jabwave.ui.list.items.SimpleListItem;
 
 public class AuthFragment extends Fragment {
     private View view;

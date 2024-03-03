@@ -32,8 +32,8 @@ import dev.tinelix.jabwave.core.fragments.auth.AuthCloudPasswordFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
-import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
-import dev.tinelix.jabwave.core.ui.views.base.XConstraintLayout;
+import dev.tinelix.jabwave.ui.enums.HandlerMessages;
+import dev.tinelix.jabwave.ui.views.base.XConstraintLayout;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 
 public class AuthActivity extends AppCompatActivity {
@@ -158,12 +158,12 @@ public class AuthActivity extends AppCompatActivity {
             }
             ft.commit();
             showSnackBar(message);
-        } else if(message == dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages.REQUIRED_AUTH_CODE) {
+        } else if(message == HandlerMessages.REQUIRED_AUTH_CODE) {
             fragment = new AuthTwoFactorFragment();
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment, fragment);
             ft.commit();
-        } else if(message == dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
+        } else if(message == HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
             fragment = new AuthCloudPasswordFragment();
             ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragment, fragment);

@@ -8,8 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -25,15 +23,15 @@ import androidx.fragment.app.FragmentTransaction;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
-import dev.tinelix.jabwave.core.ui.list.adapters.ChatsAdapter;
+import dev.tinelix.jabwave.ui.enums.HandlerMessages;
+import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.core.fragments.app.ContactsListFragment;
-import dev.tinelix.jabwave.core.ui.views.base.JabwaveActionBar;
-import dev.tinelix.jabwave.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.telegram.api.entities.Account;
+import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
+import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.net.telegram.api.entities.Account;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
-import dev.tinelix.jabwave.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
 
 public class AppActivity extends JabwaveActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -126,7 +124,7 @@ public class AppActivity extends JabwaveActivity
             public void onSuccess(TdApi.Function function, TdApi.Object object) {
                 Global.triggerReceiverIntent(
                         AppActivity.this,
-                        dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages.ACCOUNT_LOADED
+                        HandlerMessages.ACCOUNT_LOADED
                 );
             }
 

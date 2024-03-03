@@ -67,6 +67,14 @@
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mcc|mnc|uiMode"
             android:hardwareAccelerated="true">
         </activity>
+
+        <activity
+            android:name=".core.activities.MessengerActivity"
+            android:exported="true"
+            android:theme="@style/ApplicationTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mcc|mnc|uiMode"
+            android:hardwareAccelerated="true">
+        </activity>
     </application>
 
 </manifest>

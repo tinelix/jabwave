@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<dev.tinelix.jabwave.core.ui.views.base.XConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<dev.tinelix.jabwave.ui.views.base.XConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -63,4 +63,4 @@
     </LinearLayout>
 
 
-</dev.tinelix.jabwave.core.ui.views.base.XConstraintLayout>
+</dev.tinelix.jabwave.ui.views.base.XConstraintLayout>

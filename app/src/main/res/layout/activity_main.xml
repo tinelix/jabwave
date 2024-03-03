@@ -19,7 +19,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            <dev.tinelix.jabwave.core.ui.views.base.JabwaveActionBar
+            <dev.tinelix.jabwave.ui.views.base.JabwaveActionBar
                 android:id="@+id/actionbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

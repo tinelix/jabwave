@@ -13,4 +13,5 @@
     <string name="global_search_hint">Глобальный поиск</string>
     <string name="auth_twofactor_code_text">Введите код подтверждения, отправленный на другом устройстве.</string>
     <string name="auth_twofactor_code">Код для входа</string>
+    <string name="send">Отправить</string>
 </resources>

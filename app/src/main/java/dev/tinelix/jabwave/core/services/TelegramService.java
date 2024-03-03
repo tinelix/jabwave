@@ -10,11 +10,11 @@ import android.util.Log;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.telegram.api.entities.Account;
-import dev.tinelix.jabwave.telegram.api.entities.Authentication;
-import dev.tinelix.jabwave.telegram.api.models.Chats;
-import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
+import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.net.telegram.api.entities.Account;
+import dev.tinelix.jabwave.net.telegram.api.entities.Authentication;
+import dev.tinelix.jabwave.net.telegram.api.models.Chats;
+import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
 /**
  * Telegram (TDLib) client service

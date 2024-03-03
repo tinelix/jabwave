@@ -4,28 +4,21 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Messenger;
 import android.util.Log;
 
 import com.mediaparkpk.base58android.Base58;
 import com.mediaparkpk.base58android.Base58Exception;
 
-import org.jivesoftware.smack.AbstractXMPPConnection;
-import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackConfiguration;
-import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
-import java.util.ArrayList;
-
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.core.ui.enumerations.HandlerMessages;
-import dev.tinelix.jabwave.xmpp.api.XMPPClient;
-import dev.tinelix.jabwave.xmpp.api.entities.Authentication;
-import dev.tinelix.jabwave.xmpp.api.entities.Roster;
+import dev.tinelix.jabwave.ui.enums.HandlerMessages;
+import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Authentication;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Roster;
 
 /**
  * XMPP (Smack) client service
@@ -46,7 +39,7 @@ public class XMPPService extends IntentService {
 
     private XMPPClient client;
     private Intent intent;
-    private dev.tinelix.jabwave.xmpp.api.entities.Roster roster;
+    private Roster roster;
     private XMPPTCPConnection conn;
 
     public XMPPService() {
