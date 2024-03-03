@@ -71,8 +71,13 @@ public class ContactsListFragment extends Fragment {
     }
 
     public void loadLocalContacts() {
-        contacts = app.telegram.chats.chats;
-        groups = new ArrayList<>();
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            contacts = app.telegram.chats.chats;
+            groups = new ArrayList<>();
+        } else {
+            contacts = app.xmpp.getRoster().getContacts();
+            groups = app.xmpp.getRoster().getGroups();
+        }
         createContactsAdapter();
     }
 
