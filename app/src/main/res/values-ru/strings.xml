@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="auth_phone_number">Номер телефона</string>
     <string name="auth_password">Пароль</string>
     <string name="auth_sign_in">Вход</string>
@@ -14,4 +14,6 @@
     <string name="auth_twofactor_code_text">Введите код подтверждения, отправленный на другом устройстве.</string>
     <string name="auth_twofactor_code">Код для входа</string>
     <string name="send">Отправить</string>
+    <string name="message">Сообщение</string>
+    <string name="saved_messages">Избранное</string>
 </resources>

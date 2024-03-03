@@ -1,7 +1,12 @@
 package dev.tinelix.jabwave.core.activities;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import dev.tinelix.jabwave.R;
@@ -45,5 +50,7 @@ public class MessengerActivity extends JabwaveActivity {
         JabwaveActionBar actionbar = findViewById(R.id.actionbar);
         actionbar.setNavigationIconTint(R.color.white);
         setSupportActionBar(actionbar);
+        actionbar.setNavigationOnClickListener(v -> handleOnBackPressed());
     }
+
 }

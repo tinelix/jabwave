@@ -93,9 +93,27 @@ public class ContactsListFragment extends Fragment {
                 chatsAdapter.addSection(entityGroupSection);
             }
         } else {
-            ChatGroup group = new ChatGroup(getResources().getString(R.string.general_category), 1);
-            entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
-            chatsAdapter.addSection(entityGroupSection);
+            if(app.getCurrentNetworkType().equals("telegram")) {
+                ChatGroup account_group = new ChatGroup(getResources().getString(R.string.saved_messages), 1);
+                if(contacts.size() > 0) {
+                    if(contacts.get(0).id.equals(app.telegram.account.id)) {
+                        ArrayList<Chat> account_only = new ArrayList<>();
+                        Chat chat = contacts.get(0);
+                        account_only.add(chat);
+                        contacts.remove(chat);
+                        ChatsGroupSection accountGroupSection =
+                                new ChatsGroupSection(getActivity(), account_group, account_only, chatsAdapter);
+                        chatsAdapter.addSection(accountGroupSection);
+                    }
+                }
+                ChatGroup group = new ChatGroup(getResources().getString(R.string.general_category), 1);
+                entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
+                chatsAdapter.addSection(entityGroupSection);
+            } else {
+                ChatGroup group = new ChatGroup(getResources().getString(R.string.general_category), 0);
+                entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
+                chatsAdapter.addSection(entityGroupSection);
+            }
         }
         llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);

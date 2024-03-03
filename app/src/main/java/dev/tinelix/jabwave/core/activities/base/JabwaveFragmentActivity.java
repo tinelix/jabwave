@@ -3,6 +3,7 @@ package dev.tinelix.jabwave.core.activities.base;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -15,9 +16,18 @@ public class JabwaveFragmentActivity extends FragmentActivity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.statusBarColor));
         }
+
+        getOnBackPressedDispatcher().addCallback(
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        JabwaveFragmentActivity.this.handleOnBackPressed();
+                    }
+                }
+        );
     }
 
-    public void handleOnBackPressed() {
-
+    protected void handleOnBackPressed() {
+        finish();
     }
 }

@@ -16,23 +16,26 @@ public class MessageEditor extends LinearLayoutCompat {
         super(context);
         View view =  LayoutInflater.from(getContext()).inflate(
                 R.layout.layout_message_editor, null);
-
         this.addView(view);
+        view.getLayoutParams().width = LayoutParams.MATCH_PARENT;
+        view.getLayoutParams().height = LayoutParams.MATCH_PARENT;
     }
 
     public MessageEditor(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         View view =  LayoutInflater.from(getContext()).inflate(
                 R.layout.layout_message_editor, null);
-
         this.addView(view);
+        view.getLayoutParams().width = LayoutParams.MATCH_PARENT;
+        view.getLayoutParams().height = LayoutParams.MATCH_PARENT;
     }
 
     public MessageEditor(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         View view =  LayoutInflater.from(getContext()).inflate(
                 R.layout.layout_message_editor, null);
-
         this.addView(view);
+        view.getLayoutParams().width = LayoutParams.MATCH_PARENT;
+        view.getLayoutParams().height = LayoutParams.MATCH_PARENT;
     }
 }

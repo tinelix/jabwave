@@ -60,14 +60,6 @@ public class AppActivity extends JabwaveActivity
         createMainFragment();
         setActionBar();
         drawer = findViewById(R.id.drawer_layout);
-        getOnBackPressedDispatcher().addCallback(
-                new OnBackPressedCallback(true) {
-                    @Override
-                    public void handleOnBackPressed() {
-                        AppActivity.this.handleOnBackPressed();
-                    }
-                }
-        );
     }
 
     private void setActionBar() {
@@ -219,15 +211,17 @@ public class AppActivity extends JabwaveActivity
     @Override
     protected void onDestroy() {
         app.xmpp.stopService();
+        app.telegram.stopService();
         unregisterReceiver(jwReceiver);
         super.onDestroy();
     }
 
     @Override
     public void handleOnBackPressed() {
-        super.handleOnBackPressed();
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.handleOnBackPressed();
         }
     }
 

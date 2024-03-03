@@ -14,5 +14,7 @@
     <string name="global_search_hint">Global search</string>
     <string name="auth_twofactor_code_text">Enter the verification code sent on your other device.</string>
     <string name="auth_twofactor_code">Code for sign-in</string>
-    <string name="send">Отправить</string>
+    <string name="send">Send</string>
+    <string name="message">Message</string>
+    <string name="saved_messages">Saved Messages</string>
 </resources>
