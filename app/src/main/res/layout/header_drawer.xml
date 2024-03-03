@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Circle"
-        app:srcCompat="@drawable/ic_person" />
+        app:srcCompat="@drawable/ic_person_accent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/profile_name"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Profile name"
-        android:textColor="?attr/colorPrimaryDark"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/screen_name"
