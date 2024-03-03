@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Roster;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.core.fragments.app.ContactsListFragment;
@@ -111,20 +112,27 @@ public class AppActivity extends JabwaveActivity
     }
 
     private void getAccount() {
-        app.telegram.account = new Account(app.telegram.getClient(), new TDLibClient.ApiHandler() {
-            @Override
-            public void onSuccess(TdApi.Function function, TdApi.Object object) {
-                Global.triggerReceiverIntent(
-                        AppActivity.this,
-                        HandlerMessages.ACCOUNT_LOADED
-                );
-            }
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            app.telegram.account = new Account(app.telegram.getClient(), new TDLibClient.ApiHandler() {
+                @Override
+                public void onSuccess(TdApi.Function function, TdApi.Object object) {
+                    Global.triggerReceiverIntent(
+                            AppActivity.this,
+                            HandlerMessages.ACCOUNT_LOADED
+                    );
+                }
 
-            @Override
-            public void onFail(TdApi.Function function, Throwable throwable) {
+                @Override
+                public void onFail(TdApi.Function function, Throwable throwable) {
 
-            }
-        });
+                }
+            });
+        } else {
+            Global.triggerReceiverIntent(
+                    AppActivity.this,
+                    HandlerMessages.ACCOUNT_LOADED
+            );
+        }
     }
 
     private void getContacts() {
