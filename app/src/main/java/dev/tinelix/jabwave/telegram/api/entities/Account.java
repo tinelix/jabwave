@@ -39,6 +39,7 @@ public class Account extends dev.tinelix.jabwave.core.ui.list.items.base.Account
                     username = user.username;
                     phone_number = user.phoneNumber;
                     if(user.profilePhoto != null) {
+                        downloadPhoto(user.profilePhoto);
                         if(user.profilePhoto.small.local.isDownloadingCompleted)
                             loadPhoto(photo_small, new File(user.profilePhoto.small.local.path));
                         if(user.profilePhoto.big.local.isDownloadingCompleted)
@@ -53,6 +54,10 @@ public class Account extends dev.tinelix.jabwave.core.ui.list.items.base.Account
 
             }
         });
+    }
+
+    private void downloadPhoto(TdApi.ProfilePhoto photo) {
+        // does not work yet
     }
 
     private void loadPhoto(byte[] bytes, File file) {

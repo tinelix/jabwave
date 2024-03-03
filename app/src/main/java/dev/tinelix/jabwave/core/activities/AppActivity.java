@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.drinkless.td.libcore.telegram.TdApi;
@@ -174,6 +177,7 @@ public class AppActivity extends JabwaveActivity
         View header = navView.getHeaderView(0);
         TextView profile_name = header.findViewById(R.id.profile_name);
         TextView profile_id = header.findViewById(R.id.screen_name);
+        ShapeableImageView profile_photo = header.findViewById(R.id.profile_avatar);
         if(app.getCurrentNetworkType().equals("telegram")) {
             Account account = app.telegram.account;
             profile_name.setText(

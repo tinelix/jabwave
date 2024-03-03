@@ -142,6 +142,14 @@ public class ChatsGroupSection extends Section {
                                     .error(R.drawable.ic_person_accent))
                             .into(contact_avatar);
                 }
+            } else if(chat instanceof dev.tinelix.jabwave.telegram.api.entities.Chat){
+                Glide.with(ctx)
+                        .load(chat.photo)
+                        .apply(new RequestOptions()
+                                .override(400, 400)
+                                .placeholder(R.drawable.ic_person_accent)
+                                .error(R.drawable.ic_person_accent))
+                        .into(contact_avatar);
             }
         }
     }

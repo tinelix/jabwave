@@ -12,6 +12,7 @@ public class Chat {
     public Object id;
     public ArrayList<String> groups;
     public int status;
+    public byte[] photo;
 
     public Chat(String title, int network_type) {
         /*

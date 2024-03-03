@@ -2,6 +2,10 @@ package dev.tinelix.jabwave.telegram.api.entities;
 
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Chat extends dev.tinelix.jabwave.core.ui.list.items.base.Chat {
@@ -37,5 +41,15 @@ public class Chat extends dev.tinelix.jabwave.core.ui.list.items.base.Chat {
 
     public void setVCard(VCard vCard) {
         this.vCard = vCard;
+    }
+
+    public void loadPhoto(byte[] bytes, File file) {
+        try {
+            DataInputStream dis = new DataInputStream(new FileInputStream(file));
+            dis.readFully(bytes);
+            dis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

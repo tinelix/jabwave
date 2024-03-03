@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
