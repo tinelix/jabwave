@@ -160,12 +160,9 @@ public class AppActivity extends JabwaveActivity
                         ((ContactsListFragment) fragment).loadLocalContacts();
                     }
                 } else {
-                    String jid = data.getString("presence_jid");
-                    Contact contact = chatsAdapter.searchByJid(jid);
-                    if (contact != null) {
-                        contact.custom_status = data.getString("presence_status");
-                        chatsAdapter.setByJid(jid.split("/")[0], contact);
-                    }
+                    findViewById(R.id.progress).setVisibility(View.GONE);
+                    findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
+                    ((ContactsListFragment) fragment).loadLocalContacts();
                 }
         }
     }
