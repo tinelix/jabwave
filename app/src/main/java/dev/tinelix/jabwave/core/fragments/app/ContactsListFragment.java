@@ -66,6 +66,7 @@ public class ContactsListFragment extends Fragment {
         } else {
             contacts = app.xmpp.getRoster().getContacts();
             groups = app.xmpp.getRoster().getGroups();
+            Global.triggerReceiverIntent(getActivity(), HandlerMessages.CHATS_LOADED);
         }
     }
 
