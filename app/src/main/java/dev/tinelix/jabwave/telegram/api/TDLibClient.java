@@ -10,6 +10,7 @@ import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 import androidx.annotation.Nullable;
 import dev.tinelix.jabwave.BuildConfig;
@@ -19,25 +20,30 @@ import dev.tinelix.jabwave.telegram.APISecureStorage;
 public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandler {
 
    private final Client client;
+   public ApiHandler apiHandler;
+   private ClientHandler handler;
    private TdApi.TdlibParameters params;
 
-   public TDLibClient(Context app_ctx) {
+   public TDLibClient(Context app_ctx, ApiHandler apiHandler, ClientHandler handler) {
+      this.apiHandler = apiHandler;
+      this.handler = handler;
       this.params = new TdApi.TdlibParameters();
       params.applicationVersion = BuildConfig.VERSION_NAME;
       params.deviceModel = Build.MODEL;
       params.systemVersion = Build.VERSION.RELEASE;
       APISecureStorage.loadAppToken();
       this.client = Client.create(this, null,this);
+      client.send(new TdApi.SetLogVerbosityLevel(0), null);
       try {
          params.apiId = Integer.parseInt(APISecureStorage.app_id);
          params.apiHash = APISecureStorage.app_key;
          params.databaseDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
          params.filesDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
          params.systemLanguageCode = Locale.getDefault().toString();
+         sendTdlibParameters();
       } catch (Exception ex) {
          ex.printStackTrace();
       }
-      sendTdlibParameters();
    }
 
    public TDLibClient(TdApi.TdlibParameters params) {
@@ -53,16 +59,12 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
 
    @Override
    public void onResult(TdApi.Object object) {
-      Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
-              String.format("[RESULT] Class %s", object.getClass().getSimpleName())
-      );
+      handler.onUpdate(object);
    }
 
    @Override
    public void onException(Throwable e) {
-      Log.e(JabwaveApp.TELEGRAM_SERV_TAG,
-              String.format("[ERROR] %s: %s", e.getClass().getSimpleName(), e.getMessage())
-      );
+      e.printStackTrace();
    }
 
    public void send(TdApi.Function function, ApiHandler handler) {
@@ -70,6 +72,17 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
          client.send(
                  function, object -> handler.onSuccess(function, object),
                  e -> handler.onFail(function, e)
+         );
+      } else {
+         client.send(function, null);
+      }
+   }
+
+   public void send(TdApi.Function function) {
+      if(apiHandler != null) {
+         client.send(
+                 function, object -> apiHandler.onSuccess(function, object),
+                 e -> apiHandler.onFail(function, e)
          );
       } else {
          client.send(function, null);
@@ -108,6 +121,10 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
    public interface ApiHandler {
       void onSuccess(TdApi.Function function, TdApi.Object object);
       void onFail(TdApi.Function function, Throwable throwable);
+   }
+
+   public interface ClientHandler {
+      void onUpdate(TdApi.Object object);
    }
 
    public static class Error extends java.lang.Error {

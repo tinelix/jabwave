@@ -4,7 +4,9 @@ import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
 import java.util.ArrayList;
 
-public class Contact {
+import dev.tinelix.jabwave.core.ui.list.items.base.Chat;
+
+public class Contact extends Chat {
     // Contact Class used in Contacts list (AppActivity)
     public int type;
     public String title;
@@ -15,10 +17,12 @@ public class Contact {
     private VCard vCard;
 
     public Contact(String title) {
+        super(title, 0);
         this.title = title;
     }
 
     public Contact(String title, String jid, ArrayList<String> groups, String custom_status, int status) {
+        super(jid, title, 0);
         this.title = title;
         this.jid = jid;
         this.groups = groups;
@@ -27,6 +31,7 @@ public class Contact {
     }
 
     public Contact(String title, String jid, ArrayList<String> groups, int status) {
+        super(jid, title, 0);
         /* Main statuses in XMPP Contacts:
         /       0 - offline,
         /       1 - online,

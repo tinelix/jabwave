@@ -7,13 +7,14 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
-import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.EntityBareJid;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import dev.tinelix.jabwave.core.ui.list.items.base.Chat;
+import dev.tinelix.jabwave.core.ui.list.items.base.ChatGroup;
 import dev.tinelix.jabwave.xmpp.api.models.Presences;
 
 public class Roster {
@@ -27,8 +28,8 @@ public class Roster {
         try { Thread.sleep(2000); } catch (InterruptedException ignored) { }
     }
 
-    public ArrayList<Contact> getContacts() {
-        ArrayList<Contact> contacts = new ArrayList<>();
+    public ArrayList<Chat> getContacts() {
+        ArrayList<Chat> contacts = new ArrayList<>();
         Collection<RosterEntry> entries = roster.getEntries();
         Collection<RosterGroup> groups = roster.getGroups();
         for (RosterEntry entry : entries) {
@@ -102,11 +103,11 @@ public class Roster {
         return contacts;
     }
 
-    public ArrayList<Contact> getGroups() {
-        ArrayList<Contact> groups_list = new ArrayList<>();
+    public ArrayList<ChatGroup> getGroups() {
+        ArrayList<ChatGroup> groups_list = new ArrayList<>();
         Collection<RosterGroup> groups = roster.getGroups();
         for (RosterGroup group: groups) {
-            groups_list.add(new ContactsGroup(group.getName()));
+            groups_list.add(new ChatGroup(group.getName(), 0));
         }
         return groups_list;
     }

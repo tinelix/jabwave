@@ -8,32 +8,34 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
-import org.jivesoftware.smack.SmackConfiguration;
 
 import java.util.ArrayList;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.telegram.api.entities.Authentication;
+import dev.tinelix.jabwave.telegram.api.entities.Chat;
+import dev.tinelix.jabwave.telegram.api.entities.ChatsList;
 import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
 
 /**
  * Telegram (TDLib) client service
  */
 
-public class TelegramService extends IntentService {
+public class TelegramService extends IntentService implements TDLibClient.ApiHandler, TDLibClient.ClientHandler {
 
     private static final String ACTION_START = "start_service";
     private static final String ACTION_SEND_CLIENT_CMD = "sendClientCmd";
     private static final String ACTION_STOP = "stop_service";
 
     private static final String PHONE_NUMBER = "phone_number";
-
     private Context ctx;
 
     private String status = "done";
 
     private TDLibClient client = null;
+
+    public ChatsList chatsList;
     public Authentication authentication;
 
     private Intent intent;
@@ -99,47 +101,14 @@ public class TelegramService extends IntentService {
             case ACTION_START:
                 Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Preparing...");
                 status = "preparing";
-                SmackConfiguration.DEBUG = true;
                 JabwaveApp app = (JabwaveApp) getApplicationContext();
                 try {
                     this.phone_number = phone_number;
                     new Thread(() -> {
-                        client = new TDLibClient(getApplicationContext());
+                        client = new TDLibClient(getApplicationContext(), this, this);
                         client.sendTdlibParameters();
                         isConnected = true;
-                        authentication = new Authentication(client,
-                                new TDLibClient.ApiHandler() {
-                                    @SuppressLint("SwitchIntDef")
-                                    @Override
-                                    public void onSuccess(TdApi.Function function, TdApi.Object object) {
-                                        Log.d("TelegramApi", String.format("Ok?_%s", function.getClass().getSimpleName()));
-                                        if(object instanceof TdApi.Ok) {
-                                            switch (function.getConstructor()) {
-                                                case TdApi.SetAuthenticationPhoneNumber.CONSTRUCTOR:
-                                                    status = "required_auth_code";
-                                                    break;
-                                                case TdApi.CheckAuthenticationCode.CONSTRUCTOR:
-                                                    status = "required_cloud_password";
-                                                    break;
-                                                default:
-                                                    status = "authorized";
-                                                    break;
-                                            }
-                                            sendMessageToActivity(status);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFail(TdApi.Function function, Throwable throwable) {
-                                        if(throwable instanceof TDLibClient.Error) {
-                                            status = ((TDLibClient.Error) throwable).getTag();
-                                        }
-                                        Bundle data = new Bundle();
-                                        data.getInt("function", function.getConstructor());
-                                        sendMessageToActivity(status, data);
-                                    }
-                                }
-                        );
+                        authentication = new Authentication(client);
                         authentication.checkPhoneNumber(phone_number);
                     }).start();
                 } catch (Exception ex) {
@@ -218,7 +187,7 @@ public class TelegramService extends IntentService {
                 break;
 
             case "presence_changed":
-                intent.putExtra("msg", HandlerMessages.ROSTER_CHANGED);
+                intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
                 intent.putExtra("data", data);
                 break;
         }
@@ -239,5 +208,71 @@ public class TelegramService extends IntentService {
 
     public boolean isConnected() {
         return isConnected;
+    }
+
+    @SuppressLint("SwitchIntDef")
+    @Override
+    public void onSuccess(TdApi.Function function, TdApi.Object object) {
+        Log.d("TelegramApi", String.format("Ok?_%s", function.getClass().getSimpleName()));
+        if(object instanceof TdApi.Ok) {
+            if(function.getConstructor() == TdApi.SetAuthenticationPhoneNumber.CONSTRUCTOR
+                || function.getConstructor() == TdApi.CheckAuthenticationCode.CONSTRUCTOR
+                || function.getConstructor() == TdApi.CheckAuthenticationPassword.CONSTRUCTOR) {
+                authentication.checkAuthState();
+                sendMessageToActivity(status);
+            }
+        }
+    }
+
+    @Override
+    public void onFail(TdApi.Function function, Throwable throwable) {
+        if(throwable instanceof TDLibClient.Error) {
+            status = ((TDLibClient.Error) throwable).getTag();
+        }
+        Bundle data = new Bundle();
+        data.getInt("function", function.getConstructor());
+        sendMessageToActivity(status, data);
+    }
+
+    @SuppressLint("SwitchIntDef")
+    @Override
+    public void onUpdate(TdApi.Object object) {
+        //Log.d(JabwaveApp.APP_TAG, String.format("Updating data to %s...", object.getClass().getSimpleName()));
+        if(object instanceof TdApi.UpdateAuthorizationState) {
+            TdApi.AuthorizationState state =
+                    ((TdApi.UpdateAuthorizationState) object).authorizationState;
+            Log.d(JabwaveApp.APP_TAG, String.format("Updating authorization state to %s...", state.getClass().getSimpleName()));
+            switch (state.getConstructor()) {
+                case TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
+                    status = "auth_error";
+                    break;
+                case TdApi.AuthorizationStateWaitCode.CONSTRUCTOR:
+                    status = "required_auth_code";
+                    break;
+                case TdApi.AuthorizationStateWaitPassword.CONSTRUCTOR:
+                    status = "required_cloud_password";
+                    break;
+                case TdApi.AuthorizationStateReady.CONSTRUCTOR:
+                    authentication.setAuthState(state);
+                    status = "authorized";
+                    break;
+                default:
+                    break;
+            }
+            sendMessageToActivity(status);
+        } else if(object instanceof TdApi.UpdateUserStatus) {
+            TdApi.UpdateUserStatus updus = (TdApi.UpdateUserStatus) object;
+            for (int i = 0; i < chatsList.chats.size(); i++) {
+                if(((Chat) chatsList.chats.get(i)).id == updus.userId) {
+                    Chat chat = ((Chat) chatsList.chats.get(i));
+                    chat.status = updus.status.getConstructor() == TdApi.UserStatusOnline.CONSTRUCTOR ? 0 : 1;
+                    chatsList.chats.set(i, chat);
+                }
+            }
+        }
+    }
+
+    public TDLibClient getClient() {
+        return client;
     }
 }

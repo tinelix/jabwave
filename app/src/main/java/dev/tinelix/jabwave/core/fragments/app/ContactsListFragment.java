@@ -1,9 +1,15 @@
 package dev.tinelix.jabwave.core.fragments.app;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -15,15 +21,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.ui.list.adapters.ContactsAdapter;
-import dev.tinelix.jabwave.core.ui.list.sections.ContactsGroupSection;
+import dev.tinelix.jabwave.core.ui.list.adapters.ChatsAdapter;
+import dev.tinelix.jabwave.core.ui.list.items.base.Chat;
+import dev.tinelix.jabwave.core.ui.list.items.base.ChatGroup;
+import dev.tinelix.jabwave.core.ui.list.sections.ChatsGroupSection;
+import dev.tinelix.jabwave.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.telegram.api.entities.ChatsFolder;
+import dev.tinelix.jabwave.telegram.api.entities.ChatsList;
+import dev.tinelix.jabwave.telegram.enumerations.HandlerMessages;
 import dev.tinelix.jabwave.xmpp.api.entities.Contact;
 
 public class ContactsListFragment extends Fragment {
     private JabwaveApp app;
-    private ArrayList<Contact> groups;
-    private ArrayList<Contact> contacts;
-    private ContactsAdapter contactsAdapter;
+    private ArrayList<ChatGroup> groups;
+    private ArrayList<Chat> contacts;
+    private ChatsAdapter chatsAdapter;
     private LinearLayoutManager llm;
     private View view;
 
@@ -41,36 +53,63 @@ public class ContactsListFragment extends Fragment {
     }
 
     public void loadContacts() {
-        contacts = app.xmpp.getRoster().getContacts();
-        groups = app.xmpp.getRoster().getGroups();
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            app.telegram.chatsList = new ChatsList(app.telegram.getClient());
+            app.telegram.chatsList.loadChats(new TDLibClient.ApiHandler() {
+                @Override
+                public void onSuccess(TdApi.Function function, TdApi.Object object) {
+                    contacts = app.telegram.chatsList.chats;
+                    groups = new ArrayList<>();
+                    Intent intent = new Intent();
+                    intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
+                    intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
+                    Objects.requireNonNull(getActivity()).sendBroadcast(intent);
+                }
+
+                @Override
+                public void onFail(TdApi.Function function, Throwable throwable) {
+
+                }
+            });
+        } else {
+            contacts = app.xmpp.getRoster().getContacts();
+            groups = app.xmpp.getRoster().getGroups();
+        }
+    }
+
+    public void loadLocalContacts() {
+        contacts = app.telegram.chatsList.chats;
+        groups = new ArrayList<>();
         createContactsAdapter();
     }
 
     private void createContactsAdapter() {
-        contactsAdapter = new ContactsAdapter();
-        ContactsGroupSection entityGroupSection;
+        chatsAdapter = new ChatsAdapter();
+        if(groups == null) {
+            groups = new ArrayList<>();
+        }
+        ChatsGroupSection entityGroupSection;
         if(groups.size() > 0) {
-            for (Contact group : groups) {
-                ArrayList<Contact> groupContacts = new ArrayList<>();
-                for (Contact contact : contacts) {
-                    if (contact.groups.contains(group.title)) {
-                        groupContacts.add(contact);
+            for (ChatGroup group : groups) {
+                ArrayList<Chat> groupChats = new ArrayList<>();
+                for (Chat chat : contacts) {
+                    if (chat.groups.contains(group.title)) {
+                        groupChats.add(chat);
                     }
                 }
-                entityGroupSection = new ContactsGroupSection(getActivity(), group, groupContacts, contactsAdapter);
-                contactsAdapter.addSection(entityGroupSection);
+                entityGroupSection = new ChatsGroupSection(getActivity(), group, groupChats, chatsAdapter);
+                chatsAdapter.addSection(entityGroupSection);
             }
         } else {
-            Contact group = new Contact(getResources().getString(R.string.general_category));
-            entityGroupSection = new ContactsGroupSection(getActivity(), group, contacts, contactsAdapter);
-            contactsAdapter.addSection(entityGroupSection);
+            ChatGroup group = new ChatGroup(getResources().getString(R.string.general_category), 1);
+            entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
+            chatsAdapter.addSection(entityGroupSection);
         }
-
         llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         RecyclerView contactsView = view.findViewById(R.id.entityview);
         contactsView.setLayoutManager(llm);
-        contactsView.setAdapter(contactsAdapter);
+        contactsView.setAdapter(chatsAdapter);
         contactsView.setVisibility(View.VISIBLE);
         Objects.requireNonNull(getActivity()).findViewById(R.id.progress).setVisibility(View.GONE);
     }

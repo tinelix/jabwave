@@ -15,20 +15,22 @@ import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.ui.list.adapters.ContactsAdapter;
+import dev.tinelix.jabwave.core.ui.list.adapters.ChatsAdapter;
+import dev.tinelix.jabwave.core.ui.list.items.base.Chat;
+import dev.tinelix.jabwave.core.ui.list.items.base.ChatGroup;
 import dev.tinelix.jabwave.xmpp.api.entities.Contact;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 
-public class ContactsGroupSection extends Section {
-    private final ContactsAdapter adapter;
+public class ChatsGroupSection extends Section {
+    private final ChatsAdapter adapter;
     private final Context ctx;
-    private ArrayList<Contact> contacts_exp;
-    private final ArrayList<Contact> contacts;
-    private Contact header;
+    private ArrayList<Chat> contacts_exp;
+    private final ArrayList<Chat> contacts;
+    private ChatGroup header;
     private boolean isOpen = true;
 
-    public ContactsGroupSection(Context ctx, Contact header, ArrayList<Contact> contacts, ContactsAdapter adapter) {
+    public ChatsGroupSection(Context ctx, ChatGroup header, ArrayList<Chat> contacts, ChatsAdapter adapter) {
         super(SectionParameters.builder()
                 .headerResourceId(R.layout.list_item_contacts_group)
                 .itemResourceId(R.layout.list_item_contacts)
@@ -48,8 +50,8 @@ public class ContactsGroupSection extends Section {
 
     private int getOnlineCount() {
         int online_count = 0;
-        for (Contact contact: contacts) {
-            if(contact.status > 0) {
+        for (Chat chat: contacts) {
+            if(chat.status > 0) {
                 online_count++;
             }
         }
@@ -76,10 +78,10 @@ public class ContactsGroupSection extends Section {
         ((EntityGroupViewHolder) holder).bind();
     }
 
-    public Contact searchEntityByJid(String jid) {
-        for (Contact contact: contacts) {
-            if(contact.jid.equals(jid)) {
-                return contact;
+    public Chat searchEntityByJid(String jid) {
+        for (Chat chat: contacts) {
+            if(chat.id.equals(jid)) {
+                return chat;
             }
         }
         return null;
@@ -87,7 +89,7 @@ public class ContactsGroupSection extends Section {
 
     public int searchEntityIndexByJid(String jid) {
         for (int i = 0; i < contacts.size(); i++) {
-            if(contacts.get(i).jid.equals(jid)) {
+            if(contacts.get(i).id.equals(jid)) {
                 return i;
             }
         }
@@ -118,26 +120,28 @@ public class ContactsGroupSection extends Section {
         }
 
         public void bind(int position) {
-            Contact contact = contacts_exp.get(position);
+            Chat chat = contacts_exp.get(position);
             ((TextView) view.findViewById(R.id.contact_name))
-                    .setText(contact.title);
-            if (contact.status == 0) {
+                    .setText(chat.title);
+            if (chat.status == 0) {
                 contact_status.setVisibility(View.GONE);
-            } else if(contact.status > 0) {
+            } else if(chat.status > 0) {
                 contact_status.setText(
-                        getResources().getStringArray(R.array.default_xmpp_statuses)[contact.status]
+                        getResources().getStringArray(R.array.default_xmpp_statuses)[chat.status]
                 );
             }
 
-
-            if(contact.getVCard() != null) {
-                Glide.with(ctx)
-                        .load(contact.getVCard().getAvatar())
-                        .apply(new RequestOptions()
-                                .override(400, 400)
-                                .placeholder(R.drawable.ic_person_accent)
-                                .error(R.drawable.ic_person_accent))
-                        .into(contact_avatar);
+            if(chat.network_type == 0 && chat instanceof Contact) {
+                Contact contact = ((Contact) chat);
+                if (contact.getVCard() != null) {
+                    Glide.with(ctx)
+                            .load(contact.getVCard().getAvatar())
+                            .apply(new RequestOptions()
+                                    .override(400, 400)
+                                    .placeholder(R.drawable.ic_person_accent)
+                                    .error(R.drawable.ic_person_accent))
+                            .into(contact_avatar);
+                }
             }
         }
     }

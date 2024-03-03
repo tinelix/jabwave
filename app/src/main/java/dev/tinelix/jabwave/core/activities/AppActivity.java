@@ -18,7 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.ui.list.adapters.ContactsAdapter;
+import dev.tinelix.jabwave.core.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.core.fragments.app.ContactsListFragment;
 import dev.tinelix.jabwave.core.ui.views.base.JabwaveActionBar;
 import dev.tinelix.jabwave.xmpp.api.entities.Contact;
@@ -29,7 +29,7 @@ import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 public class AppActivity extends JabwaveActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ContactsAdapter contactsAdapter;
+    private ChatsAdapter chatsAdapter;
     private Fragment fragment;
     private FragmentTransaction ft;
     private DrawerLayout drawer;
@@ -123,11 +123,20 @@ public class AppActivity extends JabwaveActivity
             Log.d(JabwaveApp.APP_TAG, "Loading contacts...");
             getContacts();
         } else if(message == HandlerMessages.ROSTER_CHANGED) {
-            String jid = data.getString("presence_jid");
-            Contact contact = contactsAdapter.searchByJid(jid);
-            if(contact != null) {
-                contact.custom_status = data.getString("presence_status");
-                contactsAdapter.setByJid(jid.split("/")[0], contact);
+            if(app.getCurrentNetworkType().equals("xmpp")) {
+                String jid = data.getString("presence_jid");
+                Contact contact = chatsAdapter.searchByJid(jid);
+                if (contact != null) {
+                    contact.custom_status = data.getString("presence_status");
+                    chatsAdapter.setByJid(jid.split("/")[0], contact);
+                }
+            } else {
+                Log.d(JabwaveApp.APP_TAG, "Loading contacts...");
+                if(fragment instanceof ContactsListFragment) {
+                    findViewById(R.id.progress).setVisibility(View.GONE);
+                    findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
+                    ((ContactsListFragment) fragment).loadLocalContacts();
+                }
             }
         }
     }
