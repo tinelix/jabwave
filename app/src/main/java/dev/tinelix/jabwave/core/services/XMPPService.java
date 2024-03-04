@@ -1,30 +1,33 @@
 package dev.tinelix.jabwave.core.services;
 
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.mediaparkpk.base58android.Base58;
 import com.mediaparkpk.base58android.Base58Exception;
 
-import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
+import java.util.HashMap;
+
+import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Authentication;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Roster;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
+import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
 
 /**
  * XMPP (Smack) client service
  */
 
-public class XMPPService extends IntentService {
+public class XMPPService extends ClientService {
 
     private static final String ACTION_START = "start_service";
     private static final String ACTION_STOP = "stop_service";
@@ -46,15 +49,34 @@ public class XMPPService extends IntentService {
         super("XMPPService");
     }
 
-    public void start(Context context, String server, String username, String password) {
-        ctx = context;
+    public class XMPPServiceBinder extends Binder {
+        public XMPPClient.ApiHandler handler;
+        public XMPPService getService() {
+            return XMPPService.this;
+        }
+
+        public XMPPClient getClient() {
+            return XMPPService.this.client;
+        }
+
+        public Roster getRoster() {
+            return XMPPService.this.roster;
+        }
+    }
+
+    @Override
+    public void start(@NonNull Context ctx, HashMap<String, String> map) {
+        this.ctx = ctx;
+        String server = map.get("server");
+        String username = map.get("username");
+        String password = map.get("password");
         if(status.equals("done")) {
-            intent = new Intent(context, XMPPService.class);
+            intent = new Intent(ctx, XMPPService.class);
             intent.setAction(ACTION_START);
             intent.putExtra(SERVER, server);
             intent.putExtra(USERNAME, username);
             intent.putExtra(PASSWORD, password);
-            context.startService(intent);
+            ctx.startService(intent);
             Log.d("XMPPService", "Service started.");
         } else {
             Log.w("XMPPService", "Service already started.");
@@ -82,7 +104,6 @@ public class XMPPService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            ((JabwaveApp) getApplicationContext()).xmpp = this;
             final String action = intent.getAction();
             final String server = intent.getStringExtra(SERVER);
             final String username = intent.getStringExtra(USERNAME);
@@ -95,7 +116,6 @@ public class XMPPService extends IntentService {
         if(action.equals(ACTION_START)) {
             Log.d("XMPPService", "Preparing...");
             status = "preparing";
-            SmackConfiguration.DEBUG = true;
             JabwaveApp app = (JabwaveApp) getApplicationContext();
             try {
                 new Thread(() -> {
@@ -150,7 +170,7 @@ public class XMPPService extends IntentService {
 
     private void createAuthConfig(String server, String jid, String password) {
         XMPPTCPConnectionConfiguration config =
-                Authentication.buildAuthConfig(
+                Authenticator.buildAuthConfig(
                         server,
                         jid,
                         password,

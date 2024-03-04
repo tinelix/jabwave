@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.xmpp.api.entities;
+package dev.tinelix.jabwave.net.xmpp.api.models;
 
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
@@ -13,22 +13,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import dev.tinelix.jabwave.net.xmpp.api.models.Presences;
-import dev.tinelix.jabwave.ui.list.items.base.Chat;
-import dev.tinelix.jabwave.ui.list.items.base.ChatGroup;
+import dev.tinelix.jabwave.net.base.api.models.Chats;
+import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.net.base.api.entities.Chat;
+import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
 
-public class Roster {
+public class Roster extends Chats {
 
     private final XMPPConnection conn;
     private final org.jivesoftware.smack.roster.Roster roster;
 
-    public Roster(XMPPConnection conn) {
+    public Roster(XMPPClient client) {
+        super(client);
+        this.conn = client.getConnection();
         this.roster = org.jivesoftware.smack.roster.Roster.getInstanceFor(conn);
-        this.conn = conn;
         try { Thread.sleep(2000); } catch (InterruptedException ignored) { }
     }
 
-    public ArrayList<Chat> getContacts() {
+    @Override
+    public ArrayList<Chat> getList() {
         ArrayList<Chat> contacts = new ArrayList<>();
         Collection<RosterEntry> entries = roster.getEntries();
         Collection<RosterGroup> groups = roster.getGroups();
@@ -85,6 +89,7 @@ public class Roster {
                     entity.groups.add(group.getName());
                 }
             }
+
             try {
                 entity.setVCard(
                         VCardManager
@@ -103,7 +108,8 @@ public class Roster {
         return contacts;
     }
 
-    public ArrayList<ChatGroup> getGroups() {
+    @Override
+    public ArrayList<ChatGroup> getGroupsList() {
         ArrayList<ChatGroup> groups_list = new ArrayList<>();
         Collection<RosterGroup> groups = roster.getGroups();
         for (RosterGroup group: groups) {

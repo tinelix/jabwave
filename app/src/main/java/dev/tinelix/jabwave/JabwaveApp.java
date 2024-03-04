@@ -8,17 +8,13 @@ import org.jxmpp.jid.parts.Resourcepart;
 
 import java.util.Random;
 
-import dev.tinelix.jabwave.core.services.TelegramService;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Authentication;
-import dev.tinelix.jabwave.core.services.XMPPService;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
 
 public class JabwaveApp extends Application {
     public String version;
     private SharedPreferences global_prefs;
     private SharedPreferences xmpp_prefs;
     private SharedPreferences telegram_prefs;
-    public XMPPService xmpp;
-    public TelegramService telegram;
     public static final String XMPP_SERV_TAG = "XMPPService";
     public static final String TELEGRAM_SERV_TAG = "TDLibService";
     public static final String APP_TAG = "Jabwave";
@@ -26,8 +22,6 @@ public class JabwaveApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        telegram = new TelegramService();
-        xmpp = new XMPPService();
         version = BuildConfig.VERSION_NAME;
         global_prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         xmpp_prefs = getSharedPreferences("xmpp", 0);
@@ -109,7 +103,7 @@ public class JabwaveApp extends Application {
                 };
                 String hex4 = Global.bytesToHex(random_resource_binary);
                 String res_name = String.format("TinelixJabwave-%s", hex4);
-                Resourcepart res_part = Authentication.generateXMPPResource(res_name);
+                Resourcepart res_part = Authenticator.generateXMPPResource(res_name);
                 SharedPreferences.Editor editor = getXmppPreferences().edit();
                 editor.putString("jid_resource", res_name);
                 editor.apply();
@@ -119,14 +113,6 @@ public class JabwaveApp extends Application {
             ex.printStackTrace();
         }
         return null;
-    }
-
-    @Override
-    public void onTerminate() {
-        if(xmpp.isConnected()) {
-            xmpp.stopService();
-        }
-        super.onTerminate();
     }
 
     public String getCurrentNetworkType() {

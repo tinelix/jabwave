@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
-import dev.tinelix.jabwave.ui.list.items.base.Chat;
-import dev.tinelix.jabwave.ui.list.items.base.ChatGroup;
+import dev.tinelix.jabwave.net.base.api.entities.Chat;
+import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
@@ -133,26 +133,7 @@ public class ChatsGroupSection extends Section {
                 );
             }
 
-            if(chat.network_type == 0 && chat instanceof Contact) {
-                Contact contact = ((Contact) chat);
-                if (contact.getVCard() != null) {
-                    Glide.with(ctx)
-                            .load(contact.getVCard().getAvatar())
-                            .apply(new RequestOptions()
-                                    .override(400, 400)
-                                    .placeholder(R.drawable.ic_person_accent)
-                                    .error(R.drawable.ic_person_accent))
-                            .into(contact_avatar);
-                }
-            } else if(chat instanceof dev.tinelix.jabwave.net.telegram.api.entities.Chat){
-                Glide.with(ctx)
-                        .load(chat.photo)
-                        .apply(new RequestOptions()
-                                .override(400, 400)
-                                .placeholder(R.drawable.ic_person_accent)
-                                .error(R.drawable.ic_person_accent))
-                        .into(contact_avatar);
-            }
+            loadPhotoCache(chat);
             view.setOnClickListener(v -> {
                 Intent intent = new Intent(ctx, MessengerActivity.class);
                 intent.putExtra("network_type", chat.network_type);
@@ -164,6 +145,31 @@ public class ChatsGroupSection extends Section {
                 intent.putExtra("chat_title", chat.title);
                 ctx.startActivity(intent);
             });
+        }
+
+        private void loadPhotoCache(Chat chat) {
+            if(chat.network_type == 0 && chat instanceof Contact) {
+                Contact contact = ((Contact) chat);
+                if (contact.getVCard() != null && contact.getVCard().getAvatar() != null) {
+                    Glide.with(ctx)
+                            .load(contact.getVCard().getAvatar())
+                            .apply(new RequestOptions()
+                                    .override(400, 400)
+                                    .placeholder(R.drawable.ic_person_accent)
+                                    .error(R.drawable.ic_person_accent))
+                            .into(contact_avatar);
+                }
+            } else if(chat instanceof dev.tinelix.jabwave.net.telegram.api.entities.Chat){
+                if(chat.photo != null) {
+                    Glide.with(ctx)
+                            .load(chat.photo)
+                            .apply(new RequestOptions()
+                                    .override(400, 400)
+                                    .placeholder(R.drawable.ic_person_accent)
+                                    .error(R.drawable.ic_person_accent))
+                            .into(contact_avatar);
+                }
+            }
         }
     }
 

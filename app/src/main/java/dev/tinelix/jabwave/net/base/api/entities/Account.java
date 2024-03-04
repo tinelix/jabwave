@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.ui.list.items.base;
+package dev.tinelix.jabwave.net.base.api.entities;
 
 public class Account {
     public Object id;

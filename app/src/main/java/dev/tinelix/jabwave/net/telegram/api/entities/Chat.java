@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Chat extends dev.tinelix.jabwave.ui.list.items.base.Chat {
+public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
     // Contact Class used in Contacts list (AppActivity)
     public int type;
     public String title;

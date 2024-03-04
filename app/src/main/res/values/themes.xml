@@ -60,7 +60,7 @@
 
     <style name="ApplicationTheme.Navigation" parent="Widget.MaterialComponents.NavigationView">
         <item name="itemTextAppearance">?attr/textAppearanceSubtitle2</item>
-        <item name="listPreferredItemHeightSmall">36dp</item>
+        <item name="listPreferredItemHeightSmall">44dp</item>
     </style>
 
     <style name="RosterGroupName">

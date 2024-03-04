@@ -1,6 +1,6 @@
 package dev.tinelix.jabwave.net.telegram.api.models;
 
-import dev.tinelix.jabwave.ui.list.items.base.ChatGroup;
+import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
 
 public class ChatsFolder extends ChatGroup {
     // ContactsGroup Class used in Contacts Groups list (AppActivity)

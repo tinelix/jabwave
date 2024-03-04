@@ -6,10 +6,12 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 
-public class Account extends dev.tinelix.jabwave.ui.list.items.base.Account {
+public class Account extends dev.tinelix.jabwave.net.base.api.entities.Account {
     private TDLibClient client;
     public String username;
     private String phone_number;
@@ -19,12 +21,13 @@ public class Account extends dev.tinelix.jabwave.ui.list.items.base.Account {
         super(id, first_name, last_name);
     }
 
-    public Account(TDLibClient client, TDLibClient.ApiHandler handler) {
+    public Account(TDLibClient client, OnClientAPIResultListener listener) {
         super();
         this.client = client;
-        client.send(new TdApi.GetMe(), new TDLibClient.ApiHandler() {
+        client.send(new TdApi.GetMe(), new OnClientAPIResultListener() {
             @Override
-            public void onSuccess(TdApi.Function function, TdApi.Object object) {
+            public boolean onSuccess(HashMap<String, Object> map) {
+                TdApi.Object object = (TdApi.Object) map.get("result");
                 if(object instanceof TdApi.User) {
                     TdApi.User user = ((TdApi.User) object);
                     id = user.id;
@@ -39,13 +42,14 @@ public class Account extends dev.tinelix.jabwave.ui.list.items.base.Account {
                         if(user.profilePhoto.big.local.isDownloadingCompleted)
                             loadPhoto(photo, new File(user.profilePhoto.big.local.path));
                     }
-                    handler.onSuccess(function, object);
+                    listener.onSuccess(map);
                 }
+                return false;
             }
 
             @Override
-            public void onFail(TdApi.Function function, Throwable throwable) {
-
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                return true;
             }
         });
     }

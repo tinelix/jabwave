@@ -5,45 +5,50 @@ import android.util.Log;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.ui.list.items.base.Chat;
+import dev.tinelix.jabwave.net.base.api.entities.Chat;
 
-public class Chats {
+public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
 
-    private final TDLibClient client;
+    private TDLibClient client;
     public ArrayList<Chat> chats;
     private int chats_count;
     private static final int CHATS_MAX_LIMIT = 50;
 
     public Chats(TDLibClient client) {
-        this.client = client;
+        super(client);
         this.chats = new ArrayList<>();
     }
 
-    public void loadChats(TDLibClient.ApiHandler handler) {
+    @Override
+    public void loadChats(OnClientAPIResultListener listener) {
         client.send(new TdApi.GetChats(new TdApi.ChatListMain(), CHATS_MAX_LIMIT),
-                new TDLibClient.ApiHandler() {
+                new OnClientAPIResultListener() {
                     @Override
-                    public void onSuccess(TdApi.Function function, TdApi.Object object) {
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        TdApi.Object object = (TdApi.Object) map.get("result");
                         if(object instanceof TdApi.Chats) {
-                            loadChats((TdApi.Chats) object, handler);
+                            loadChats((TdApi.Chats) object, listener);
                         }
+                        return true;
                     }
 
                     @Override
-                    public void onFail(TdApi.Function function, Throwable throwable) {
-
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
                     }
                 }
         );
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void loadChats(TdApi.Chats chats, TDLibClient.ApiHandler handler) {
+    private void loadChats(TdApi.Chats chats, OnClientAPIResultListener listener) {
         chats_count = chats.totalCount;
         if(chats_count > CHATS_MAX_LIMIT) {
             chats_count = CHATS_MAX_LIMIT;
@@ -51,24 +56,27 @@ public class Chats {
         this.chats = new ArrayList<>();
         final CountDownLatch latch = new CountDownLatch(chats_count);
         for (long id: chats.chatIds) {
-            client.send(new TdApi.GetChat(id), new TDLibClient.ApiHandler() {
+            client.send(new TdApi.GetChat(id), new OnClientAPIResultListener() {
                 @Override
-                public void onSuccess(TdApi.Function function, TdApi.Object object) {
+                public boolean onSuccess(HashMap<String, Object> map) {
+                    TdApi.Object object = (TdApi.Object) map.get("result");
                     TdApi.Chat td_chat = (TdApi.Chat) object;
                     dev.tinelix.jabwave.net.telegram.api.entities.Chat chat =
                             new dev.tinelix.jabwave.net.telegram.api.entities.Chat(
-                                    id, td_chat.title, new ArrayList<>(), 0
+                                    id, td_chat != null ? td_chat.title : "[Unknown chat]",
+                                    new ArrayList<>(), 0
                             );
                     Chats.this.chats.add(chat);
                     latch.countDown();
                     if(latch.getCount() == 0) {
-                        handler.onSuccess(function, object);
+                        listener.onSuccess(map);
                     }
+                    return false;
                 }
 
                 @Override
-                public void onFail(TdApi.Function function, Throwable throwable) {
-
+                public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                    return false;
                 }
             });
         }
@@ -80,14 +88,12 @@ public class Chats {
         Log.d(JabwaveApp.TELEGRAM_SERV_TAG, String.format("%s chats loaded.", this.chats.size()));
     }
 
-    private void getChat(long chatId, boolean clear) {
-        if(clear) {
-            chats.clear();
-        }
-        client.send(new TdApi.GetChat(chatId));
-    }
-
     public int getTotalCount() {
         return chats_count;
+    }
+
+    @Override
+    public ArrayList<Chat> getList() {
+        return super.getList();
     }
 }

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Jabwave</string>
+
+    <!-- Authorization Activity !-->
     <string name="auth_phone_number">Phone number</string>
     <string name="auth_jid" translatable="false">Jabber ID</string>
     <string name="auth_password">Password</string>
@@ -8,13 +10,21 @@
     <string name="invalid_pn_or_passw">Invalid phone number and/or password</string>
     <string name="invalid_jid_or_passw">Invalid Jabber ID and/or password.</string>
     <string name="auth_error_network">No Internet connection</string>
-    <string name="auth_wait">Wait</string>
-    <string name="retry_btn">Retry</string>
-    <string name="general_category">General</string>
-    <string name="global_search_hint">Global search</string>
     <string name="auth_twofactor_code_text">Enter the verification code sent on your other device.</string>
     <string name="auth_twofactor_code">Code for sign-in</string>
+    <string name="auth_wait">Wait</string>
+    <string name="retry_btn">Retry</string>
+
+    <!-- Application Activity !-->
+    <string name="general_category">General</string>
+    <string name="global_search_hint">Global search</string>
+    <string name="saved_messages">Saved Messages</string>
+
+    <!-- Menu !-->
+    <string name="new_group">New group</string>
+    <string name="settings">Settings</string>
+
+    <!-- Messenger Activity !-->
     <string name="send">Send</string>
     <string name="message">Message</string>
-    <string name="saved_messages">Saved Messages</string>
 </resources>

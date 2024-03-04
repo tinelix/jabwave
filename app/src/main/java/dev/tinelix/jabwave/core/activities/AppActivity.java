@@ -1,7 +1,10 @@
 package dev.tinelix.jabwave.core.activities;
 
+import android.content.ComponentName;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,26 +16,30 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
-import androidx.activity.OnBackPressedCallback;
+import java.util.HashMap;
+
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Roster;
-import dev.tinelix.jabwave.ui.enums.HandlerMessages;
-import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
+import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.fragments.app.ContactsListFragment;
-import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
+import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
+import dev.tinelix.jabwave.core.services.TelegramService;
+import dev.tinelix.jabwave.core.services.XMPPService;
+import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.net.base.SecureStorage;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.telegram.api.entities.Account;
-import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
-import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
+import dev.tinelix.jabwave.ui.enums.HandlerMessages;
+import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
+import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
 
 public class AppActivity extends JabwaveActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +51,22 @@ public class AppActivity extends JabwaveActivity
 
     private JabwaveReceiver jwReceiver;
     private JabwaveApp app;
+    public ClientService service;
+
+    private final ServiceConnection clientConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClientService.ClientServiceBinder binder = (ClientService.ClientServiceBinder) service;
+            AppActivity.this.service = binder.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            AppActivity.this.service.stopSelf();
+            AppActivity.this.service = null;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +76,10 @@ public class AppActivity extends JabwaveActivity
         findViewById(R.id.app_fragment).setVisibility(View.GONE);
         findViewById(R.id.progress).setVisibility(View.VISIBLE);
         registerBroadcastReceiver();
-        if(!app.xmpp.isConnected()) {
+        if(service == null) {
+            service = new ClientService(app.getCurrentNetworkType());
+        }
+        if(!service.isConnected()) {
             connect();
         } else {
             getAccount();
@@ -92,41 +118,45 @@ public class AppActivity extends JabwaveActivity
     }
 
     private void connect() {
+        HashMap<String, String> credentials;
         if(app.getCurrentNetworkType().equals("telegram")) {
-            if(!app.telegram.isConnected()) {
-                app.telegram.start(
-                        this,
-                        app.getTelegramPreferences().getString("phone_number", "")
-                );
-            }
+            credentials = new SecureStorage().createCredentialsMap(
+                    app.getTelegramPreferences().getString("phone_number", "")
+            );
+            ((TelegramService) service).start(this, credentials);
         } else {
-            if (!app.xmpp.isConnected()) {
-                app.xmpp.start(
-                        this,
-                        app.getXmppPreferences().getString("server", ""),
-                        app.getXmppPreferences().getString("username", ""),
-                        app.getXmppPreferences().getString("password_hash", "")
-                );
-            }
+            credentials = new SecureStorage().createCredentialsMap(
+                    app.getXmppPreferences().getString("server", ""),
+                    app.getXmppPreferences().getString("username", ""),
+                    app.getXmppPreferences().getString("password_hash", "")
+            );
+            ((XMPPService) service).start(this, credentials);
         }
+
     }
 
     private void getAccount() {
         if(app.getCurrentNetworkType().equals("telegram")) {
-            app.telegram.account = new Account(app.telegram.getClient(), new TDLibClient.ApiHandler() {
-                @Override
-                public void onSuccess(TdApi.Function function, TdApi.Object object) {
-                    Global.triggerReceiverIntent(
-                            AppActivity.this,
-                            HandlerMessages.ACCOUNT_LOADED
-                    );
-                }
+            service.setAccount(
+                    new Account(
+                            (TDLibClient) service.getClient(),
+                            new OnClientAPIResultListener() {
+                                    @Override
+                                    public boolean onSuccess(HashMap<String, Object> map) {
+                                        Global.triggerReceiverIntent(
+                                                AppActivity.this,
+                                                HandlerMessages.ACCOUNT_LOADED
+                                        );
+                                        return false;
+                                    }
 
-                @Override
-                public void onFail(TdApi.Function function, Throwable throwable) {
-
-                }
-            });
+                                    @Override
+                                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                                        return false;
+                                    }
+                            }
+                    )
+            );
         } else {
             Global.triggerReceiverIntent(
                     AppActivity.this,
@@ -174,7 +204,7 @@ public class AppActivity extends JabwaveActivity
         TextView profile_id = header.findViewById(R.id.screen_name);
         ShapeableImageView profile_photo = header.findViewById(R.id.profile_avatar);
         if(app.getCurrentNetworkType().equals("telegram")) {
-            Account account = app.telegram.account;
+            Account account = (Account) service.getAccount();
             profile_name.setText(
                     String.format("%s %s", account.first_name, account.last_name)
             );
@@ -183,6 +213,8 @@ public class AppActivity extends JabwaveActivity
             } else {
                 profile_id.setVisibility(View.GONE);
             }
+        } else {
+            Roster roster = (Roster) service.getChats();
         }
     }
 
@@ -215,8 +247,8 @@ public class AppActivity extends JabwaveActivity
 
     @Override
     protected void onDestroy() {
-        app.xmpp.stopService();
-        app.telegram.stopService();
+        service.stopSelf();
+        service.stopSelf();
         unregisterReceiver(jwReceiver);
         super.onDestroy();
     }

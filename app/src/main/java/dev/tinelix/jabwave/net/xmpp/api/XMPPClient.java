@@ -9,15 +9,17 @@ import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
-import dev.tinelix.jabwave.net.xmpp.api.entities.Authentication;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Roster;
+import dev.tinelix.jabwave.net.base.api.BaseClient;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
+import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
 
-public class XMPPClient {
+public class XMPPClient extends BaseClient {
     private AbstractXMPPConnection conn;
     private final ApiHandler handler;
     private ConnectionListener connListener;
 
     public XMPPClient(AbstractXMPPConnection conn, ApiHandler handler) {
+        super(false, "xmpp");
         this.conn = conn;
         this.handler = handler;
     }
@@ -25,7 +27,7 @@ public class XMPPClient {
     public void start(String server, String jid, String password) {
         try {
             XMPPTCPConnectionConfiguration config =
-                    Authentication.buildAuthConfig(
+                    Authenticator.buildAuthConfig(
                             server,
                             jid,
                             password,
@@ -33,7 +35,7 @@ public class XMPPClient {
                     );
             conn = new XMPPTCPConnection(config);
             conn.connect();
-            conn.login(jid, password, Authentication.generateXMPPResource());
+            conn.login(jid, password, Authenticator.generateXMPPResource());
             Presence presence = conn
                     .getStanzaFactory()
                     .buildPresenceStanza()
@@ -50,14 +52,14 @@ public class XMPPClient {
     public void start(String server, String jid, String password, String res_name) {
         try {
             XMPPTCPConnectionConfiguration config =
-                    Authentication.buildAuthConfig(
+                    Authenticator.buildAuthConfig(
                             server,
                             jid,
                             password,
                             true
                     );
             conn = new XMPPTCPConnection(config);
-            conn.login(jid, password, Authentication.generateXMPPResource(res_name));
+            conn.login(jid, password, Authenticator.generateXMPPResource(res_name));
             Presence presence = conn
                     .getStanzaFactory()
                     .buildPresenceStanza()
@@ -118,7 +120,7 @@ public class XMPPClient {
     }
 
     public Roster getRoster() {
-        return new Roster(conn);
+        return new Roster(this);
     }
 
     public interface ApiHandler {

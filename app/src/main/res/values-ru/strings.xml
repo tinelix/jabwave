@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Authorization Activity !-->
     <string name="auth_phone_number">Номер телефона</string>
     <string name="auth_password">Пароль</string>
     <string name="auth_sign_in">Вход</string>
@@ -7,13 +9,21 @@
     <string name="invalid_pn_or_passw">Неверный номер телефона и/или пароль.</string>
     <string name="invalid_jid_or_passw">Неверный Jabber ID и/или пароль.</string>
     <string name="auth_error_network">Нет подключения к Интернету</string>
-    <string name="auth_wait">Подождите</string>
-    <string name="retry_btn">Повторить</string>
-    <string name="general_category">Общие</string>
-    <string name="global_search_hint">Глобальный поиск</string>
     <string name="auth_twofactor_code_text">Введите код подтверждения, отправленный на другом устройстве.</string>
     <string name="auth_twofactor_code">Код для входа</string>
+    <string name="auth_wait">Подождите</string>
+    <string name="retry_btn">Повторить</string>
+
+    <!-- Application Activity !-->
+    <string name="general_category">Общие</string>
+    <string name="global_search_hint">Глобальный поиск</string>
+
+    <!-- Menu !-->
+    <string name="saved_messages">Избранное</string>
+    <string name="new_group">Создать группу</string>
+    <string name="settings">Настройки</string>
+
+    <!-- Messenger Activity !-->
     <string name="send">Отправить</string>
     <string name="message">Сообщение</string>
-    <string name="saved_messages">Избранное</string>
 </resources>

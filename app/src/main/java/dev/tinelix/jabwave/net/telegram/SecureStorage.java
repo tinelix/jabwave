@@ -1,15 +1,14 @@
 package dev.tinelix.jabwave.net.telegram;
 
-import android.util.Log;
-
 import com.mediaparkpk.base58android.Base58;
 import com.mediaparkpk.base58android.Base58Exception;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 import dev.tinelix.jabwave.BuildConfig;
 
-public class APISecureStorage {
+public class SecureStorage extends dev.tinelix.jabwave.net.base.SecureStorage {
     /**
         <h2>Secure storage for Telegram API Keys</h2>
         See <i><code>getTDAppToken()</code></i> function in <code>build.gradle</code>
@@ -19,10 +18,15 @@ public class APISecureStorage {
         Application Token & ID can be obtained from
         <a href="my.telegram.org">Telegram Developers website</a>.
     **/
-    public static String app_id = "";
-    public static String app_key = "";
+    private String app_id = "";
+    private String app_key = "";
 
-    public static void loadAppToken() {
+    public SecureStorage() {
+
+    }
+
+    @Override
+    public HashMap<String, Object> loadAppToken() {
         try {
             String decoded_token = new String(
                     Base58.decode(BuildConfig.TDLIB_APP_TOKEN), StandardCharsets.UTF_8
@@ -30,9 +34,18 @@ public class APISecureStorage {
             // кек, этот реджекс похож на логотип вкусно и точка
             app_id = decoded_token.split("\\.")[0];
             app_key = decoded_token.split("\\.")[1];
-        } catch (Base58Exception e) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("app_id", Integer.parseInt(app_id));
+            map.put("app_key", app_key);
+            return map;
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
+    @Override
+    public HashMap<String, String> createCredentialsMap(String username) {
+        return super.createCredentialsMap(username);
+    }
 }

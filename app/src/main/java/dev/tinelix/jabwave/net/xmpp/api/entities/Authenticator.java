@@ -22,12 +22,12 @@ import javax.net.ssl.X509TrustManager;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
-public class Authentication {
+public class Authenticator {
 
     private final XMPPClient client;
     private XMPPTCPConnection conn;
 
-    public Authentication(XMPPClient client) {
+    public Authenticator(XMPPClient client) {
         this.client = client;
     }
 

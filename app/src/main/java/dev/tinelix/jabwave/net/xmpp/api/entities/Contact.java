@@ -4,7 +4,7 @@ import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
 import java.util.ArrayList;
 
-import dev.tinelix.jabwave.ui.list.items.base.Chat;
+import dev.tinelix.jabwave.net.base.api.entities.Chat;
 
 public class Contact extends Chat {
     // Contact Class used in Contacts list (AppActivity)

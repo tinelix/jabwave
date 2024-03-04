@@ -2,15 +2,20 @@ package dev.tinelix.jabwave.net.telegram.api.entities;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.util.HashMap;
+
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 
-public class Authentication implements TDLibClient.ApiHandler {
+public class Authenticator extends dev.tinelix.jabwave.net.base.api.entities.Authenticator
+        implements OnClientAPIResultListener {
 
     private final TDLibClient client;
     private boolean isAuthorized;
     private TdApi.PhoneNumberAuthenticationSettings phoneAuthSettings;
 
-    public Authentication(TDLibClient client) {
+    public Authenticator(TDLibClient client) {
+        super(client);
         this.client = client;
         checkAuthState();
     }
@@ -61,22 +66,24 @@ public class Authentication implements TDLibClient.ApiHandler {
     }
 
     @Override
-    public void onSuccess(TdApi.Function function, TdApi.Object object) {
+    public boolean onSuccess(HashMap<String, Object> map) {
+        TdApi.Object object = (TdApi.Object) map.get("result");
+        TdApi.Function function = (TdApi.Function) map.get("function");
         if(object instanceof TdApi.Error) {
-            onFail(function, new TDLibClient.Error(
+            onFail(map, new TDLibClient.Error(
                     "auth_error",
                     String.format(
                             "%s\r\nFunction: TdApi.%s",
                             ((TdApi.Error) object).message,
-                            function.getClass().getSimpleName()
+                            function != null ? function.getClass().getSimpleName() : "UnknownClass"
                     )
             ));
         }
+        return true;
     }
 
     @Override
-    public void onFail(TdApi.Function function, Throwable throwable) {
-        throwable.printStackTrace();
-        client.apiHandler.onFail(function, throwable);
+    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+        return false;
     }
 }

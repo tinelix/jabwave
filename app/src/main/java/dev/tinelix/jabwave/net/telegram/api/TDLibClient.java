@@ -8,32 +8,38 @@ import android.os.Bundle;
 import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 import androidx.annotation.Nullable;
 import dev.tinelix.jabwave.BuildConfig;
-import dev.tinelix.jabwave.net.telegram.APISecureStorage;
+import dev.tinelix.jabwave.net.base.api.BaseClient;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.net.telegram.SecureStorage;
 
-public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandler {
+public class TDLibClient extends BaseClient implements Client.ResultHandler, Client.ExceptionHandler {
 
    private final Client client;
    public ApiHandler apiHandler;
    private ClientHandler handler;
    private TdApi.TdlibParameters params;
 
+   @SuppressWarnings("ConstantConditions")
    public TDLibClient(Context app_ctx, ApiHandler apiHandler, ClientHandler handler) {
+      super(true, "Telegram");
       this.apiHandler = apiHandler;
       this.handler = handler;
       this.params = new TdApi.TdlibParameters();
       params.applicationVersion = BuildConfig.VERSION_NAME;
       params.deviceModel = Build.MODEL;
       params.systemVersion = Build.VERSION.RELEASE;
-      APISecureStorage.loadAppToken();
+      SecureStorage secureStorage = new SecureStorage();
+      HashMap<String, Object> api_map = secureStorage.loadAppToken();
       this.client = Client.create(this, null,this);
       client.send(new TdApi.SetLogVerbosityLevel(0), null);
       try {
-         params.apiId = Integer.parseInt(APISecureStorage.app_id);
-         params.apiHash = APISecureStorage.app_key;
+         params.apiId = api_map.containsKey("app_id") ? (int) api_map.get("app_id") : 0;
+         params.apiHash = (String) api_map.get("app_hash");
          params.databaseDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
          params.filesDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
          params.systemLanguageCode = Locale.getDefault().toString();
@@ -44,6 +50,7 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
    }
 
    public TDLibClient(TdApi.TdlibParameters params) {
+      super(true, "Telegram");
       this.params = params;
       this.client = Client.create(this, null,this);
       sendTdlibParameters();
@@ -64,25 +71,25 @@ public class TDLibClient implements Client.ResultHandler, Client.ExceptionHandle
       e.printStackTrace();
    }
 
-   public void send(TdApi.Function function, ApiHandler handler) {
-      if(handler != null) {
+   @Override
+   public void send(Object function, OnClientAPIResultListener listener) {
+      HashMap<String, Object> map = new HashMap<>();
+      map.put("network_name", network_name);
+      map.put("function", function);
+      if(listener != null) {
          client.send(
-                 function, object -> handler.onSuccess(function, object),
-                 e -> handler.onFail(function, e)
+                 ((TdApi.Function) function),
+                 object -> {
+                     map.put("result", object);
+                     listener.onSuccess(map);
+                 },
+                 e -> {
+                     e.printStackTrace();
+                     listener.onFail(map, e);
+                 }
          );
       } else {
-         client.send(function, null);
-      }
-   }
-
-   public void send(TdApi.Function function) {
-      if(apiHandler != null) {
-         client.send(
-                 function, object -> apiHandler.onSuccess(function, object),
-                 e -> apiHandler.onFail(function, e)
-         );
-      } else {
-         client.send(function, null);
+         client.send(((TdApi.Function) function), object -> {});
       }
    }
 

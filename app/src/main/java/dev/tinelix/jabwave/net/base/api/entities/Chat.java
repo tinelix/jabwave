@@ -1,8 +1,6 @@
-package dev.tinelix.jabwave.ui.list.items.base;
+package dev.tinelix.jabwave.net.base.api.entities;
 
 import java.util.ArrayList;
-
-import androidx.arch.core.internal.FastSafeIterableMap;
 
 public class Chat {
     // Base Contact Class used in Contacts list (AppActivity)

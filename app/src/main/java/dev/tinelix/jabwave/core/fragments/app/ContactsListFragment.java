@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -18,12 +19,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.activities.AppActivity;
+import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.net.base.api.models.Chats;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
-import dev.tinelix.jabwave.ui.list.items.base.Chat;
-import dev.tinelix.jabwave.ui.list.items.base.ChatGroup;
+import dev.tinelix.jabwave.net.base.api.entities.Chat;
+import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
 import dev.tinelix.jabwave.ui.list.sections.ChatsGroupSection;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.net.telegram.api.models.Chats;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
 public class ContactsListFragment extends Fragment {
@@ -48,40 +52,46 @@ public class ContactsListFragment extends Fragment {
     }
 
     public void loadContacts() {
-        if(app.getCurrentNetworkType().equals("telegram")) {
-            app.telegram.chats = new Chats(app.telegram.getClient());
-            app.telegram.chats.loadChats(new TDLibClient.ApiHandler() {
-                @Override
-                public void onSuccess(TdApi.Function function, TdApi.Object object) {
-                    contacts = app.telegram.chats.chats;
-                    groups = new ArrayList<>();
-                    Global.triggerReceiverIntent(getActivity(), HandlerMessages.CHATS_LOADED);
-                }
+        if(getActivity() instanceof AppActivity) {
+            AppActivity activity = (AppActivity) getActivity();
+            if (app.getCurrentNetworkType().equals("telegram")) {
+                Chats chats = activity.service.getChats();
+                chats.loadChats(new OnClientAPIResultListener() {
+                    @Override
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        contacts = activity.service.getChats().getList();
+                        groups = activity.service.getChats().getGroupsList();
+                        Global.triggerReceiverIntent(Objects.requireNonNull(getActivity()), HandlerMessages.CHATS_LOADED);
+                        return true;
+                    }
 
-                @Override
-                public void onFail(TdApi.Function function, Throwable throwable) {
-
-                }
-            });
-        } else {
-            contacts = app.xmpp.getRoster().getContacts();
-            groups = app.xmpp.getRoster().getGroups();
-            Global.triggerReceiverIntent(getActivity(), HandlerMessages.CHATS_LOADED);
+                    @Override
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
+                    }
+                });
+            } else {
+                contacts = activity.service.getChats().getList();
+                groups = activity.service.getChats().getGroupsList();
+                Global.triggerReceiverIntent(getActivity(), HandlerMessages.CHATS_LOADED);
+            }
         }
     }
 
     public void loadLocalContacts() {
-        if(app.getCurrentNetworkType().equals("telegram")) {
-            contacts = app.telegram.chats.chats;
-            groups = new ArrayList<>();
-        } else {
-            contacts = app.xmpp.getRoster().getContacts();
-            groups = app.xmpp.getRoster().getGroups();
+        if(getActivity() instanceof AppActivity) {
+            AppActivity activity = (AppActivity) getActivity();
+            contacts = activity.service.getChats().getList();
+            if (app.getCurrentNetworkType().equals("telegram")) {
+                groups = new ArrayList<>();
+            } else {
+                groups = activity.service.getChats().getGroupsList();
+            }
+            createContactsAdapter(activity.service);
         }
-        createContactsAdapter();
     }
 
-    private void createContactsAdapter() {
+    private void createContactsAdapter(ClientService service) {
         chatsAdapter = new ChatsAdapter();
         if(groups == null) {
             groups = new ArrayList<>();
@@ -99,10 +109,11 @@ public class ContactsListFragment extends Fragment {
                 chatsAdapter.addSection(entityGroupSection);
             }
         } else {
+            ChatGroup group;
             if(app.getCurrentNetworkType().equals("telegram")) {
                 ChatGroup account_group = new ChatGroup(getResources().getString(R.string.saved_messages), 1);
                 if(contacts.size() > 0) {
-                    if(contacts.get(0).id.equals(app.telegram.account.id)) {
+                    if(contacts.get(0).id.equals(service.getAccount().id)) {
                         ArrayList<Chat> account_only = new ArrayList<>();
                         Chat chat = contacts.get(0);
                         account_only.add(chat);
@@ -112,14 +123,12 @@ public class ContactsListFragment extends Fragment {
                         chatsAdapter.addSection(accountGroupSection);
                     }
                 }
-                ChatGroup group = new ChatGroup(getResources().getString(R.string.general_category), 1);
-                entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
-                chatsAdapter.addSection(entityGroupSection);
+                group = new ChatGroup(getResources().getString(R.string.general_category), 1);
             } else {
-                ChatGroup group = new ChatGroup(getResources().getString(R.string.general_category), 0);
-                entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
-                chatsAdapter.addSection(entityGroupSection);
+                group = new ChatGroup(getResources().getString(R.string.general_category), 0);
             }
+            entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
+            chatsAdapter.addSection(entityGroupSection);
         }
         llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);

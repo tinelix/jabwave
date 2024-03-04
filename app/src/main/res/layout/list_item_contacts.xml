@@ -34,8 +34,8 @@
                 android:cropToPadding="false"
                 android:longClickable="false"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_person"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Circle"
+                app:srcCompat="@drawable/ic_person_accent"
                 tools:ignore="HardcodedText" />
 
             <TextView

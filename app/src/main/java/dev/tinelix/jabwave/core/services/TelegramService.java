@@ -1,26 +1,31 @@
 package dev.tinelix.jabwave.core.services;
 
 import android.annotation.SuppressLint;
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.Bundle;
 import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.util.HashMap;
+
+import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.net.base.api.BaseClient;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.telegram.api.entities.Account;
-import dev.tinelix.jabwave.net.telegram.api.entities.Authentication;
+import dev.tinelix.jabwave.net.telegram.api.entities.Authenticator;
 import dev.tinelix.jabwave.net.telegram.api.models.Chats;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
 /**
- * Telegram (TDLib) client service
+ * <b>Telegram (TDLib) client service</b>. Based on ClientService class.
  */
 
-public class TelegramService extends IntentService implements TDLibClient.ApiHandler, TDLibClient.ClientHandler {
+public class TelegramService extends ClientService implements TDLibClient.ApiHandler, TDLibClient.ClientHandler {
 
     private static final String ACTION_START = "start_service";
     private static final String ACTION_SEND_CLIENT_CMD = "sendClientCmd";
@@ -35,7 +40,7 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
     private TDLibClient client = null;
 
     public Chats chats;
-    public Authentication authentication;
+    public Authenticator authenticator;
 
     private Intent intent;
 
@@ -46,17 +51,20 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
         super(JabwaveApp.TELEGRAM_SERV_TAG);
     }
 
-    public void start(Context context, String phone_number) {
-        ctx = context;
+    @Override
+    public void start(@NonNull Context ctx, HashMap<String, String> map) {
+        this.ctx = ctx;
+        phone_number = map.get("phone_number");
         if(status.equals("done") || isConnected()) {
-            intent = new Intent(context, TelegramService.class);
+            intent = new Intent(ctx, TelegramService.class);
             intent.setAction(ACTION_START);
             intent.putExtra(PHONE_NUMBER, phone_number);
-            context.startService(intent);
+            ctx.startService(intent);
             Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Service started.");
         } else {
             Log.w(JabwaveApp.TELEGRAM_SERV_TAG, "Service already started.");
         }
+        super.start(ctx, map);
     }
 
     public void stop(Context context) {
@@ -80,7 +88,6 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            ((JabwaveApp) getApplicationContext()).telegram = this;
             final String action = intent.getAction();
             final String phone_number = intent.getStringExtra(PHONE_NUMBER);
             if(action.equals("ACTION_RUN_FUNCTION")) {
@@ -107,8 +114,8 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
                         client = new TDLibClient(getApplicationContext(), this, this);
                         client.sendTdlibParameters();
                         isConnected = true;
-                        authentication = new Authentication(client);
-                        authentication.checkPhoneNumber(phone_number);
+                        authenticator = new Authenticator(client);
+                        authenticator.checkPhoneNumber(phone_number);
                     }).start();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -127,17 +134,7 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
 
     private void runClientFunction(int constructor, Bundle params) {
         TdApi.Function function = client.createFunction(constructor, params);
-        client.send(function, new TDLibClient.ApiHandler() {
-            @Override
-            public void onSuccess(TdApi.Function function, TdApi.Object object) {
-
-            }
-
-            @Override
-            public void onFail(TdApi.Function function, Throwable throwable) {
-
-            }
-        });
+        client.send(function, null);
     }
 
     private void sendMessageToActivity(String status) {
@@ -217,7 +214,7 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
             if(function.getConstructor() == TdApi.SetAuthenticationPhoneNumber.CONSTRUCTOR
                 || function.getConstructor() == TdApi.CheckAuthenticationCode.CONSTRUCTOR
                 || function.getConstructor() == TdApi.CheckAuthenticationPassword.CONSTRUCTOR) {
-                authentication.checkAuthState();
+                authenticator.checkAuthState();
                 sendMessageToActivity(status);
             }
         }
@@ -252,7 +249,7 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
                     status = "required_cloud_password";
                     break;
                 case TdApi.AuthorizationStateReady.CONSTRUCTOR:
-                    authentication.setAuthState(state);
+                    authenticator.setAuthState(state);
                     status = "authorized";
                     break;
                 default:
@@ -260,9 +257,5 @@ public class TelegramService extends IntentService implements TDLibClient.ApiHan
             }
             sendMessageToActivity(status);
         }
-    }
-
-    public TDLibClient getClient() {
-        return client;
     }
 }
