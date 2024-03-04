@@ -67,7 +67,7 @@
                     android:paddingStart="10dp"
                     android:singleLine="true"
                     android:text="Screenname"
-                    android:textColor="?attr/colorPrimaryDark"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:textSize="16sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
 
