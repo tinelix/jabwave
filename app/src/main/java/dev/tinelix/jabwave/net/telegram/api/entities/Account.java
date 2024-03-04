@@ -22,7 +22,7 @@ public class Account extends dev.tinelix.jabwave.net.base.api.entities.Account {
     }
 
     public Account(TDLibClient client, OnClientAPIResultListener listener) {
-        super();
+        super(client);
         this.client = client;
         client.send(new TdApi.GetMe(), new OnClientAPIResultListener() {
             @Override

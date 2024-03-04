@@ -56,7 +56,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     @Override
     public void start(@NonNull Context ctx, ServiceConnection connection, HashMap<String, String> map) {
         this.ctx = ctx;
-        phone_number = map.get("phone_number");
+        phone_number = map.get("username");
         if(status.equals("done") || isConnected()) {
             intent = new Intent(ctx, TelegramService.class);
             intent.setAction(ACTION_START);
@@ -109,13 +109,14 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             case ACTION_START:
                 Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Preparing...");
                 status = "preparing";
-                JabwaveApp app = (JabwaveApp) getApplicationContext();
                 try {
                     this.phone_number = phone_number;
-                    client = new TDLibClient(getApplicationContext(), this, this);
+                    this.client = new TDLibClient(getApplicationContext(), this, this);
                     isConnected = true;
                     authenticator = new Authenticator(client);
-                    authenticator.checkPhoneNumber(phone_number);
+                    authenticator.checkAuthState();
+                    if(!authenticator.isAuthorized())
+                        authenticator.checkPhoneNumber(phone_number);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -267,5 +268,33 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             }
             sendMessageToActivity(status);
         }
+    }
+
+    @Override
+    public TDLibClient getClient() {
+        return client;
+    }
+
+    @Override
+    public Chats getChats() {
+        if(chats == null) {
+            chats = new Chats(client);
+        }
+        return chats;
+    }
+
+    @Override
+    public Account getAccount() {
+        return account;
+    }
+
+    @Override
+    public void setAccount(dev.tinelix.jabwave.net.base.api.entities.Account account) {
+        this.account = (Account) account;
+    }
+
+    @Override
+    public Authenticator getAuthenticator() {
+        return authenticator;
     }
 }

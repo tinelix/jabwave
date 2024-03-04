@@ -1,6 +1,5 @@
 package dev.tinelix.jabwave.net.telegram.api;
 
-
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;

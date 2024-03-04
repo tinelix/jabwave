@@ -29,13 +29,6 @@ public class Presences {
     }
 
     public int getStatusEnum(Presence presence) {
-        Log.d(JabwaveApp.XMPP_SERV_TAG,
-                String.format(
-                        "JID: %s | Subscription Type: %s",
-                        contact.jid,
-                        presence.getType().toString()
-                )
-        );
         if(presence.getType() == Presence.Type.available) {
             switch (presence.getMode()) {
                 case away:          // Away

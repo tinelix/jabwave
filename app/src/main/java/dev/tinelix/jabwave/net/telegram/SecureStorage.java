@@ -36,7 +36,7 @@ public class SecureStorage extends dev.tinelix.jabwave.net.base.SecureStorage {
             app_key = decoded_token.split("\\.")[1];
             HashMap<String, Object> map = new HashMap<>();
             map.put("app_id", Integer.parseInt(app_id));
-            map.put("app_key", app_key);
+            map.put("app_hash", app_key);
             return map;
         } catch (Exception e) {
             e.printStackTrace();

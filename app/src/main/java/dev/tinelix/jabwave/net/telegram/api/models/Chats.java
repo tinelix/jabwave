@@ -23,6 +23,7 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
 
     public Chats(TDLibClient client) {
         super(client);
+        this.client = client;
         this.chats = new ArrayList<>();
     }
 
@@ -94,6 +95,6 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
 
     @Override
     public ArrayList<Chat> getList() {
-        return super.getList();
+        return chats;
     }
 }

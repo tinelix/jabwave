@@ -1,6 +1,10 @@
 package dev.tinelix.jabwave.net.base.api.entities;
 
+import dev.tinelix.jabwave.net.base.api.BaseClient;
+import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
+
 public class Account {
+    private BaseClient client;
     public Object id;
     public String first_name;
     public String last_name;
@@ -15,5 +19,9 @@ public class Account {
 
     public Account() {
 
+    }
+
+    public Account(BaseClient client) {
+        this.client = client;
     }
 }
