@@ -13,9 +13,12 @@ import android.widget.TextView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
+import com.mediaparkpk.base58android.Base58;
+import com.mediaparkpk.base58android.Base58Exception;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
@@ -123,14 +126,21 @@ public class AppActivity extends JabwaveActivity
             credentials = new SecureStorage().createCredentialsMap(
                     app.getTelegramPreferences().getString("phone_number", "")
             );
-            ((TelegramService) service).start(this, credentials);
+            service = new TelegramService();
+            ((TelegramService) service).start(this, clientConnection, credentials);
         } else {
-            credentials = new SecureStorage().createCredentialsMap(
-                    app.getXmppPreferences().getString("server", ""),
-                    app.getXmppPreferences().getString("username", ""),
-                    app.getXmppPreferences().getString("password_hash", "")
-            );
-            ((XMPPService) service).start(this, credentials);
+            try {
+                String server = app.getXmppPreferences().getString("server", "");
+                String username = app.getXmppPreferences().getString("username", "");
+                String password = new String(Base58.decode(
+                        app.getXmppPreferences().getString("password_hash", "")
+                ), StandardCharsets.UTF_8);
+                credentials = new SecureStorage().createCredentialsMap(server, username, password);
+                service = new XMPPService();
+                ((XMPPService) service).start(this, clientConnection, credentials);
+            } catch (Base58Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }

@@ -54,8 +54,8 @@ public class ContactsListFragment extends Fragment {
     public void loadContacts() {
         if(getActivity() instanceof AppActivity) {
             AppActivity activity = (AppActivity) getActivity();
+            Chats chats = activity.service.getChats();
             if (app.getCurrentNetworkType().equals("telegram")) {
-                Chats chats = activity.service.getChats();
                 chats.loadChats(new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
@@ -71,8 +71,8 @@ public class ContactsListFragment extends Fragment {
                     }
                 });
             } else {
-                contacts = activity.service.getChats().getList();
-                groups = activity.service.getChats().getGroupsList();
+                contacts = chats.getList();
+                groups = chats.getGroupsList();
                 Global.triggerReceiverIntent(getActivity(), HandlerMessages.CHATS_LOADED);
             }
         }

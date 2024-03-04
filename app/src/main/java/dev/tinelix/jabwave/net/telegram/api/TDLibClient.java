@@ -57,8 +57,19 @@ public class TDLibClient extends BaseClient implements Client.ResultHandler, Cli
    }
 
    public void sendTdlibParameters() {
-      send(new TdApi.SetTdlibParameters(params), null);
-      send(new TdApi.CheckDatabaseEncryptionKey(), null);
+      OnClientAPIResultListener listener = new OnClientAPIResultListener() {
+         @Override
+         public boolean onSuccess(HashMap<String, Object> map) {
+            return false;
+         }
+
+         @Override
+         public boolean onFail(HashMap<String, Object> map, Throwable t) {
+            return false;
+         }
+      };
+      send(new TdApi.SetTdlibParameters(params), listener);
+      send(new TdApi.CheckDatabaseEncryptionKey(), listener);
    }
 
    @Override

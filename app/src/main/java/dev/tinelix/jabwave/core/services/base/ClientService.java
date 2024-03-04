@@ -3,6 +3,7 @@ package dev.tinelix.jabwave.core.services.base;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -55,7 +56,7 @@ public class ClientService extends IntentService {
 
     }
 
-    protected void start(@NonNull Context ctx, HashMap<String, String> map) {
+    protected void start(@NonNull Context ctx, ServiceConnection connection, HashMap<String, String> map) {
 
     }
 

@@ -124,7 +124,7 @@ public class AuthActivity extends AppCompatActivity {
         if(global_prefs.getString("network_type", "").equals("telegram")) {
             this.username = username;
             credentials = new SecureStorage().createCredentialsMap(username);
-            ((TelegramService) service).start(this, credentials);
+            ((TelegramService) service).start(this, clientConnection, credentials);
         } else {
             String[] username_mask = username.split("@");
             if (username_mask.length == 2) {
@@ -135,7 +135,7 @@ public class AuthActivity extends AppCompatActivity {
             credentials = new SecureStorage().createCredentialsMap(
                     this.username, this.server, this.password
             );
-            ((XMPPService) service).start(this, credentials);
+            ((XMPPService) service).start(this, clientConnection, credentials);
         }
 
         ft = getSupportFragmentManager().beginTransaction();

@@ -2,6 +2,7 @@ package dev.tinelix.jabwave.core.services;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,11 +14,13 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.net.base.api.models.Chats;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
@@ -65,7 +68,7 @@ public class XMPPService extends ClientService {
     }
 
     @Override
-    public void start(@NonNull Context ctx, HashMap<String, String> map) {
+    public void start(@NonNull Context ctx, ServiceConnection connection, HashMap<String, String> map) {
         this.ctx = ctx;
         String server = map.get("server");
         String username = map.get("username");
@@ -77,6 +80,7 @@ public class XMPPService extends ClientService {
             intent.putExtra(USERNAME, username);
             intent.putExtra(PASSWORD, password);
             ctx.startService(intent);
+            ctx.bindService(intent, connection, BIND_AUTO_CREATE);
             Log.d("XMPPService", "Service started.");
         } else {
             Log.w("XMPPService", "Service already started.");
@@ -118,44 +122,38 @@ public class XMPPService extends ClientService {
             status = "preparing";
             JabwaveApp app = (JabwaveApp) getApplicationContext();
             try {
-                new Thread(() -> {
-                    try {
-                        createAuthConfig(server, username, password);
-                        client = new XMPPClient(conn, new XMPPClient.ApiHandler() {
-                            @Override
-                            public void onSuccess(XMPPConnection conn, Object object) {
-                                receiveState(conn, object);
-                            }
-
-                            @Override
-                            public void onFail(Throwable t) {
-                                receiveState(client.getConnection(), t);
-                            }
-                        });
-                        Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
-                        status = "authorizing";
-                        listenConnection(client);
-                        try {
-                            client.start(server, username, new String(Base58.decode(password)));
-                        } catch (Base58Exception e) {
-                            Log.e(JabwaveApp.XMPP_SERV_TAG,
-                                    "Authentication with Base58 failed. Retrying with plain password..."
-                            );
-                            client.start(server, username, password);
-                        }
-                        Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
-                        status = "authorized";
-                        buildHelloPresence(conn);
-                        roster = getRoster();
-                        sendMessageToActivity(status);
-                    } catch (Exception ex) {
-                        status = "error";
-                        ex.printStackTrace();
-                        sendMessageToActivity(status);
+                createAuthConfig(server, username, password);
+                client = new XMPPClient(conn, new XMPPClient.ApiHandler() {
+                    @Override
+                    public void onSuccess(XMPPConnection conn, Object object) {
+                        receiveState(conn, object);
                     }
-                }).start();
+
+                    @Override
+                    public void onFail(Throwable t) {
+                        receiveState(client.getConnection(), t);
+                    }
+                });
+                Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
+                status = "authorizing";
+                listenConnection(client);
+                try {
+                    client.start(server, username, new String(Base58.decode(password)));
+                } catch (Base58Exception e) {
+                    Log.e(JabwaveApp.XMPP_SERV_TAG,
+                            "Authentication with Base58 failed. Retrying with plain password..."
+                    );
+                    client.start(server, username, password);
+                }
+                Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
+                status = "authorized";
+                buildHelloPresence(conn);
+                roster = new Roster(client);
+                sendMessageToActivity(status);
             } catch (Exception ex) {
+                status = "error";
                 ex.printStackTrace();
+                sendMessageToActivity(status);
             }
         } else if(action.equals(ACTION_STOP)) {
             try {
@@ -168,7 +166,7 @@ public class XMPPService extends ClientService {
         }
     }
 
-    private void createAuthConfig(String server, String jid, String password) {
+    private void createAuthConfig(String server, String jid, String password){
         XMPPTCPConnectionConfiguration config =
                 Authenticator.buildAuthConfig(
                         server,
@@ -207,7 +205,12 @@ public class XMPPService extends ClientService {
     }
 
     public Roster getRoster() {
-        return client.getRoster();
+        return roster;
+    }
+
+    @Override
+    public Chats getChats() {
+        return getRoster();
     }
 
     public boolean isConnected() {
