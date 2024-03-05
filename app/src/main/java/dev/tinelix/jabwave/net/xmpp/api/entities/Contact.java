@@ -1,6 +1,7 @@
 package dev.tinelix.jabwave.net.xmpp.api.entities;
 
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
+import org.jxmpp.jid.BareJid;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class Contact extends Chat {
     public String custom_status;
     public ArrayList<String> groups;
     public int status;
+    public BareJid bareJid;
     private VCard vCard;
 
     public Contact(String title) {
