@@ -132,4 +132,12 @@
         <item name="colorAccent">@color/accentColor</item>
     </style>
 
+    <style name="ApplicationTheme.Button" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ApplicationTheme.Overlay</item>
+    </style>
+
+    <style name="ApplicationTheme.Overlay">
+        <item name="colorPrimary">@color/accentColor</item>
+    </style>
+
 </resources>

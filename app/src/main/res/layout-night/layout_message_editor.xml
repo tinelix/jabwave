@@ -31,7 +31,7 @@
             android:inputType="textLongMessage"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            tools:ignore="TouchTargetSizeCheck,TextContrastCheck"
+            tools:ignore="TouchTargetSizeCheck"
             android:importantForAutofill="no" />
 
         <ImageButton
@@ -56,10 +56,10 @@
             android:insetLeft="0dp"
             android:insetRight="0dp"
             android:insetTop="0dp"
-            android:theme="@style/ApplicationTheme.Button"
             app:icon="@drawable/ic_send"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
+            app:iconTint="@color/accentColor"
             tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

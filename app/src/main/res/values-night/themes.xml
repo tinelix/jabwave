@@ -21,4 +21,10 @@
     <style name="ApplicationTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="ApplicationTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="ApplicationTheme.Button" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ApplicationTheme.Overlay</item>
+        <item name="iconTint">@color/accentColor</item>
+    </style>
+
 </resources>

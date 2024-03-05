@@ -10,10 +10,10 @@
 
     <ProgressBar
         android:id="@+id/auth_progress"
-        style="?android:attr/progressBarStyle"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:theme="@style/ApplicationTheme.ProgressBar" />
 
     <TextView
         android:id="@+id/auth_progress_text"
