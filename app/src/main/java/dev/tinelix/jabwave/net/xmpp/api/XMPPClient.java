@@ -8,6 +8,8 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jxmpp.jid.BareJid;
+import org.jxmpp.jid.impl.JidCreate;
 
 import dev.tinelix.jabwave.net.base.api.BaseClient;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
@@ -17,6 +19,8 @@ public class XMPPClient extends BaseClient {
     private AbstractXMPPConnection conn;
     private final ApiHandler handler;
     private ConnectionListener connListener;
+    public String jid;
+    public BareJid bareJid;
 
     public XMPPClient(AbstractXMPPConnection conn, ApiHandler handler) {
         super(false, "xmpp");
@@ -25,6 +29,7 @@ public class XMPPClient extends BaseClient {
     }
 
     public void start(String server, String jid, String password) {
+        this.jid = jid;
         try {
             XMPPTCPConnectionConfiguration config =
                     Authenticator.buildAuthConfig(
@@ -43,6 +48,7 @@ public class XMPPClient extends BaseClient {
                     .ofType(Presence.Type.available)
                     .build();
             sendStanza(presence);
+            bareJid = JidCreate.from(String.format("%s@%s", jid, server)).asEntityBareJidOrThrow();
         } catch (Exception e) {
             e.printStackTrace();
             handler.onFail(e);
@@ -67,6 +73,7 @@ public class XMPPClient extends BaseClient {
                     .ofType(Presence.Type.available)
                     .build();
             sendStanza(presence);
+            bareJid = JidCreate.from(String.format("%s@%s", jid, server)).asEntityBareJidOrThrow();
         } catch (Exception e) {
             e.printStackTrace();
             handler.onFail(e);

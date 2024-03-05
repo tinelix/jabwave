@@ -103,4 +103,8 @@ public class ClientService extends IntentService {
         binder = new ClientServiceBinder();
         onBind(intent);
     }
+
+    public Account createAccount() {
+        return null;
+    }
 }

@@ -65,8 +65,8 @@
         android:fitsSystemWindows="true"
         android:theme="@style/ApplicationTheme.Navigation"
         app:headerLayout="@layout/header_drawer"
-        app:itemIconTint="?android:textColorPrimary"
-        app:itemTextColor="?android:textColorPrimary"
+        app:itemIconTint="@color/menuItemColor"
+        app:itemTextColor="@color/menuItemColor"
         app:menu="@menu/app_nav_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

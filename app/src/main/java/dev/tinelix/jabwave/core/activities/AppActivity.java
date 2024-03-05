@@ -40,6 +40,7 @@ import dev.tinelix.jabwave.net.base.SecureStorage;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.telegram.api.entities.Account;
+import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
@@ -147,32 +148,10 @@ public class AppActivity extends JabwaveActivity
     }
 
     private void getAccount() {
-        if(app.getCurrentNetworkType().equals("telegram")) {
-            service.setAccount(
-                    new Account(
-                            (TDLibClient) service.getClient(),
-                            new OnClientAPIResultListener() {
-                                    @Override
-                                    public boolean onSuccess(HashMap<String, Object> map) {
-                                        Global.triggerReceiverIntent(
-                                                AppActivity.this,
-                                                HandlerMessages.ACCOUNT_LOADED
-                                        );
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
-                                        return false;
-                                    }
-                            }
-                    )
-            );
-        } else {
-            Global.triggerReceiverIntent(
-                    AppActivity.this,
-                    HandlerMessages.ACCOUNT_LOADED
-            );
+        service.createAccount();
+        if(!app.getCurrentNetworkType().equals("telegram")) {
+            updateNavView();
+            getContacts();
         }
     }
 
@@ -194,13 +173,7 @@ public class AppActivity extends JabwaveActivity
                 getContacts();
                 break;
             case HandlerMessages.CHATS_LOADED:
-                if(app.getCurrentNetworkType().equals("telegram")) {
-                    if (fragment instanceof ContactsListFragment) {
-                        findViewById(R.id.progress).setVisibility(View.GONE);
-                        findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
-                        ((ContactsListFragment) fragment).loadLocalContacts();
-                    }
-                } else {
+                if (fragment instanceof ContactsListFragment) {
                     findViewById(R.id.progress).setVisibility(View.GONE);
                     findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
                     ((ContactsListFragment) fragment).loadLocalContacts();
@@ -214,8 +187,8 @@ public class AppActivity extends JabwaveActivity
         TextView profile_name = header.findViewById(R.id.profile_name);
         TextView profile_id = header.findViewById(R.id.screen_name);
         ShapeableImageView profile_photo = header.findViewById(R.id.profile_avatar);
+        dev.tinelix.jabwave.net.base.api.entities.Account account = service.getAccount();
         if(app.getCurrentNetworkType().equals("telegram")) {
-            Account account = (Account) service.getAccount();
             profile_name.setText(
                     String.format("%s %s", account.first_name, account.last_name)
             );
@@ -225,7 +198,14 @@ public class AppActivity extends JabwaveActivity
                 profile_id.setVisibility(View.GONE);
             }
         } else {
-            Roster roster = (Roster) service.getChats();
+            profile_name.setText(
+                    String.format("%s %s", account.first_name, account.last_name)
+            );
+            if(account.id != null) {
+                profile_id.setText(String.format("%s", account.id));
+            } else {
+                profile_id.setVisibility(View.GONE);
+            }
         }
     }
 

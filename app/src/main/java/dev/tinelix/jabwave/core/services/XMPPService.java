@@ -14,12 +14,12 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.net.base.api.entities.Account;
 import dev.tinelix.jabwave.net.base.api.models.Chats;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
@@ -47,6 +47,7 @@ public class XMPPService extends ClientService {
     private Intent intent;
     private Roster roster;
     private XMPPTCPConnection conn;
+    private dev.tinelix.jabwave.net.xmpp.api.entities.Account account;
 
     public XMPPService() {
         super("XMPPService");
@@ -233,6 +234,9 @@ public class XMPPService extends ClientService {
             case "done":
                 intent.putExtra("msg", HandlerMessages.DONE);
                 break;
+            case "account_loaded":
+                intent.putExtra("msg", HandlerMessages.ACCOUNT_LOADED);
+                break;
             default:
                 intent.putExtra("msg", HandlerMessages.UNKNOWN_ERROR);
                 break;
@@ -264,5 +268,16 @@ public class XMPPService extends ClientService {
             }
         }
         stopSelf();
+    }
+
+    @Override
+    public dev.tinelix.jabwave.net.xmpp.api.entities.Account getAccount() {
+        return account;
+    }
+
+    @Override
+    public Account createAccount() {
+        account = new dev.tinelix.jabwave.net.xmpp.api.entities.Account(client);
+        return account;
     }
 }

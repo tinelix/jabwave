@@ -10,6 +10,7 @@ public class Account {
     public String last_name;
     public byte[] photo;
     public byte[] photo_small;
+    public String username;
 
     public Account(Object id, String first_name, String last_name) {
         this.id = id;

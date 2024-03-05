@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.Binder;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -15,7 +14,6 @@ import java.util.HashMap;
 import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.base.api.BaseClient;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.telegram.api.entities.Account;
@@ -165,6 +163,9 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             case "authorized":
                 intent.putExtra("msg", HandlerMessages.AUTHORIZED);
                 break;
+            case "account_loaded":
+                intent.putExtra("msg", HandlerMessages.ACCOUNT_LOADED);
+                break;
             case "done":
                 intent.putExtra("msg", HandlerMessages.DONE);
                 break;
@@ -191,7 +192,6 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                 intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
                 intent.putExtra("data", data);
                 break;
-
             case "presence_changed":
                 intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
                 intent.putExtra("data", data);
@@ -296,5 +296,24 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     @Override
     public Authenticator getAuthenticator() {
         return authenticator;
+    }
+
+    @Override
+    public dev.tinelix.jabwave.net.base.api.entities.Account createAccount() {
+        account = new Account(client,
+                new OnClientAPIResultListener() {
+                    @Override
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        sendMessageToActivity("account_loaded");
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
+                    }
+                }
+        );
+        return account;
     }
 }
