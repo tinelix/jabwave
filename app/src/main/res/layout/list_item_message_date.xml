@@ -16,8 +16,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="8dp"
-            app:cardBackgroundColor="@color/outMessageColor"
+            app:cardBackgroundColor="@color/msgDateLabelColor"
             app:cardCornerRadius="12dp">
 
             <LinearLayout
@@ -29,30 +30,11 @@
                 android:paddingStart="8dp"
                 android:paddingTop="4dp">
 
-                <LinearLayout
-                    android:id="@+id/flow_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <Space
-                        android:id="@+id/container_space"
-                        android:layout_width="match_parent"
-                        android:layout_height="4dp" />
-
-                    <androidx.constraintlayout.helper.widget.Flow
-                        android:id="@+id/flow_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:visibility="visible" />
-
-                </LinearLayout>
-
                 <TextView
                     android:id="@+id/msg_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
                     android:text="Message text"
                     android:textColor="@color/white" />
 

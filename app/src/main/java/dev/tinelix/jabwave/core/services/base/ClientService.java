@@ -23,6 +23,7 @@ public class ClientService extends IntentService {
     private Account account;
     private Chats chats;
     private BaseClient client;
+    protected int authType;
     private ClientServiceBinder binder = new ClientServiceBinder();
 
     public class ClientServiceBinder extends Binder {
@@ -106,5 +107,11 @@ public class ClientService extends IntentService {
 
     public Account createAccount() {
         return null;
+    }
+
+    public int getAuthType() {
+        // returns 0 if username/ID/phone number required
+        // also returns 1 if required phone number with authentication code
+        return authType;
     }
 }

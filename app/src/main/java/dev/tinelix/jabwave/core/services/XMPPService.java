@@ -280,4 +280,9 @@ public class XMPPService extends ClientService {
         account = new dev.tinelix.jabwave.net.xmpp.api.entities.Account(client);
         return account;
     }
+
+    @Override
+    public int getAuthType() {
+        return authType;
+    }
 }

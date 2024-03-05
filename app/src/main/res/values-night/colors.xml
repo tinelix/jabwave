@@ -9,4 +9,5 @@
     <color name="backgroundDark">#FF212121</color>
     <color name="backgroundDarkAmoled">#FF000000</color>
     <color name="menuItemColor">#9FFFFFFF</color>
+    <color name="outMessageColor">#FF853E00</color>
 </resources>

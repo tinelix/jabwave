@@ -90,6 +90,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
         if (intent != null) {
             final String action = intent.getAction();
             final String phone_number = intent.getStringExtra(PHONE_NUMBER);
+            authType = 1;
             if(action.equals("ACTION_RUN_FUNCTION")) {
                 if(client != null)
                     runClientFunction(
@@ -315,5 +316,10 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                 }
         );
         return account;
+    }
+
+    @Override
+    public int getAuthType() {
+        return authType;
     }
 }
