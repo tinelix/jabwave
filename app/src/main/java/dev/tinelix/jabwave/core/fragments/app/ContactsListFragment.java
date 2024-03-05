@@ -71,9 +71,10 @@ public class ContactsListFragment extends Fragment {
                     }
                 });
             } else {
+                // not yet optimized
                 contacts = chats.getList();
                 groups = chats.getGroupsList();
-                Global.triggerReceiverIntent(getActivity(), HandlerMessages.CHATS_LOADED);
+                createContactsAdapter(activity.service);
             }
         }
     }

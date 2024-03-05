@@ -34,7 +34,7 @@ public class Roster extends Chats {
     @Override
     public ArrayList<Chat> getList() {
         ArrayList<Chat> contacts = new ArrayList<>();
-        Collection<RosterEntry> entries = roster.getEntries();
+        Collection <RosterEntry> entries = roster.getEntries();
         Collection<RosterGroup> groups = roster.getGroups();
         for (RosterEntry entry : entries) {
             Contact entity = new Contact("");
@@ -89,19 +89,23 @@ public class Roster extends Chats {
                     entity.groups.add(group.getName());
                 }
             }
+            Contact finalEntity = entity;
+            new Thread(() -> {
+                // Non-async loadVCard function blocking UI thread.
+                try {
+                    finalEntity.setVCard(
+                            VCardManager
+                                    .getInstanceFor(conn)
+                                    .loadVCard((EntityBareJid) entry.getJid().asBareJid())
+                    );
+                } catch (SmackException.NoResponseException |
+                        XMPPException.XMPPErrorException |
+                        SmackException.NotConnectedException |
+                        InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
 
-            try {
-                entity.setVCard(
-                        VCardManager
-                                .getInstanceFor(conn)
-                                .loadVCard((EntityBareJid) entry.getJid().asBareJid())
-                );
-            } catch (SmackException.NoResponseException |
-                    XMPPException.XMPPErrorException |
-                    SmackException.NotConnectedException |
-                    InterruptedException e) {
-                e.printStackTrace();
-            }
             contacts.add(entity);
         }
 
