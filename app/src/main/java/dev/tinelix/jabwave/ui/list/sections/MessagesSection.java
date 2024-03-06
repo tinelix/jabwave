@@ -29,7 +29,7 @@ public class MessagesSection extends Section {
     public MessagesSection(Context ctx, ArrayList<Message> messages, MessagesAdapter adapter) {
         super(SectionParameters.builder()
                 .headerResourceId(R.layout.list_item_message_date)
-                .itemResourceId(R.layout.list_item_message_in)
+                .itemResourceId(R.layout.list_item_message)
                 .build());
         this.ctx = ctx;
         this.messages = messages;

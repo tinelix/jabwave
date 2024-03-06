@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
@@ -108,6 +110,7 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
             Message message = new Message(id, chat_id, author_id, text, new Date(msg.date), !msg.isOutgoing);
             msgs.add(message);
         }
+        Collections.reverse(msgs);
         this.messages = msgs;
     }
 }

@@ -58,11 +58,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <TextView
+                    <dev.tinelix.jabwave.ui.views.base.TightTextView
                         android:id="@+id/msg_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Message text"
+                        android:maxWidth="220dp"
                         android:textColor="@color/white" />
 
                     <TextView
@@ -71,6 +72,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:text="9:50"
+                        android:layout_gravity="bottom"
                         android:textColor="@color/msgTimestampColor"
                         android:textSize="10sp" />
                 </LinearLayout>

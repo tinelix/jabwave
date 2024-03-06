@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Message {
     public long id;
@@ -24,12 +25,14 @@ public class Message {
 
     @SuppressLint("SimpleDateFormat")
     public String formatTimestamp() {
-        return new SimpleDateFormat("HH:mm").format(timestamp);
+        Date timestamp_1 = new Date(timestamp.getTime() * 1000);
+        return new SimpleDateFormat("HH:mm").format(timestamp_1);
     }
 
     @SuppressLint("SimpleDateFormat")
     public String formatTimestamp(String pattern) {
-        return new SimpleDateFormat(pattern).format(timestamp);
+        Date timestamp_1 = new Date(timestamp.getTime() * 1000);
+        return new SimpleDateFormat(pattern).format(timestamp_1);
     }
 
     public boolean isIncoming() {
