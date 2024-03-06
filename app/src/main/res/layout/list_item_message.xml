@@ -65,7 +65,7 @@
                         android:maxWidth="220dp"
                         android:text="Message text"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/msg_timestamp"
