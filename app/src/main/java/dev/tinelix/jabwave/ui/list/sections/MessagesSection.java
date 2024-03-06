@@ -46,7 +46,7 @@ public class MessagesSection extends Section {
     public RecyclerView.ViewHolder getItemViewHolder(View view) {
         MessageViewHolder holder = new MessageViewHolder(view);
         holder.setIsRecyclable(false);
-        return ;
+        return holder;
     }
 
     @Override
