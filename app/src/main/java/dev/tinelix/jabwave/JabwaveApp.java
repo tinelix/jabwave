@@ -2,16 +2,19 @@ package dev.tinelix.jabwave;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 
 import org.jxmpp.jid.parts.Resourcepart;
 
 import java.util.Random;
 
+import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
 
 public class JabwaveApp extends Application {
     public String version;
+    public ClientService clientService;
     private SharedPreferences global_prefs;
     private SharedPreferences xmpp_prefs;
     private SharedPreferences telegram_prefs;

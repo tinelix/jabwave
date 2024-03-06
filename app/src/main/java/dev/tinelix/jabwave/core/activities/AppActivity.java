@@ -64,6 +64,7 @@ public class AppActivity extends JabwaveActivity
         public void onServiceConnected(ComponentName name, IBinder service) {
             ClientService.ClientServiceBinder binder = (ClientService.ClientServiceBinder) service;
             AppActivity.this.service = binder.getService();
+            ((JabwaveApp) AppActivity.this.getApplicationContext()).clientService = binder.getService();
         }
 
         @Override

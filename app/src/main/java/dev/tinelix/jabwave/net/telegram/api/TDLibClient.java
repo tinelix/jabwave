@@ -90,6 +90,10 @@ public class TDLibClient extends BaseClient implements Client.ResultHandler, Cli
          client.send(
                  ((TdApi.Function) function),
                  object -> {
+                     if(object instanceof TdApi.Error) {
+                        onException(new Throwable(((TdApi.Error) object).message));
+                        return;
+                     }
                      map.put("result", object);
                      listener.onSuccess(map);
                  },

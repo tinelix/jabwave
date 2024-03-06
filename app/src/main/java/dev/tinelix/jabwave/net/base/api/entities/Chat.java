@@ -2,8 +2,11 @@ package dev.tinelix.jabwave.net.base.api.entities;
 
 import java.util.ArrayList;
 
+import dev.tinelix.jabwave.net.base.api.BaseClient;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+
 public class Chat {
-    // Base Contact Class used in Contacts list (AppActivity)
+    // Base Chat Class used in Contacts list (AppActivity)
     public int type;
     public int network_type;
     public String title;
@@ -11,6 +14,7 @@ public class Chat {
     public ArrayList<String> groups;
     public int status;
     public byte[] photo;
+    public ArrayList<Message> messages;
 
     public Chat(String title, int network_type) {
         /*
@@ -33,5 +37,17 @@ public class Chat {
         this.title = title;
         this.id = id;
         this.groups = new ArrayList<>();
+    }
+
+    public void loadMessages(BaseClient client) {
+
+    }
+
+    public void loadMessages(BaseClient client, OnClientAPIResultListener listener) {
+
+    }
+
+    public ArrayList<Message> getMessages() {
+        return messages;
     }
 }

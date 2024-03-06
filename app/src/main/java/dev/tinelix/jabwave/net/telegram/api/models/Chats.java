@@ -89,6 +89,46 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
         Log.d(JabwaveApp.TELEGRAM_SERV_TAG, String.format("%s chats loaded.", this.chats.size()));
     }
 
+    @Override
+    public Chat getChatById(Object id) {
+        for (Chat chat : chats) {
+            if(chat.id.equals(id)) {
+                return chat;
+            }
+        }
+        Log.e(JabwaveApp.TELEGRAM_SERV_TAG,
+                String.format("Chat not found with ID #%s.", id));
+        return null;
+    }
+
+    @Override
+    public void loadChat(Object chat_id, OnClientAPIResultListener listener) {
+        client.send(new TdApi.GetChat((long) chat_id), new OnClientAPIResultListener() {
+            @Override
+            public boolean onSuccess(HashMap<String, Object> map) {
+                if(map.get("result") instanceof TdApi.Chat) {
+                    TdApi.Chat td_chat = (TdApi.Chat) map.get("result");
+                    if(td_chat != null) {
+                        long id = td_chat.id;
+                        dev.tinelix.jabwave.net.telegram.api.entities.Chat chat =
+                                new dev.tinelix.jabwave.net.telegram.api.entities.Chat(
+                                        id, td_chat.title,
+                                        new ArrayList<>(), 0
+                                );
+                        map.put("chat", chat);
+                        listener.onSuccess(map);
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                return false;
+            }
+        });
+    }
+
     public int getTotalCount() {
         return chats_count;
     }

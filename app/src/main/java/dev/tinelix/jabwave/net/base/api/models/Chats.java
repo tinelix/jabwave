@@ -35,4 +35,12 @@ public class Chats {
     public ArrayList<ChatGroup> getGroupsList() {
         return groups;
     }
+
+    public Chat loadChat(Object chat_id) {
+        return null;
+    }
+
+    public void loadChat(Object chat_id, OnClientAPIResultListener listener) {
+
+    }
 }

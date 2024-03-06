@@ -6,6 +6,7 @@
     android:layout_height="wrap_content">
 
     <FrameLayout
+        android:id="@+id/msg_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -14,9 +15,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/msg_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             app:cardBackgroundColor="@color/outMessageColor"
             app:cardCornerRadius="12dp">
 
@@ -49,12 +54,26 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/msg_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Message text"
-                    android:textColor="@color/white" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/msg_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Message text"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/msg_timestamp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="9:50"
+                        android:textColor="@color/msgTimestampColor"
+                        android:textSize="10sp" />
+                </LinearLayout>
 
             </LinearLayout>
 

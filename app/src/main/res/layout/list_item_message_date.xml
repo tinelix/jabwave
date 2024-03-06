@@ -17,7 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             app:cardBackgroundColor="@color/msgDateLabelColor"
             app:cardCornerRadius="12dp">
 
@@ -31,12 +34,13 @@
                 android:paddingTop="4dp">
 
                 <TextView
-                    android:id="@+id/msg_text"
+                    android:id="@+id/msg_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="Message text"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

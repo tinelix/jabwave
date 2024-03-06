@@ -65,6 +65,8 @@ public class AuthActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             ClientService.ClientServiceBinder binder = (ClientService.ClientServiceBinder) service;
             AuthActivity.this.service = binder.getService();
+            ((JabwaveApp) AuthActivity.this.getApplicationContext()).clientService =
+                    ((ClientService.ClientServiceBinder) service).getService();
         }
 
         @Override

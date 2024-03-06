@@ -11,4 +11,5 @@
     <color name="menuItemColor">#9F000000</color>
     <color name="outMessageColor">#FFDD6700</color>
     <color name="msgDateLabelColor">#5F5F5F</color>
+    <color name="msgTimestampColor">#AEFFFFFF</color>
 </resources>
