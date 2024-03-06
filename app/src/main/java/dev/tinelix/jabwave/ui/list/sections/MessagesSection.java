@@ -120,6 +120,7 @@ public class MessagesSection extends Section {
             msg_timestamp.setText(msg.formatTimestamp());
             if(!msg.isIncoming()) {
                 ((FrameLayout.LayoutParams) msg_card.getLayoutParams()).gravity = Gravity.RIGHT;
+                msg_text.setTextColor(ctx.getResources().getColor(R.color.outMessageTextColor));
             } else {
                 msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                 msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));

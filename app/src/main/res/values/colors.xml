@@ -13,6 +13,7 @@
     <color name="inMessageTextColor">#FF733600</color>
     <color name="inMsgTimestampColor">#AE000000</color>
     <color name="outMessageColor">#FFDD6700</color>
+    <color name="outMessageTextColor">#FFFFFFFF</color>
     <color name="msgDateLabelColor">#5F5F5F</color>
     <color name="msgTimestampColor">#AEFFFFFF</color>
     <color name="messengerBackgroundColor">#FFB29983</color>
