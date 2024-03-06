@@ -1,10 +1,8 @@
 package dev.tinelix.jabwave.core.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import androidx.annotation.Nullable;
@@ -20,7 +18,6 @@ import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.entities.Message;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.ui.list.adapters.MessagesAdapter;
-import dev.tinelix.jabwave.ui.list.sections.MessagesSection;
 import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
 
 public class MessengerActivity extends JabwaveActivity {
@@ -106,10 +103,7 @@ public class MessengerActivity extends JabwaveActivity {
 
     private void createMessagesAdapter() {
         messages_list = findViewById(R.id.messages_list);
-        MessagesAdapter adapter = new MessagesAdapter();
-        adapter.addSection(
-                new MessagesSection(this, messages, adapter)
-        );
+        MessagesAdapter adapter = new MessagesAdapter(this, messages);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         messages_list.setLayoutManager(llm);

@@ -13,6 +13,7 @@ public class Message {
     public String text;
     private boolean isIncoming;
     private Date timestamp;
+    private boolean isHeader;
 
     public Message(long id, Object chat_id, Object member_id, String text, Date timestamp, boolean isIncoming) {
         this.id = id;
@@ -21,6 +22,11 @@ public class Message {
         this.timestamp = timestamp;
         this.text = text;
         this.isIncoming = isIncoming;
+    }
+
+    public Message(boolean isHeader, String header_title) {
+        this.isHeader = isHeader;
+        this.text = header_title;
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -39,4 +45,7 @@ public class Message {
         return isIncoming;
     }
 
+    public boolean isHeader() {
+        return isHeader;
+    }
 }
