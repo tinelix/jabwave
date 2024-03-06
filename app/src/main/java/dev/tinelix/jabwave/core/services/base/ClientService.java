@@ -57,7 +57,7 @@ public class ClientService extends IntentService {
 
     }
 
-    protected void start(@NonNull Context ctx, ServiceConnection connection, HashMap<String, String> map) {
+    public void start(@NonNull Context ctx, ServiceConnection connection, HashMap<String, String> map) {
 
     }
 
