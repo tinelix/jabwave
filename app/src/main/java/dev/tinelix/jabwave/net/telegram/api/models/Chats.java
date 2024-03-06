@@ -137,4 +137,14 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
     public ArrayList<Chat> getList() {
         return chats;
     }
+
+    @Override
+    public int getChatIndex(Chat chat) {
+        for(int i = 0; i < chats.size(); i++) {
+            if(chats.get(i).equals(chat)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

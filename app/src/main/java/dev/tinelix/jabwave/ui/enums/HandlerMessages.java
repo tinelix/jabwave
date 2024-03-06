@@ -10,6 +10,7 @@ public class HandlerMessages {
 
     // Chats
     public static final int CHATS_LOADED                      =   200;
+    public static final int CHATS_UPDATED                      =   201;
 
     // Messenger
     public static final int MESSAGE_SENT                      =   300;

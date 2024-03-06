@@ -18,6 +18,7 @@ import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.telegram.api.entities.Account;
 import dev.tinelix.jabwave.net.telegram.api.entities.Authenticator;
+import dev.tinelix.jabwave.net.telegram.api.entities.Chat;
 import dev.tinelix.jabwave.net.telegram.api.models.Chats;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
@@ -167,6 +168,9 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             case "account_loaded":
                 intent.putExtra("msg", HandlerMessages.ACCOUNT_LOADED);
                 break;
+            case "update_chat_status":
+                intent.putExtra("msg", HandlerMessages.CHATS_UPDATED);
+                break;
             case "done":
                 intent.putExtra("msg", HandlerMessages.DONE);
                 break;
@@ -267,6 +271,22 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                 default:
                     break;
             }
+            sendMessageToActivity(status);
+        } else if(object instanceof TdApi.UpdateUserStatus) {
+            TdApi.UpdateUserStatus userStatus = ((TdApi.UpdateUserStatus) object);
+            Chat chat = null;
+            switch(userStatus.status.getConstructor()) {
+                case TdApi.UserStatusOnline.CONSTRUCTOR:
+                    chat = (Chat) getChats().getChatById(userStatus.userId);
+                    chat.status = 1;
+                    break;
+                case TdApi.UserStatusOffline.CONSTRUCTOR:
+                    chat = (Chat) getChats().getChatById(userStatus.userId);
+                    chat.status = 0;
+                    break;
+            }
+            getChats().chats.set(getChats().getChatIndex(chat), chat);
+            status = "update_chat_status";
             sendMessageToActivity(status);
         }
     }

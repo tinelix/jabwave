@@ -43,4 +43,13 @@ public class Chats {
     public void loadChat(Object chat_id, OnClientAPIResultListener listener) {
 
     }
+
+    public int getChatIndex(Chat chat) {
+        for(int i = 0; i < chats.size(); i++) {
+            if(chats.get(i).equals(chat)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
