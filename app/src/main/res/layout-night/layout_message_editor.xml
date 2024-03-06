@@ -28,16 +28,17 @@
             android:background="@null"
             android:ems="10"
             android:hint="@string/message"
+            android:importantForAutofill="no"
             android:inputType="textLongMessage"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            tools:ignore="TouchTargetSizeCheck"
-            android:importantForAutofill="no" />
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
+            android:textSize="16sp"
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
         <ImageButton
             android:id="@+id/emoji_button"
-            android:layout_width="38dp"
-            android:layout_height="36dp"
+            android:layout_width="36dp"
+            android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_marginEnd="6dp"
             android:background="@null"
@@ -48,8 +49,8 @@
 
         <Button
             android:id="@+id/send_button"
-            android:layout_width="38dp"
-            android:layout_height="36dp"
+            android:layout_width="36dp"
+            android:layout_height="34dp"
             android:layout_gravity="center"
             android:layout_marginEnd="6dp"
             android:insetBottom="0dp"

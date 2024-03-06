@@ -30,8 +30,8 @@
             android:hint="@string/message"
             android:importantForAutofill="no"
             android:inputType="textLongMessage"
-            android:paddingBottom="9dp"
-            android:paddingTop="9dp"
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"
             android:textSize="16sp"
             tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
@@ -49,10 +49,10 @@
 
         <Button
             android:id="@+id/send_button"
-            android:layout_width="34dp"
-            android:layout_height="32dp"
+            android:layout_width="36dp"
+            android:layout_height="34dp"
             android:layout_gravity="center"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="10dp"
             android:insetBottom="0dp"
             android:insetLeft="0dp"
             android:insetRight="0dp"
