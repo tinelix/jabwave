@@ -23,6 +23,7 @@
         android:id="@+id/messages_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/messengerBackgroundColor"
         app:layout_constraintBottom_toTopOf="@+id/message_editor_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,11 +34,11 @@
     <dev.tinelix.jabwave.ui.views.base.XConstraintLayout
         android:id="@+id/message_editor_panel"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messages_list" >
+        app:layout_constraintTop_toBottomOf="@+id/messages_list">
 
         <dev.tinelix.jabwave.ui.views.MessageEditor
             android:id="@+id/message_editor"

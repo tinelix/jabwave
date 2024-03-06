@@ -95,7 +95,7 @@ public class MessagesSection extends Section {
 
     class MessageViewHolder extends RecyclerView.ViewHolder {
         private final View view;
-        private final FrameLayout msg_card;
+        private final CardView msg_card;
         private final TextView msg_text;
         private final TextView msg_timestamp;
         private final Flow flow_layout;
@@ -121,7 +121,9 @@ public class MessagesSection extends Section {
             if(!msg.isIncoming()) {
                 ((FrameLayout.LayoutParams) msg_card.getLayoutParams()).gravity = Gravity.RIGHT;
             } else {
-                msg_card.setBackgroundColor(ctx.getResources().getColor(R.color.backgroundDark));
+                msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
+                msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
+                msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
             }
         }
 

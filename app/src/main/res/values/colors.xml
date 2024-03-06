@@ -9,7 +9,11 @@
     <color name="backgroundDark">#FF212121</color>
     <color name="backgroundDarkAmoled">#FF000000</color>
     <color name="menuItemColor">#9F000000</color>
+    <color name="inMessageColor">#FFFFCFA6</color>
+    <color name="inMessageTextColor">#FF733600</color>
+    <color name="inMsgTimestampColor">#AE000000</color>
     <color name="outMessageColor">#FFDD6700</color>
     <color name="msgDateLabelColor">#5F5F5F</color>
     <color name="msgTimestampColor">#AEFFFFFF</color>
+    <color name="messengerBackgroundColor">#FFB29983</color>
 </resources>
