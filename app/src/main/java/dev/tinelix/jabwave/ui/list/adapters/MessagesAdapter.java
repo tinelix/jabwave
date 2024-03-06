@@ -55,4 +55,9 @@ public class MessagesAdapter extends SectionedRecyclerViewAdapter {
         }
         notifyDataSetChanged();
     }
+
+    @Override
+    public int getSectionItemViewType(int position) {
+        return position;
+    }
 }
