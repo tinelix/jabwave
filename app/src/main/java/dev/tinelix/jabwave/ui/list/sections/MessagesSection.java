@@ -44,7 +44,9 @@ public class MessagesSection extends Section {
 
     @Override
     public RecyclerView.ViewHolder getItemViewHolder(View view) {
-        return new MessageViewHolder(view);
+        MessageViewHolder holder = new MessageViewHolder(view);
+        holder.setIsRecyclable(false);
+        return ;
     }
 
     @Override
@@ -54,8 +56,7 @@ public class MessagesSection extends Section {
 
     @Override
     public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Message msg = messages.get(position);
-        ((MessageViewHolder) holder).bind(msg);
+        ((MessageViewHolder) holder).bind(position);
     }
 
     @Override
@@ -115,7 +116,8 @@ public class MessagesSection extends Section {
             return view.getResources();
         }
 
-        public void bind(Message msg) {
+        public void bind(int position) {
+            Message msg = messages.get(position);
             msg_text.setText(msg.text);
             msg_timestamp.setText(msg.formatTimestamp());
             if(!msg.isIncoming()) {
