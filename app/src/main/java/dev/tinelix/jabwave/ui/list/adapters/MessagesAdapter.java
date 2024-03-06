@@ -29,7 +29,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
         this.messages.add(0,
                 new Message(true,
                         messages.size() > 0 ?
-                                messages.get(0).formatTimestamp("dd MMMM YYYY")
+                                messages.get(0).formatTimestamp("dd MMMM yyyy")
                                 :
                                 ctx.getResources().getString(R.string.no_messages)
                 )
