@@ -55,7 +55,7 @@ public class ContactsListFragment extends Fragment {
         if(getActivity() instanceof AppActivity) {
             AppActivity activity = (AppActivity) getActivity();
             Chats chats = activity.service.getChats();
-            if (app.getCurrentNetworkType().equals("telegram")) {
+            if (activity.service.isAsyncAPIs()) {
                 chats.loadChats(new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {

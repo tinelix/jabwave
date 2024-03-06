@@ -47,6 +47,14 @@ public class Chat {
 
     }
 
+    public void sendMessage(BaseClient client, String text) {
+
+    }
+
+    public void sendMessage(BaseClient client, String text, OnClientAPIResultListener listener) {
+
+    }
+
     public ArrayList<Message> getMessages() {
         return messages;
     }

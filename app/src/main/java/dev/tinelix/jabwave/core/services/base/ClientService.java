@@ -114,4 +114,8 @@ public class ClientService extends IntentService {
         // also returns 1 if required phone number with authentication code
         return authType;
     }
+
+    public boolean isAsyncAPIs() {
+        return getClient().isAsyncApi();
+    }
 }

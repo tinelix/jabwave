@@ -63,7 +63,7 @@ public class MessengerActivity extends JabwaveActivity {
     }
 
     private void loadChat() {
-        if(app.getCurrentNetworkType().equals("telegram")) {
+        if(service.isAsyncAPIs()) {
             service.getChats().loadChat(chat_id, new OnClientAPIResultListener() {
                 @Override
                 public boolean onSuccess(HashMap<String, Object> map) {

@@ -2,6 +2,7 @@ package dev.tinelix.jabwave.net.telegram.api.entities;
 
 import android.util.Log;
 
+import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
@@ -112,5 +113,41 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
         }
         Collections.reverse(msgs);
         this.messages = msgs;
+    }
+
+
+    @Override
+    public void sendMessage(BaseClient client, String text, OnClientAPIResultListener listener) {
+        client.send(
+                new TdApi.SendMessage(
+                        id, id, 0, null, null,
+                        new TdApi.InputMessageText(
+                                new TdApi.FormattedText(text, null),
+                                false, true
+                        )
+                ), new OnClientAPIResultListener() {
+                    @Override
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        if(map.get("result") instanceof TdApi.Message) {
+                            if(map.containsKey("result")) {
+                                TdApi.Message msg = (TdApi.Message) map.get("result");
+                                Message message = new Message(
+                                        Objects.requireNonNull(msg).id, msg.chatId, msg.senderId,
+                                        text, new Date(msg.date), false
+                                );
+                                messages.add(message);
+                            }
+                        }
+                        listener.onSuccess(map);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        listener.onFail(map, t);
+                        return false;
+                    }
+                }
+        );
     }
 }

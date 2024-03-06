@@ -150,7 +150,7 @@ public class AppActivity extends JabwaveActivity
 
     private void getAccount() {
         service.createAccount();
-        if(!app.getCurrentNetworkType().equals("telegram")) {
+        if(!service.isAsyncAPIs()) {
             updateNavView();
             getContacts();
         }
