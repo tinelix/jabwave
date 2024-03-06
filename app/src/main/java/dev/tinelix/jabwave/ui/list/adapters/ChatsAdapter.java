@@ -34,4 +34,9 @@ public class ChatsAdapter extends SectionedRecyclerViewAdapter {
         }
         notifyDataSetChanged();
     }
+
+    @Override
+    public int getSectionItemViewType(int position) {
+        return position;
+    }
 }
