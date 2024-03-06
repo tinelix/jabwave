@@ -23,6 +23,7 @@ public class Roster extends Chats {
 
     private final XMPPConnection conn;
     private final org.jivesoftware.smack.roster.Roster roster;
+    private ArrayList<Chat> contacts;
 
     public Roster(XMPPClient client) {
         super(client);
@@ -33,7 +34,7 @@ public class Roster extends Chats {
 
     @Override
     public ArrayList<Chat> getList() {
-        ArrayList<Chat> contacts = new ArrayList<>();
+        contacts = new ArrayList<>();
         Collection <RosterEntry> entries = roster.getEntries();
         Collection<RosterGroup> groups = roster.getGroups();
         for (RosterEntry entry : entries) {
@@ -120,5 +121,15 @@ public class Roster extends Chats {
             groups_list.add(new ChatGroup(group.getName(), 0));
         }
         return groups_list;
+    }
+
+    @Override
+    public Chat getChatById(Object id) {
+        for (Chat chat : contacts) {
+            if(chat.id.equals(id)) {
+                return chat;
+            }
+        }
+        return null;
     }
 }

@@ -148,7 +148,11 @@ public class MessagesSection extends Section {
 
         @SuppressLint("UseCompatLoadingForDrawables")
         public void bind() {
-            date_header.setText(messages.get(0).formatTimestamp("d MMMM yyyy"));
+            if(messages.size() > 0) {
+                date_header.setText(messages.get(0).formatTimestamp("d MMMM yyyy"));
+            } else {
+                date_header.setText(getResources().getString(R.string.no_messages));
+            }
         }
     }
 

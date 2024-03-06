@@ -214,6 +214,11 @@ public class XMPPService extends ClientService {
         return getRoster();
     }
 
+    @Override
+    public XMPPClient getClient() {
+        return client;
+    }
+
     public boolean isConnected() {
         if(conn != null) {
             return conn.isConnected();

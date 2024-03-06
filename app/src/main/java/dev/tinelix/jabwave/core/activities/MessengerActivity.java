@@ -99,6 +99,8 @@ public class MessengerActivity extends JabwaveActivity {
         } else {
             Chat chat = service.getChats().getChatById(chat_id);
             chat.loadMessages(service.getClient());
+            messages = chat.getMessages();
+            createMessagesAdapter();
         }
     }
 
