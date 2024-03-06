@@ -62,19 +62,20 @@
                         android:id="@+id/msg_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Message text"
                         android:maxWidth="220dp"
-                        android:textColor="@color/white" />
+                        android:text="Message text"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/msg_timestamp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:layout_marginStart="6dp"
                         android:text="9:50"
-                        android:layout_gravity="bottom"
                         android:textColor="@color/msgTimestampColor"
-                        android:textSize="10sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
             </LinearLayout>
