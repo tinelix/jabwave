@@ -1,6 +1,11 @@
 package dev.tinelix.jabwave.core.activities;
 
+import android.annotation.SuppressLint;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
@@ -17,7 +23,9 @@ import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.entities.Message;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.MessagesAdapter;
+import dev.tinelix.jabwave.ui.views.MessageEditor;
 import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
 
 public class MessengerActivity extends JabwaveActivity {
@@ -28,6 +36,8 @@ public class MessengerActivity extends JabwaveActivity {
     private Object chat_id;
     private ArrayList<Message> messages;
     private RecyclerView messages_list;
+    private Chat chat;
+    private MessagesAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +69,50 @@ public class MessengerActivity extends JabwaveActivity {
                 finish();
             }
         }
+        registerBroadcastReceiver();
         loadChat();
+        setUiListeners();
+    }
+
+    public void registerBroadcastReceiver() {
+        jwReceiver = new JabwaveReceiver(this);
+        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
+        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
+    }
+
+    private void setUiListeners() {
+        MessageEditor editor = findViewById(R.id.message_editor);
+        editor.setSendButtonListener(v -> {
+            if(service.isAsyncAPIs()) {
+                chat.sendMessage(service.getClient(),
+                        editor.getEditorArea().getText().toString(),
+                        new OnClientAPIResultListener() {
+                            @SuppressLint("NotifyDataSetChanged")
+                            @Override
+                            public boolean onSuccess(HashMap<String, Object> map) {
+                                Global.triggerReceiverIntent(
+                                        MessengerActivity.this,
+                                        HandlerMessages.MESSAGE_SENT
+                                );
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                                editor.getEditorArea().setText("");
+                                Toast.makeText(
+                                        MessengerActivity.this,
+                                        getResources().getString(R.string.error),
+                                        Toast.LENGTH_LONG
+                                ).show();
+                                return false;
+                            }
+                        }
+                );
+            } else {
+                chat.sendMessage(service.getClient(), editor.getEditorArea().getText().toString());
+            }
+        });
     }
 
     private void loadChat() {
@@ -67,7 +120,7 @@ public class MessengerActivity extends JabwaveActivity {
             service.getChats().loadChat(chat_id, new OnClientAPIResultListener() {
                 @Override
                 public boolean onSuccess(HashMap<String, Object> map) {
-                    Chat chat = (Chat) map.get("chat");
+                    chat = (Chat) map.get("chat");
                     if (chat != null) {
                         chat.loadMessages(service.getClient(),
                                 new OnClientAPIResultListener() {
@@ -103,7 +156,7 @@ public class MessengerActivity extends JabwaveActivity {
 
     private void createMessagesAdapter() {
         messages_list = findViewById(R.id.messages_list);
-        MessagesAdapter adapter = new MessagesAdapter(this, messages);
+        adapter = new MessagesAdapter(this, messages);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         messages_list.setLayoutManager(llm);
@@ -115,5 +168,26 @@ public class MessengerActivity extends JabwaveActivity {
         actionbar.setNavigationIconTint(R.color.white);
         setSupportActionBar(actionbar);
         actionbar.setNavigationOnClickListener(v -> handleOnBackPressed());
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterBroadcastReceiver();
+        super.onDestroy();
+    }
+
+    private void unregisterBroadcastReceiver() {
+        unregisterReceiver(jwReceiver);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void receiveState(int msg, Bundle data) {
+        switch (msg) {
+            case HandlerMessages.MESSAGE_SENT:
+                MessageEditor editor = findViewById(R.id.message_editor);
+                editor.getEditorArea().setText("");
+                adapter.notifyDataSetChanged();
+                break;
+        }
     }
 }

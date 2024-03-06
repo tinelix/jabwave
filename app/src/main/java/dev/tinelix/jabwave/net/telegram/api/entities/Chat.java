@@ -120,7 +120,7 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
     public void sendMessage(BaseClient client, String text, OnClientAPIResultListener listener) {
         client.send(
                 new TdApi.SendMessage(
-                        id, id, 0, null, null,
+                        id, 0, 0, null, null,
                         new TdApi.InputMessageText(
                                 new TdApi.FormattedText(text, null),
                                 false, true

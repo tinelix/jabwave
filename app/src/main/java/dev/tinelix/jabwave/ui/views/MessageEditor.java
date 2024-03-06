@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,5 +38,13 @@ public class MessageEditor extends LinearLayoutCompat {
         this.addView(view);
         view.getLayoutParams().width = LayoutParams.MATCH_PARENT;
         view.getLayoutParams().height = LayoutParams.MATCH_PARENT;
+    }
+
+    public void setSendButtonListener(OnClickListener onClickListener) {
+        findViewById(R.id.send_button).setOnClickListener(onClickListener);
+    }
+
+    public EditText getEditorArea() {
+        return findViewById(R.id.message_edit);
     }
 }

@@ -9,7 +9,10 @@ public class HandlerMessages {
     public static final int ACCOUNT_LOADED                    =   100;
 
     // Chats
-    public static final int CHATS_LOADED                      =   110;
+    public static final int CHATS_LOADED                      =   200;
+
+    // Messenger
+    public static final int MESSAGE_SENT                      =   300;
 
     // Errors
     public static final int NO_INTERNET_CONNECTION            =   -1;
@@ -18,5 +21,4 @@ public class HandlerMessages {
     public static final int REQUIRED_AUTH_CODE                =   -4;
     public static final int REQUIRED_CLOUD_PASSWORD           =   -5;
     public static final int AUTHENTICATION_ERROR              =   -6;
-
 }

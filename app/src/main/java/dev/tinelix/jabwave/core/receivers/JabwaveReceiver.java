@@ -8,6 +8,7 @@ import android.util.Log;
 
 import dev.tinelix.jabwave.core.activities.AppActivity;
 import dev.tinelix.jabwave.core.activities.AuthActivity;
+import dev.tinelix.jabwave.core.activities.MessengerActivity;
 
 public class JabwaveReceiver extends BroadcastReceiver {
 
@@ -50,6 +51,12 @@ public class JabwaveReceiver extends BroadcastReceiver {
             );
         } else if(ctx instanceof AuthActivity) {
             AuthActivity activity = (AuthActivity) ctx;
+            activity.receiveState(
+                    intent.getIntExtra("msg", 0),
+                    intent.getBundleExtra("data")
+            );
+        } else if(ctx instanceof MessengerActivity) {
+            MessengerActivity activity = (MessengerActivity) ctx;
             activity.receiveState(
                     intent.getIntExtra("msg", 0),
                     intent.getBundleExtra("data")
