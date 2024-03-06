@@ -16,3 +16,4 @@ local.properties
 tdlib/build
 app/.signing
 *.so
+.idea/deploymentTargetDropDown.xml
