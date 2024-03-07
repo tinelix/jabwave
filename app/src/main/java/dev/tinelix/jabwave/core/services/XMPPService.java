@@ -10,7 +10,9 @@ import android.util.Log;
 import com.mediaparkpk.base58android.Base58;
 import com.mediaparkpk.base58android.Base58Exception;
 
+import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
@@ -201,7 +203,17 @@ public class XMPPService extends ClientService {
     }
 
     private void buildHelloPresence(XMPPConnection conn) {
-
+        try {
+            Presence presence = conn
+                    .getStanzaFactory()
+                    .buildPresenceStanza()
+                    .setMode(Presence.Mode.available)
+                    .ofType(Presence.Type.available)
+                    .build();
+            conn.sendStanza(presence);
+        } catch (SmackException.NotConnectedException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public Roster getRoster() {
