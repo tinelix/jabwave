@@ -10,7 +10,7 @@
     <color name="backgroundDark">#FF212121</color>
     <color name="backgroundDarkAmoled">#FF000000</color>
     <color name="menuItemColor">#9FFFFFFF</color>
-    <color name="inMessageColor">#FF3F3F3F</color>
+    <color name="inMessageColor">#FF353535</color>
     <color name="inMessageTextColor">#FFFFFF</color>
     <color name="outMessageColor">#FF182C59</color>
     <color name="outSelectedMessageColor">#FF204390</color>
