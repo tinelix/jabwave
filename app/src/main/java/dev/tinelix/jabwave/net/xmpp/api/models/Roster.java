@@ -165,4 +165,14 @@ public class Roster extends Chats {
         }
         return null;
     }
+
+    @Override
+    public int getChatIndex(Chat chat) {
+        for(int i = 0; i < contacts.size(); i++) {
+            if(contacts.get(i).equals(chat)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
