@@ -23,6 +23,4 @@
         <item name="materialThemeOverlay">@style/ApplicationTheme.Overlay</item>
         <item name="iconTint">@color/accentColor</item>
     </style>
-
-    <color name="accentColorVariant">#FF000000</color>
 </resources>
