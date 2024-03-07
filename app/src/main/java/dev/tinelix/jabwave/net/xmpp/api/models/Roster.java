@@ -39,6 +39,33 @@ public class Roster extends Chats {
         this.roster = org.jivesoftware.smack.roster.Roster.getInstanceFor(conn);
         this.listener = listener;
         try { Thread.sleep(2000); } catch (InterruptedException ignored) { }
+        roster.addRosterListener(new RosterListener() {
+            @Override
+            public void entriesAdded(Collection<Jid> addresses) {
+
+            }
+
+            @Override
+            public void entriesUpdated(Collection<Jid> addresses) {
+
+            }
+
+            @Override
+            public void entriesDeleted(Collection<Jid> addresses) {
+
+            }
+
+            public void presenceChanged(Presence presence) {
+                if(contacts != null) {
+                    Log.d(JabwaveApp.XMPP_SERV_TAG, String.format("Updated presence from %s", presence.getFrom()));
+                    Contact contact = (Contact) getChatById(presence.getFrom().toString().split("/")[0]);
+                    Presences presences = new Presences(contact, new ArrayList<>());
+                    contact.status = presences.getStatusEnum(presence);
+                    contacts.set(getChatIndex(contact), contact);
+                    listener.onUpdate(new HashMap<>());
+                }
+            }
+        });
     }
 
     @Override
@@ -118,31 +145,6 @@ public class Roster extends Chats {
 
             contacts.add(entity);
         }
-        roster.addRosterListener(new RosterListener() {
-            @Override
-            public void entriesAdded(Collection<Jid> addresses) {
-
-            }
-
-            @Override
-            public void entriesUpdated(Collection<Jid> addresses) {
-
-            }
-
-            @Override
-            public void entriesDeleted(Collection<Jid> addresses) {
-
-            }
-
-            public void presenceChanged(Presence presence) {
-                Log.d(JabwaveApp.XMPP_SERV_TAG, String.format("Updated presence from %s", presence.getFrom()));
-                Contact contact = (Contact) getChatById(presence.getFrom().toString().split("/")[0]);
-                Presences presences = new Presences(contact, new ArrayList<>());
-                contact.status = presences.getStatusEnum(presence);
-                contacts.set(getChatIndex(contact), contact);
-                listener.onUpdate(new HashMap<>());
-            }
-        });
         return contacts;
     }
 

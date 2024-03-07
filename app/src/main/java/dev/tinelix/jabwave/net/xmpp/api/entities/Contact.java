@@ -21,7 +21,6 @@ public class Contact extends Chat {
     public String jid;
     public String custom_status;
     public ArrayList<String> groups;
-    public int status;
     public BareJid bareJid;
     private VCard vCard;
 
