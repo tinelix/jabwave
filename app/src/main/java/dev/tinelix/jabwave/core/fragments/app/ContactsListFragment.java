@@ -112,7 +112,9 @@ public class ContactsListFragment extends Fragment {
         } else {
             ChatGroup group;
             if(app.getCurrentNetworkType().equals("telegram")) {
-                ChatGroup account_group = new ChatGroup(getResources().getString(R.string.saved_messages), 1);
+                ChatGroup account_group = new ChatGroup(
+                        getResources().getString(R.string.saved_messages), false, 1
+                );
                 if(contacts.size() > 0) {
                     if(contacts.get(0).id.equals(service.getAccount().id)) {
                         ArrayList<Chat> account_only = new ArrayList<>();
@@ -124,12 +126,32 @@ public class ContactsListFragment extends Fragment {
                         chatsAdapter.addSection(accountGroupSection);
                     }
                 }
-                group = new ChatGroup(getResources().getString(R.string.general_category), 1);
+                group = new ChatGroup(
+                        getResources().getString(R.string.channels_category), false, 1
+                );
+                entityGroupSection = new ChatsGroupSection(
+                        getActivity(), group, service.getChats().getChannels(), chatsAdapter
+                );
+                chatsAdapter.addSection(entityGroupSection);
+                group = new ChatGroup(
+                        getResources().getString(R.string.groupchats_category), false, 1
+                );
+                entityGroupSection = new ChatsGroupSection(
+                        getActivity(), group, service.getChats().getGroupChats(), chatsAdapter
+                );
+                chatsAdapter.addSection(entityGroupSection);
+                group = new ChatGroup(
+                        getResources().getString(R.string.people_category), true, 1
+                );
+                entityGroupSection = new ChatsGroupSection(
+                        getActivity(), group, service.getChats().getPeople(), chatsAdapter
+                );
+                chatsAdapter.addSection(entityGroupSection);
             } else {
-                group = new ChatGroup(getResources().getString(R.string.general_category), 0);
+                group = new ChatGroup(getResources().getString(R.string.general_category), true, 0);
+                entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
+                chatsAdapter.addSection(entityGroupSection);
             }
-            entityGroupSection = new ChatsGroupSection(getActivity(), group, contacts, chatsAdapter);
-            chatsAdapter.addSection(entityGroupSection);
         }
         llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);

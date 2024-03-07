@@ -118,7 +118,7 @@ public class Roster extends Chats {
         ArrayList<ChatGroup> groups_list = new ArrayList<>();
         Collection<RosterGroup> groups = roster.getGroups();
         for (RosterGroup group: groups) {
-            groups_list.add(new ChatGroup(group.getName(), 0));
+            groups_list.add(new ChatGroup(group.getName(), true, 0));
         }
         return groups_list;
     }

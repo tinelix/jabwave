@@ -7,7 +7,7 @@ public class ChatsFolder extends ChatGroup {
     public String title;
 
     public ChatsFolder(String title) {
-        super(title, 1);
+        super(title, true, 1);
         this.title = title;
     }
 }

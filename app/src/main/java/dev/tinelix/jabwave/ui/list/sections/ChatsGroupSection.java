@@ -225,7 +225,13 @@ public class ChatsGroupSection extends Section {
             );
             arrow.setBounds(0, 0, 90, 90);
             groupname.setCompoundDrawables(arrow, null, null, null);
-            members_counter.setText(String.format("%s / %s", getOnlineCount(), contacts.size()));
+            if(header.withOnlineCount) {
+                members_counter.setText(String.format("%s / %s", getOnlineCount(), contacts.size()));
+            } else if(contacts.size() > 1) {
+                members_counter.setText(String.format("%s", contacts.size()));
+            } else {
+                members_counter.setVisibility(View.GONE);
+            }
             //((TextView) view.findViewById(R.id.members)).setText(getSectionItemsTotal());
         }
 

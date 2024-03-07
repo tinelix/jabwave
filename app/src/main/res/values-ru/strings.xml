@@ -16,6 +16,9 @@
 
     <!-- Application Activity !-->
     <string name="general_category">Общие</string>
+    <string name="channels_category">Каналы</string>
+    <string name="groupchats_category">Групповые чаты</string>
+    <string name="people_category">Люди</string>
     <string name="global_search_hint">Глобальный поиск</string>
 
     <!-- Menu !-->

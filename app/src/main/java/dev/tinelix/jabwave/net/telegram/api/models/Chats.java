@@ -131,7 +131,14 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
                         int chat_type;
                         switch (Objects.requireNonNull(td_chat).type.getConstructor()) {
                             case TdApi.ChatTypeSupergroup.CONSTRUCTOR:
-                                chat_type = 3;
+                                TdApi.ChatTypeSupergroup type =
+                                        (TdApi.ChatTypeSupergroup)
+                                                Objects.requireNonNull(td_chat).type;
+                                if(type.isChannel) {
+                                    chat_type = 3;
+                                } else {
+                                    chat_type = 2;
+                                }
                                 break;
                             case TdApi.ChatTypeBasicGroup.CONSTRUCTOR:
                                 chat_type = 2;
@@ -179,5 +186,38 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
             }
         }
         return -1;
+    }
+
+    @Override
+    public ArrayList<Chat> getChannels() {
+        ArrayList<Chat> channels = new ArrayList<>();
+        for (Chat chat : chats) {
+            if(chat.type == 3) {
+                channels.add(chat);
+            }
+        }
+        return channels;
+    }
+
+    @Override
+    public ArrayList<Chat> getGroupChats() {
+        ArrayList<Chat> group_chats = new ArrayList<>();
+        for (Chat chat : chats) {
+            if(chat.type == 2) {
+                group_chats.add(chat);
+            }
+        }
+        return group_chats;
+    }
+
+    @Override
+    public ArrayList<Chat> getPeople() {
+        ArrayList<Chat> people = new ArrayList<>();
+        for (Chat chat : chats) {
+            if(chat.type <= 1 && chat.type >= 0) {
+                people.add(chat);
+            }
+        }
+        return people;
     }
 }

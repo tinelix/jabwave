@@ -17,6 +17,9 @@
 
     <!-- Application Activity !-->
     <string name="general_category">General</string>
+    <string name="channels_category">Channels</string>
+    <string name="groupchats_category">Group chats</string>
+    <string name="people_category">People</string>
     <string name="global_search_hint">Global search</string>
     <string name="saved_messages">Saved Messages</string>
 
