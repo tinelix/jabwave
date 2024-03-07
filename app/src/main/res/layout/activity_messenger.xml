@@ -4,20 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <dev.tinelix.jabwave.ui.views.base.JabwaveActionBar
-        android:id="@+id/actionbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ApplicationTheme.Toolbar.Dark"
-        app:layout_constraintBottom_toTopOf="@+id/messages_list"
+        android:layout_height="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/ic_back"
-        app:subtitleTextColor="?android:attr/textColorSecondaryInverse"
-        app:title="@string/app_name" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <dev.tinelix.jabwave.ui.views.base.JabwaveActionBar
+            android:id="@+id/actionbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ApplicationTheme.Toolbar.Dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_menu"
+            app:subtitleTextColor="?android:attr/textColorSecondaryInverse"
+            app:title="@string/app_name" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messages_list"
@@ -26,8 +34,9 @@
         android:background="@color/messengerBackgroundColor"
         app:layout_constraintBottom_toTopOf="@+id/message_editor_panel"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actionbar"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar"
         app:reverseLayout="true"
         app:stackFromEnd="true">
 
@@ -39,8 +48,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messages_list">
+        app:layout_constraintStart_toStartOf="parent">
 
         <dev.tinelix.jabwave.ui.views.MessageEditor
             android:id="@+id/message_editor"
