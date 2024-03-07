@@ -3,6 +3,7 @@
     <color name="actionBarColor">#FF242424</color>
     <color name="actionBarColorNight">#FF424242</color>
     <color name="accentColor">#FF5A8DFE</color>
+    <color name="accentColorVariant">#FF2D68EB</color>
     <color name="statusBarColor">#FF181818</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

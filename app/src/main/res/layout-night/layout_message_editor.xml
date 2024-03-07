@@ -57,6 +57,7 @@
             android:insetLeft="0dp"
             android:insetRight="0dp"
             android:insetTop="0dp"
+            app:backgroundTint="@color/backgroundDark"
             app:icon="@drawable/ic_send"
             app:iconGravity="textStart"
             app:iconPadding="0dp"

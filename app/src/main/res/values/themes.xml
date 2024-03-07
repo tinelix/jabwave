@@ -2,35 +2,13 @@
     <!-- Base application theme. -->
     <style name="ApplicationTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/actionBarColor</item>
-        <item name="colorPrimaryVariant">@color/actionBarColor</item>
+        <item name="colorPrimary">@color/accentColor</item>
+        <item name="colorPrimaryVariant">@color/accentColor</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/actionBarColor</item>
-        <item name="colorSecondaryVariant">@color/actionBarColor</item>
+        <item name="colorSecondary">@color/accentColor</item>
+        <item name="colorSecondaryVariant">@color/accentColor</item>
         <item name="colorOnSecondary">@color/black</item>
-    </style>
-
-    <style name="ApplicationTheme.Dark" parent="Theme.MaterialComponents">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/actionBarColor</item>
-        <item name="colorPrimaryVariant">@color/actionBarColor</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/actionBarColor</item>
-        <item name="colorSecondaryVariant">@color/actionBarColor</item>
-        <item name="colorOnSecondary">@color/black</item>
-    </style>
-
-    <style name="ApplicationTheme.Dark.AMOLED" parent="Theme.MaterialComponents">
-        <item name="android:windowBackground">@color/backgroundDarkAmoled</item>
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/actionBarColor</item>
-        <item name="colorPrimaryVariant">@color/actionBarColor</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/actionBarColor</item>
-        <item name="colorSecondaryVariant">@color/actionBarColor</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColor</item>
     </style>
 
     <style name="ApplicationTheme.NoActionBar">
