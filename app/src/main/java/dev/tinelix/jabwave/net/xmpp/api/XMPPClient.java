@@ -11,21 +11,25 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.impl.JidCreate;
 
+import java.util.HashMap;
+
 import dev.tinelix.jabwave.net.base.api.BaseClient;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
 import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
 
 public class XMPPClient extends BaseClient {
     private AbstractXMPPConnection conn;
-    private final ApiHandler handler;
+    private final OnClientAPIResultListener listener;
     private ConnectionListener connListener;
     public String jid;
     public BareJid bareJid;
 
-    public XMPPClient(AbstractXMPPConnection conn, ApiHandler handler) {
+    public XMPPClient(AbstractXMPPConnection conn, OnClientAPIResultListener listener) {
         super(false, "xmpp");
         this.conn = conn;
-        this.handler = handler;
+        this.listener = listener;
     }
 
     public void start(String server, String jid, String password) {
@@ -51,7 +55,7 @@ public class XMPPClient extends BaseClient {
             bareJid = JidCreate.from(String.format("%s@%s", jid, server)).asEntityBareJidOrThrow();
         } catch (Exception e) {
             e.printStackTrace();
-            handler.onFail(e);
+            listener.onFail(new HashMap<>(), e);
         }
     }
 
@@ -76,7 +80,7 @@ public class XMPPClient extends BaseClient {
             bareJid = JidCreate.from(String.format("%s@%s", jid, server)).asEntityBareJidOrThrow();
         } catch (Exception e) {
             e.printStackTrace();
-            handler.onFail(e);
+            listener.onFail(new HashMap<>(), e);
         }
     }
 
@@ -84,7 +88,7 @@ public class XMPPClient extends BaseClient {
         return conn;
     }
 
-    public void listenConnection(ApiConnectionHandler handler) {
+    public void listenConnection(OnClientAPIResultListener listener) {
         if(connListener != null) {
             conn.removeConnectionListener(connListener);
         }
@@ -92,7 +96,9 @@ public class XMPPClient extends BaseClient {
             @Override
             public void connected(XMPPConnection connection) {
                 ConnectionListener.super.connected(connection);
-                handler.onSuccess(conn);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("connection", conn);
+                listener.onSuccess(map);
             }
 
             @Override
@@ -103,14 +109,13 @@ public class XMPPClient extends BaseClient {
             @Override
             public void connectionClosed() {
                 ConnectionListener.super.connectionClosed();
-                handler.onDisconnect();
             }
 
             @Override
             public void connectionClosedOnError(Exception e) {
                 ConnectionListener.super.connectionClosedOnError(e);
                 e.printStackTrace();
-                handler.onFail(e);
+                listener.onFail(new HashMap<>(), e);
             }
         };
         conn.addConnectionListener(connListener);
@@ -119,25 +124,13 @@ public class XMPPClient extends BaseClient {
     public void sendStanza(Stanza stanza) {
         try {
             conn.sendStanza(stanza);
-            handler.onSuccess(conn, stanza);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("connection", conn);
+            map.put("function", stanza);
+            listener.onSuccess(map);
         } catch (SmackException.NotConnectedException | InterruptedException e) {
             e.printStackTrace();
-            handler.onFail(e);
+            listener.onFail(new HashMap<>(), e);
         }
-    }
-
-    public Roster getRoster() {
-        return new Roster(this);
-    }
-
-    public interface ApiHandler {
-        void onSuccess(XMPPConnection conn, Object object);
-        void onFail(Throwable t);
-    }
-
-    public interface ApiConnectionHandler {
-        void onSuccess(XMPPConnection conn);
-        void onFail(Throwable t);
-        void onDisconnect();
     }
 }

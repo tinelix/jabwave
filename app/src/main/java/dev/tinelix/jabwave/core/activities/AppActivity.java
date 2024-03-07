@@ -184,7 +184,7 @@ public class AppActivity extends JabwaveActivity
                 break;
             case HandlerMessages.CHATS_UPDATED:
                 if (fragment instanceof ContactsListFragment) {
-                    ((ContactsListFragment) fragment).chatsAdapter.notifyDataSetChanged();
+                    ((ContactsListFragment) fragment).refreshAdapter();
                 }
                 break;
         }

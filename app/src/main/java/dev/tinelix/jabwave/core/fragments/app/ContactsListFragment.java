@@ -161,4 +161,12 @@ public class ContactsListFragment extends Fragment {
         contactsView.setVisibility(View.VISIBLE);
         Objects.requireNonNull(getActivity()).findViewById(R.id.progress).setVisibility(View.GONE);
     }
+
+    public void refreshAdapter() {
+        if(getActivity() instanceof AppActivity) {
+            AppActivity activity = (AppActivity) getActivity();
+            contacts = activity.service.getChats().getList();
+            chatsAdapter.notifyDataSetChanged();
+        }
+    }
 }

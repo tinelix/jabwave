@@ -20,6 +20,8 @@ import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.net.base.api.entities.Account;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.base.api.models.Chats;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
@@ -54,7 +56,6 @@ public class XMPPService extends ClientService {
     }
 
     public class XMPPServiceBinder extends Binder {
-        public XMPPClient.ApiHandler handler;
         public XMPPService getService() {
             return XMPPService.this;
         }
@@ -124,15 +125,15 @@ public class XMPPService extends ClientService {
             JabwaveApp app = (JabwaveApp) getApplicationContext();
             try {
                 createAuthConfig(server, username, password);
-                client = new XMPPClient(conn, new XMPPClient.ApiHandler() {
+                client = new XMPPClient(conn, new OnClientAPIResultListener() {
                     @Override
-                    public void onSuccess(XMPPConnection conn, Object object) {
-                        receiveState(conn, object);
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        return true;
                     }
 
                     @Override
-                    public void onFail(Throwable t) {
-                        receiveState(client.getConnection(), t);
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
                     }
                 });
                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
@@ -149,7 +150,13 @@ public class XMPPService extends ClientService {
                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                 status = "authorized";
                 buildHelloPresence(conn);
-                roster = new Roster(client);
+                roster = new Roster(client, new OnClientUpdateListener() {
+                    @Override
+                    public boolean onUpdate(HashMap<String, Object> map) {
+                        sendMessageToActivity("presence_changed");
+                        return false;
+                    }
+                });
                 sendMessageToActivity(status);
             } catch (Exception ex) {
                 status = "error";
@@ -178,25 +185,17 @@ public class XMPPService extends ClientService {
         conn = new XMPPTCPConnection(config);
     }
 
-    private void receiveState(XMPPConnection conn, Object object) {
-
-    }
-
     private void listenConnection(XMPPClient client) {
-        client.listenConnection(new XMPPClient.ApiConnectionHandler() {
+        client.listenConnection(new OnClientAPIResultListener() {
             @Override
-            public void onSuccess(XMPPConnection conn) {
+            public boolean onSuccess(HashMap<String, Object> map) {
                 status = "connected";
+                return false;
             }
 
             @Override
-            public void onFail(Throwable t) {
-                status = "connection_error";
-            }
-
-            @Override
-            public void onDisconnect() {
-                status = "disconnect";
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                return false;
             }
         });
     }
@@ -238,6 +237,9 @@ public class XMPPService extends ClientService {
                 break;
             case "done":
                 intent.putExtra("msg", HandlerMessages.DONE);
+                break;
+            case "presence_changed":
+                intent.putExtra("msg", HandlerMessages.CHATS_UPDATED);
                 break;
             case "account_loaded":
                 intent.putExtra("msg", HandlerMessages.ACCOUNT_LOADED);

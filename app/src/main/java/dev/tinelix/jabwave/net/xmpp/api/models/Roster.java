@@ -1,18 +1,25 @@
 package dev.tinelix.jabwave.net.xmpp.api.models;
 
+import android.util.Log;
+
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
+import org.jivesoftware.smack.roster.RosterListener;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jxmpp.jid.EntityBareJid;
+import org.jxmpp.jid.Jid;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
+import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.base.api.models.Chats;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
@@ -23,12 +30,14 @@ public class Roster extends Chats {
 
     private final XMPPConnection conn;
     private final org.jivesoftware.smack.roster.Roster roster;
+    private final OnClientUpdateListener listener;
     private ArrayList<Chat> contacts;
 
-    public Roster(XMPPClient client) {
+    public Roster(XMPPClient client, OnClientUpdateListener listener) {
         super(client);
         this.conn = client.getConnection();
         this.roster = org.jivesoftware.smack.roster.Roster.getInstanceFor(conn);
+        this.listener = listener;
         try { Thread.sleep(2000); } catch (InterruptedException ignored) { }
     }
 
@@ -109,7 +118,31 @@ public class Roster extends Chats {
 
             contacts.add(entity);
         }
+        roster.addRosterListener(new RosterListener() {
+            @Override
+            public void entriesAdded(Collection<Jid> addresses) {
 
+            }
+
+            @Override
+            public void entriesUpdated(Collection<Jid> addresses) {
+
+            }
+
+            @Override
+            public void entriesDeleted(Collection<Jid> addresses) {
+
+            }
+
+            public void presenceChanged(Presence presence) {
+                Log.d(JabwaveApp.XMPP_SERV_TAG, String.format("Updated presence from %s", presence.getFrom()));
+                Contact contact = (Contact) getChatById(presence.getFrom().toString().split("/")[0]);
+                Presences presences = new Presences(contact, new ArrayList<>());
+                contact.status = presences.getStatusEnum(presence);
+                contacts.set(getChatIndex(contact), contact);
+                listener.onUpdate(new HashMap<>());
+            }
+        });
         return contacts;
     }
 

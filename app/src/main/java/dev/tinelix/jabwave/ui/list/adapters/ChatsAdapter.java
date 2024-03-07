@@ -2,6 +2,9 @@ package dev.tinelix.jabwave.ui.list.adapters;
 
 import android.annotation.SuppressLint;
 
+import java.util.ArrayList;
+
+import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
 import dev.tinelix.jabwave.ui.list.sections.ChatsGroupSection;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
@@ -39,4 +42,5 @@ public class ChatsAdapter extends SectionedRecyclerViewAdapter {
     public int getSectionItemViewType(int position) {
         return position;
     }
+
 }
