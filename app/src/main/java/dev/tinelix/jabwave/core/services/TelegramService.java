@@ -287,10 +287,12 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                         chat.status = 0;
                     break;
             }
-            if(getChats().getChatIndex(chat) >= 0) {
-                getChats().chats.set(getChats().getChatIndex(chat), chat);
-                status = "update_chat_status";
-                sendMessageToActivity(status);
+            if(chat != null) {
+                if (getChats().getChatIndex(chat) >= 0) {
+                    getChats().chats.set(getChats().getChatIndex(chat), chat);
+                    status = "update_chat_status";
+                    sendMessageToActivity(status);
+                }
             }
         }
     }
