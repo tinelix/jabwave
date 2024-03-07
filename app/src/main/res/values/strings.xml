@@ -30,6 +30,7 @@
     <!-- Messenger Activity !-->
     <string name="send">Send</string>
     <string name="message">Message</string>
+    <string name="broadcast">Broadcast</string>
     <string name="no_messages">No messages</string>
     <string name="error">Error</string>
 </resources>

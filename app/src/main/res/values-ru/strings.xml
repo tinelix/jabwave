@@ -29,6 +29,7 @@
     <!-- Messenger Activity !-->
     <string name="send">Отправить</string>
     <string name="message">Сообщение</string>
+    <string name="broadcast">Транслируемая публикация</string>
     <string name="no_messages">Нет сообщений</string>
     <string name="error">Error</string>
 </resources>

@@ -82,6 +82,11 @@ public class MessengerActivity extends JabwaveActivity {
 
     private void setUiListeners() {
         MessageEditor editor = findViewById(R.id.message_editor);
+        editor.getEditorArea().setHint(
+                chat.type == 3 ? 
+                getResources().getString(R.string.broadcast) :
+                getResources().getString(R.string.message)
+        );
         editor.setSendButtonListener(v -> {
             if(service.isAsyncAPIs()) {
                 chat.sendMessage(service.getClient(),
