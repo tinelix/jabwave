@@ -12,7 +12,8 @@
     <color name="menuItemColor">#9FFFFFFF</color>
     <color name="inMessageColor">#FF424242</color>
     <color name="inMessageTextColor">#FFFFFF</color>
-    <color name="outMessageColor">#FF204390</color>
+    <color name="outMessageColor">#FF182C59</color>
+    <color name="outSelectedMessageColor">#FF204390</color>
     <color name="outMessageTextColor">#FFC1D4FF</color>
     <color name="inMsgTimestampColor">#AEFFFFFF</color>
     <color name="messengerBackgroundColor">#FF000000</color>
