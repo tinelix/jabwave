@@ -19,19 +19,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            <dev.tinelix.jabwave.ui.views.base.JabwaveActionBar
-                android:id="@+id/actionbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:navigationIcon="@drawable/ic_menu"
-                app:subtitleTextColor="?android:attr/textColorSecondaryInverse"
-                android:theme="@style/ApplicationTheme.Toolbar.Dark"
-                app:title="@string/app_name" />
+                <dev.tinelix.jabwave.ui.views.base.JabwaveActionBar
+                    android:id="@+id/actionbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/actionBarColor"
+                    android:minHeight="?attr/actionBarSize"
+                    android:theme="@style/ApplicationTheme.Toolbar.Dark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:navigationIcon="@drawable/ic_menu"
+                    app:subtitleTextColor="?android:attr/textColorSecondaryInverse"
+                    app:title="@string/app_name" />
             </com.google.android.material.appbar.AppBarLayout>
 
         <include
