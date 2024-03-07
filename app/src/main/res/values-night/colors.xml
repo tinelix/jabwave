@@ -15,7 +15,7 @@
     <color name="outMessageColor">#FF182C59</color>
     <color name="outSelectedMessageColor">#FF204390</color>
     <color name="outMessageTextColor">#FFC1D4FF</color>
-    <color name="inMsgTimestampColor">#AEFFFFFF</color>
+    <color name="inMsgTimestampColor">#8EFFFFFF</color>
     <color name="messengerBackgroundColor">#FF000000</color>
     <color name="authorInMessageColor">#FF7B96D3</color>
     <color name="authorOutMessageColor">#FF5A8DFE</color>
