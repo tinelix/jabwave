@@ -22,7 +22,7 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
     private TDLibClient client;
     public ArrayList<Chat> chats;
     private int chats_count;
-    private static final int CHATS_MAX_LIMIT = 50;
+    private static final int CHATS_MAX_LIMIT = 80;
 
     public Chats(TDLibClient client) {
         super(client);
