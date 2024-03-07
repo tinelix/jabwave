@@ -122,6 +122,12 @@ public class MessengerActivity extends JabwaveActivity {
                 public boolean onSuccess(HashMap<String, Object> map) {
                     chat = (Chat) map.get("chat");
                     if (chat != null) {
+                        MessageEditor editor = findViewById(R.id.message_editor);
+                        editor.getEditorArea().setHint(
+                                chat.type == 3 ?
+                                        getResources().getString(R.string.broadcast) :
+                                        getResources().getString(R.string.message)
+                        );
                         chat.loadMessages(service.getClient(),
                                 new OnClientAPIResultListener() {
                                     @Override
@@ -152,12 +158,6 @@ public class MessengerActivity extends JabwaveActivity {
             messages = chat.getMessages();
             createMessagesAdapter();
         }
-        MessageEditor editor = findViewById(R.id.message_editor);
-        editor.getEditorArea().setHint(
-                chat.type == 3 ?
-                        getResources().getString(R.string.broadcast) :
-                        getResources().getString(R.string.message)
-        );
     }
 
     private void createMessagesAdapter() {
