@@ -14,6 +14,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
@@ -147,7 +148,26 @@ public class ChatsGroupSection extends Section {
             });
         }
 
+        @SuppressLint("UseCompatLoadingForDrawables")
         private void loadPhotoCache(Chat chat) {
+            int placeholder_resid;
+            switch (chat.type) {
+                case 3:
+                    placeholder_resid = R.drawable.ic_campaign_accent;
+                    break;
+                case 2:
+                    placeholder_resid = R.drawable.ic_group_accent;
+                    break;
+                case 1:
+                    placeholder_resid = R.drawable.ic_secret_chat_accent;
+                    break;
+                default:
+                    placeholder_resid = R.drawable.ic_person_accent;
+                    break;
+            }
+            contact_avatar.setImageDrawable(
+                    ContextCompat.getDrawable(ctx, placeholder_resid)
+            );
             if(chat.network_type == 0 && chat instanceof Contact) {
                 Contact contact = ((Contact) chat);
                 if (contact.getVCard() != null && contact.getVCard().getAvatar() != null) {
@@ -155,18 +175,20 @@ public class ChatsGroupSection extends Section {
                             .load(contact.getVCard().getAvatar())
                             .apply(new RequestOptions()
                                     .override(400, 400)
-                                    .placeholder(R.drawable.ic_person_accent)
-                                    .error(R.drawable.ic_person_accent))
+                                    .placeholder(placeholder_resid)
+                                    .error(placeholder_resid)
+                            )
                             .into(contact_avatar);
                 }
-            } else if(chat instanceof dev.tinelix.jabwave.net.telegram.api.entities.Chat){
+            } else {
                 if(chat.photo != null) {
                     Glide.with(ctx)
                             .load(chat.photo)
                             .apply(new RequestOptions()
                                     .override(400, 400)
-                                    .placeholder(R.drawable.ic_person_accent)
-                                    .error(R.drawable.ic_person_accent))
+                                    .placeholder(placeholder_resid)
+                                    .error(placeholder_resid)
+                            )
                             .into(contact_avatar);
                 }
             }

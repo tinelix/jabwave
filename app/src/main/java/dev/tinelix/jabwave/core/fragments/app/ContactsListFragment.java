@@ -34,7 +34,7 @@ public class ContactsListFragment extends Fragment {
     private JabwaveApp app;
     private ArrayList<ChatGroup> groups;
     private ArrayList<Chat> contacts;
-    private ChatsAdapter chatsAdapter;
+    public ChatsAdapter chatsAdapter;
     private LinearLayoutManager llm;
     private View view;
 

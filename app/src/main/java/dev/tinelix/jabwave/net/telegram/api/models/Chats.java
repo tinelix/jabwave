@@ -1,15 +1,18 @@
 package dev.tinelix.jabwave.net.telegram.api.models;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.net.base.api.entities.ChatSender;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.base.api.entities.Chat;
@@ -58,14 +61,29 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
         final CountDownLatch latch = new CountDownLatch(chats_count);
         for (long id: chats.chatIds) {
             client.send(new TdApi.GetChat(id), new OnClientAPIResultListener() {
+                @SuppressLint("SwitchIntDef")
                 @Override
                 public boolean onSuccess(HashMap<String, Object> map) {
                     TdApi.Object object = (TdApi.Object) map.get("result");
                     TdApi.Chat td_chat = (TdApi.Chat) object;
+                    int chat_type;
+                    switch (Objects.requireNonNull(td_chat).type.getConstructor()) {
+                        case TdApi.ChatTypeSupergroup.CONSTRUCTOR:
+                            chat_type = 3;
+                            break;
+                        case TdApi.ChatTypeBasicGroup.CONSTRUCTOR:
+                            chat_type = 2;
+                            break;
+                        case TdApi.ChatTypeSecret.CONSTRUCTOR:
+                            chat_type = 1;
+                            break;
+                        default:
+                            chat_type = 0;
+                            break;
+                    }
                     dev.tinelix.jabwave.net.telegram.api.entities.Chat chat =
                             new dev.tinelix.jabwave.net.telegram.api.entities.Chat(
-                                    id, td_chat != null ? td_chat.title : "[Unknown chat]",
-                                    new ArrayList<>(), 0
+                                    id, chat_type, td_chat.title, new ArrayList<>(), 0
                             );
                     Chats.this.chats.add(chat);
                     latch.countDown();
@@ -104,16 +122,31 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
     @Override
     public void loadChat(Object chat_id, OnClientAPIResultListener listener) {
         client.send(new TdApi.GetChat((long) chat_id), new OnClientAPIResultListener() {
+            @SuppressLint("SwitchIntDef")
             @Override
             public boolean onSuccess(HashMap<String, Object> map) {
                 if(map.get("result") instanceof TdApi.Chat) {
                     TdApi.Chat td_chat = (TdApi.Chat) map.get("result");
                     if(td_chat != null) {
+                        int chat_type;
+                        switch (Objects.requireNonNull(td_chat).type.getConstructor()) {
+                            case TdApi.ChatTypeSupergroup.CONSTRUCTOR:
+                                chat_type = 3;
+                                break;
+                            case TdApi.ChatTypeBasicGroup.CONSTRUCTOR:
+                                chat_type = 2;
+                                break;
+                            case TdApi.ChatTypeSecret.CONSTRUCTOR:
+                                chat_type = 1;
+                                break;
+                            default:
+                                chat_type = 0;
+                                break;
+                        }
                         long id = td_chat.id;
                         dev.tinelix.jabwave.net.telegram.api.entities.Chat chat =
                                 new dev.tinelix.jabwave.net.telegram.api.entities.Chat(
-                                        id, td_chat.title,
-                                        new ArrayList<>(), 0
+                                        id, chat_type, td_chat.title, new ArrayList<>(), 0
                                 );
                         map.put("chat", chat);
                         listener.onSuccess(map);

@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.core.activities;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -163,6 +164,7 @@ public class AppActivity extends JabwaveActivity
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void receiveState(int message, Bundle data) {
         switch (message) {
             case HandlerMessages.AUTHORIZED:
@@ -179,6 +181,12 @@ public class AppActivity extends JabwaveActivity
                     findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
                     ((ContactsListFragment) fragment).loadLocalContacts();
                 }
+                break;
+            case HandlerMessages.CHATS_UPDATED:
+                if (fragment instanceof ContactsListFragment) {
+                    ((ContactsListFragment) fragment).chatsAdapter.notifyDataSetChanged();
+                }
+                break;
         }
     }
 

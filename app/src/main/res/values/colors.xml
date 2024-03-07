@@ -17,4 +17,6 @@
     <color name="msgDateLabelColor">#5F5F5F</color>
     <color name="msgTimestampColor">#AEFFFFFF</color>
     <color name="messengerBackgroundColor">#FFB29983</color>
+    <color name="authorInMessageColor">#FFDD6700</color>
+    <color name="authorOutMessageColor">#FFFFFFFF</color>
 </resources>

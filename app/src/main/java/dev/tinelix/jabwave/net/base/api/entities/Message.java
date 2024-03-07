@@ -14,6 +14,7 @@ public class Message {
     private boolean isIncoming;
     private Date timestamp;
     private boolean isHeader;
+    private ChatSender sender;
 
     public Message(long id, Object chat_id, Object member_id, String text, Date timestamp, boolean isIncoming) {
         this.id = id;
@@ -47,5 +48,13 @@ public class Message {
 
     public boolean isHeader() {
         return isHeader;
+    }
+
+    public ChatSender getSender() {
+        return sender;
+    }
+
+    public void setSender(ChatSender sender) {
+        this.sender = sender;
     }
 }

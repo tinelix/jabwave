@@ -156,7 +156,7 @@ public class MessengerActivity extends JabwaveActivity {
 
     private void createMessagesAdapter() {
         messages_list = findViewById(R.id.messages_list);
-        adapter = new MessagesAdapter(this, messages);
+        adapter = new MessagesAdapter(this, messages, chat);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         messages_list.setLayoutManager(llm);

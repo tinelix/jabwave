@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.net.base.api.BaseClient;
@@ -25,7 +26,6 @@ import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 
 public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
     // Contact Class used in Contacts list (AppActivity)
-    public int type;
     public String title;
     public long id;
     public ArrayList<String> groups;
@@ -39,6 +39,14 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
 
     public Chat(long id, String title, ArrayList<String> groups, int status) {
         super(id, title, 1);
+        this.title = title;
+        this.id = id;
+        this.groups = groups;
+        this.status = status;
+    }
+
+    public Chat(long id, int type, String title, ArrayList<String> groups, int status) {
+        super(id, title, type, 1);
         this.title = title;
         this.id = id;
         this.groups = groups;
@@ -75,12 +83,10 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
                         if(map.get("result") instanceof TdApi.Messages) {
-                            Log.d(JabwaveApp.APP_TAG, String.format("%s messages loaded.",
-                                    ((TdApi.Messages) Objects.requireNonNull(map.get("result"))).messages.length));
                             loadMessages(
-                                    ((TdApi.Messages) Objects.requireNonNull(map.get("result")))
+                                    client, ((TdApi.Messages) Objects.requireNonNull(map.get("result"))),
+                                    listener
                             );
-                            listener.onSuccess(map);
                         }
                         return false;
                     }
@@ -93,8 +99,10 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
         );
     }
 
-    private void loadMessages(TdApi.Messages messages) {
+    private void loadMessages(BaseClient client, TdApi.Messages messages,
+                              OnClientAPIResultListener listener) {
         ArrayList<Message> msgs = new ArrayList<>();
+        final CountDownLatch latch = new CountDownLatch(messages.totalCount);
         for (TdApi.Message msg: messages.messages) {
             long id = msg.id;
             long chat_id = msg.chatId;
@@ -108,11 +116,47 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                 text = "[Unsupported message type]";
             }
 
-            Message message = new Message(id, chat_id, author_id, text, new Date(msg.date), !msg.isOutgoing);
-            msgs.add(message);
+            ChatSender sender = null;
+            for (Message msg_entity : msgs) {
+                if(msg_entity.getSender() != null) {
+                    sender = (ChatSender) msg_entity.getSender();
+                }
+            }
+            if(sender == null && msg.senderId instanceof TdApi.MessageSenderUser) {
+                sender = new ChatSender(client, author_id, 0);
+                ChatSender finalSender = sender;
+                sender.getChatSender(new OnClientAPIResultListener() {
+                    @Override
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        Message message = new Message(id, chat_id, author_id, text,
+                                new Date(msg.date), !msg.isOutgoing);
+                        message.setSender(finalSender);
+                        msgs.add(message);
+                        latch.countDown();
+                        if(latch.getCount() == 0) {
+                            Chat.this.messages = msgs;
+                            Collections.reverse(msgs);
+                            listener.onSuccess(map);
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
+                    }
+                });
+            } else {
+                Message message = new Message(id, chat_id, author_id, text, new Date(msg.date), !msg.isOutgoing);
+                msgs.add(message);
+                latch.countDown();
+                if(latch.getCount() == 0) {
+                    this.messages = msgs;
+                    Collections.reverse(msgs);
+                    listener.onSuccess(new HashMap<>());
+                }
+            }
         }
-        Collections.reverse(msgs);
-        this.messages = msgs;
     }
 
 

@@ -1,6 +1,5 @@
 package dev.tinelix.jabwave.ui.list.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
@@ -9,21 +8,21 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.helper.widget.Flow;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.entities.Message;
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder> {
     private final Context ctx;
     private final ArrayList<Message> messages;
+    private final Chat chat;
 
-    public MessagesAdapter(Context context, ArrayList<Message> messages) {
+    public MessagesAdapter(Context context, ArrayList<Message> messages, Chat chat) {
         this.ctx = context;
         this.messages = messages;
         this.messages.add(0,
@@ -34,6 +33,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                                 ctx.getResources().getString(R.string.no_messages)
                 )
         );
+        this.chat = chat;
     }
 
     @NonNull
@@ -66,6 +66,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
     public class Holder extends RecyclerView.ViewHolder {
 
         private final CardView msg_card;
+        private final TextView msg_author;
         private TextView msg_text;
         private final TextView msg_timestamp;
         private final Flow flow_layout;
@@ -78,6 +79,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
             flow_layout = view.findViewById(R.id.flow_layout);
             msg_timestamp = view.findViewById(R.id.msg_timestamp);
             msg_card = view.findViewById(R.id.msg_card);
+            msg_author = view.findViewById(R.id.msg_author);
         }
 
         public void bind(int position) {
@@ -86,15 +88,29 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 msg_text = view.findViewById(R.id.msg_date);
             } else {
                 msg_timestamp.setText(msg.formatTimestamp());
-                if (!msg.isIncoming()) {
+                if(chat.type < 2 || chat.type == 3) {
+                    msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
+                    msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
+                    msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
+                } else if (!msg.isIncoming()) {
                     ((FrameLayout.LayoutParams) msg_card.getLayoutParams()).gravity = Gravity.END;
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.outMessageTextColor));
                 } else {
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
+                    msg_author.setText(
+                            msg.getSender() != null ?
+                                    String.format("%s %s",
+                                            msg.getSender().first_name,
+                                            msg.getSender().last_name
+                                    ) : chat.title
+                    );
+                    msg_author.setVisibility(View.VISIBLE);
+                    msg_author.setTextColor(ctx.getResources().getColor(R.color.authorInMessageColor));
                 }
             }
+
             msg_text.setText(msg.text);
         }
     }

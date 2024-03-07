@@ -39,6 +39,26 @@ public class Chat {
         this.groups = new ArrayList<>();
     }
 
+    public Chat(Object id, String title, int type, int network_type) {
+        /*
+            Network Type available values:
+            0 - XMPP
+            1 - Telegram
+         */
+        this.network_type = network_type;
+        /*
+            Chat Type available values:
+            0 - Private chat
+            1 - Secret chat
+            2 - Public chat
+            3 - Supergroup (Channel)
+         */
+        this.type = type;
+        this.title = title;
+        this.id = id;
+        this.groups = new ArrayList<>();
+    }
+
     public void loadMessages(BaseClient client) {
 
     }
