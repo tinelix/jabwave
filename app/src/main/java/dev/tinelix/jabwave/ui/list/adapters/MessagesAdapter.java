@@ -88,7 +88,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 msg_text = view.findViewById(R.id.msg_date);
             } else {
                 msg_timestamp.setText(msg.formatTimestamp());
-                if(chat.type == 2 || chat.type == 3) {
+                if(chat.type == 0 || chat.type == 3) {
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
