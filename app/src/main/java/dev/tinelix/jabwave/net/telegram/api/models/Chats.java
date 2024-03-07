@@ -69,7 +69,14 @@ public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
                     int chat_type;
                     switch (Objects.requireNonNull(td_chat).type.getConstructor()) {
                         case TdApi.ChatTypeSupergroup.CONSTRUCTOR:
-                            chat_type = 3;
+                            TdApi.ChatTypeSupergroup type =
+                                    (TdApi.ChatTypeSupergroup)
+                                            Objects.requireNonNull(td_chat).type;
+                            if(type.isChannel) {
+                                chat_type = 3;
+                            } else {
+                                chat_type = 2;
+                            }
                             break;
                         case TdApi.ChatTypeBasicGroup.CONSTRUCTOR:
                             chat_type = 2;
