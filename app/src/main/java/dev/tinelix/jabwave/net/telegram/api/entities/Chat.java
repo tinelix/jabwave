@@ -109,11 +109,15 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
             long author_id = msg.senderId instanceof TdApi.MessageSenderChat ?
                     ((TdApi.MessageSenderChat) msg.senderId).chatId :
                     ((TdApi.MessageSenderUser) msg.senderId).userId;
-            String text;
-            if(msg.content instanceof TdApi.MessageText) {
-                text = ((TdApi.MessageText) msg.content).text.text;
-            } else {
-                text = "[Unsupported message type]";
+            String text = "[Unsupported message type]";
+            switch(msg.content.getConstructor()) {
+                case TdApi.MessageText.CONSTRUCTOR:
+                    text = ((TdApi.MessageText) msg.content).text.text;
+                    break;
+//                case TdApi.MessagePhoto.CONSTRUCTOR:
+//
+//                    text = ((TdApi.MessagePhoto) msg.content).caption.text;
+//                    break;
             }
 
             ChatSender sender = null;
@@ -125,10 +129,11 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
             if(sender == null && msg.senderId instanceof TdApi.MessageSenderUser) {
                 sender = new ChatSender(client, author_id, 0);
                 ChatSender finalSender = sender;
+                String finalText = text;
                 sender.getChatSender(new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
-                        Message message = new Message(id, chat_id, author_id, text,
+                        Message message = new Message(id, chat_id, author_id, finalText,
                                 new Date(msg.date), !msg.isOutgoing);
                         message.setSender(finalSender);
                         msgs.add(message);
