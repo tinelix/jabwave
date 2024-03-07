@@ -29,7 +29,6 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
     public String title;
     public long id;
     public ArrayList<String> groups;
-    public int status;
     private VCard vCard;
 
     public Chat(String title) {
