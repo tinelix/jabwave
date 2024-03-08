@@ -118,7 +118,7 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                     chatmanager.chatWith(JidCreate.entityBareFrom(jid));
             chat.send(text);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }
