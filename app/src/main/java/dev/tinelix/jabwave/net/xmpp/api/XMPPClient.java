@@ -2,6 +2,7 @@ package dev.tinelix.jabwave.net.xmpp.api;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
@@ -9,6 +10,7 @@ import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jxmpp.jid.BareJid;
+import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 
 import java.util.HashMap;
@@ -24,7 +26,8 @@ public class XMPPClient extends BaseClient {
     private final OnClientAPIResultListener listener;
     private ConnectionListener connListener;
     public String jid;
-    public BareJid bareJid;
+    public EntityBareJid entitiyBareJid;
+    public String server;
 
     public XMPPClient(AbstractXMPPConnection conn, OnClientAPIResultListener listener) {
         super(false, "xmpp");
@@ -33,7 +36,9 @@ public class XMPPClient extends BaseClient {
     }
 
     public void start(String server, String jid, String password) {
+        this.server = server;
         this.jid = jid;
+        SmackConfiguration.DEBUG = true;
         try {
             XMPPTCPConnectionConfiguration config =
                     Authenticator.buildAuthConfig(
@@ -52,7 +57,7 @@ public class XMPPClient extends BaseClient {
                     .ofType(Presence.Type.available)
                     .build();
             sendStanza(presence);
-            bareJid = JidCreate.from(String.format("%s@%s", jid, server)).asEntityBareJidOrThrow();
+            entitiyBareJid = JidCreate.entityBareFrom(String.format("%s@%s", jid, server));
         } catch (Exception e) {
             e.printStackTrace();
             listener.onFail(new HashMap<>(), e);
@@ -77,7 +82,7 @@ public class XMPPClient extends BaseClient {
                     .ofType(Presence.Type.available)
                     .build();
             sendStanza(presence);
-            bareJid = JidCreate.from(String.format("%s@%s", jid, server)).asEntityBareJidOrThrow();
+            entitiyBareJid = JidCreate.entityBareFrom(String.format("%s@%s", jid, server));
         } catch (Exception e) {
             e.printStackTrace();
             listener.onFail(new HashMap<>(), e);

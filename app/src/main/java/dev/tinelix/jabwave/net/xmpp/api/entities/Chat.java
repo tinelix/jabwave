@@ -2,15 +2,22 @@ package dev.tinelix.jabwave.net.xmpp.api.entities;
 
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.chat2.ChatManager;
+import org.jivesoftware.smack.chat2.OutgoingChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.MessageBuilder;
+import org.jivesoftware.smack.packet.MessageOrPresenceBuilder;
+import org.jivesoftware.smack.packet.StanzaBuilder;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import org.jxmpp.jid.BareJid;
+import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import dev.tinelix.jabwave.net.base.api.BaseClient;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
@@ -116,9 +123,21 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                     ChatManager.getInstanceFor(((XMPPClient) client).getConnection());
             org.jivesoftware.smack.chat2.Chat chat =
                     chatmanager.chatWith(JidCreate.entityBareFrom(jid));
+            chatmanager.addOutgoingListener((to, messageBuilder, chat1) -> {
+                Message msg = messageBuilder.build();
+                if(text.length() > 0) {
+                    dev.tinelix.jabwave.net.base.api.entities.Message message = new dev.tinelix.jabwave.net.base.api.entities.Message(
+                            0, msg.getFrom(), msg.getFrom(),
+                            text, new Date(System.currentTimeMillis()), false
+                    );
+                    messages.add(message);
+                }
+                listener.onSuccess(new HashMap<>());
+            });
             chat.send(text);
         } catch (Exception e) {
             e.printStackTrace();
+            listener.onFail(new HashMap<>(), e);
         }
     }
 }
