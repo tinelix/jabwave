@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.net.telegram.api.entities;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.Client;
@@ -98,6 +99,7 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
         );
     }
 
+    @SuppressLint("SwitchIntDef")
     private void loadMessages(BaseClient client, TdApi.Messages messages,
                               OnClientAPIResultListener listener) {
         ArrayList<Message> msgs = new ArrayList<>();
@@ -113,10 +115,6 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                 case TdApi.MessageText.CONSTRUCTOR:
                     text = ((TdApi.MessageText) msg.content).text.text;
                     break;
-//                case TdApi.MessagePhoto.CONSTRUCTOR:
-//
-//                    text = ((TdApi.MessagePhoto) msg.content).caption.text;
-//                    break;
             }
 
             ChatSender sender = null;
