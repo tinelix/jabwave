@@ -1,20 +1,17 @@
 package dev.tinelix.jabwave.net.xmpp.api.models;
 
-import android.util.Log;
-
 import org.jivesoftware.smack.packet.Presence;
 
 import java.util.List;
 
-import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
 
 public class Presences {
     public List<Presence> presences;
-    private Contact contact;
+    private Chat chat;
 
-    public Presences(Contact contact, List<Presence> presences) {
-        this.contact = contact;
+    public Presences(Chat chat, List<Presence> presences) {
+        this.chat = chat;
         this.presences = presences;
     }
 

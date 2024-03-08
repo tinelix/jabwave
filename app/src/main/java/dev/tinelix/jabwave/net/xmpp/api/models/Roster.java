@@ -22,8 +22,7 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.base.api.models.Chats;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
 
 public class Roster extends Chats {
@@ -31,7 +30,7 @@ public class Roster extends Chats {
     private final XMPPConnection conn;
     private final org.jivesoftware.smack.roster.Roster roster;
     private final OnClientUpdateListener listener;
-    private ArrayList<Chat> contacts;
+    private ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> chats;
 
     public Roster(XMPPClient client, OnClientUpdateListener listener) {
         super(client);
@@ -56,12 +55,12 @@ public class Roster extends Chats {
             }
 
             public void presenceChanged(Presence presence) {
-                if(contacts != null) {
+                if(chats != null) {
                     Log.d(JabwaveApp.XMPP_SERV_TAG, String.format("Updated presence from %s", presence.getFrom()));
-                    Contact contact = (Contact) getChatById(presence.getFrom().toString().split("/")[0]);
-                    Presences presences = new Presences(contact, new ArrayList<>());
-                    contact.status = presences.getStatusEnum(presence);
-                    contacts.set(getChatIndex(contact), contact);
+                    Chat chat = (Chat) getChatById(presence.getFrom().toString().split("/")[0]);
+                    Presences presences = new Presences(chat, new ArrayList<>());
+                    chat.status = presences.getStatusEnum(presence);
+                    chats.set(getChatIndex(chat), chat);
                     listener.onUpdate(new HashMap<>());
                 }
             }
@@ -69,12 +68,12 @@ public class Roster extends Chats {
     }
 
     @Override
-    public ArrayList<Chat> getList() {
-        contacts = new ArrayList<>();
+    public ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> getList() {
+        chats = new ArrayList<>();
         Collection <RosterEntry> entries = roster.getEntries();
         Collection<RosterGroup> groups = roster.getGroups();
         for (RosterEntry entry : entries) {
-            Contact entity = new Contact("");
+            Chat entity = new Chat("");
             entity.jid = entry.getJid().toString();
             List<Presence> presences = roster.getAllPresences(entry.getJid());
             String custom_status = "";
@@ -89,7 +88,7 @@ public class Roster extends Chats {
             }
             if(entry.getName() != null) {
                 if(custom_status != null && custom_status.length() > 0)
-                    entity = new Contact(
+                    entity = new Chat(
                             entry.getName(),
                             entry.getJid().toString(),
                             new ArrayList<>(),
@@ -97,7 +96,7 @@ public class Roster extends Chats {
                             status
                     );
                 else
-                    entity = new Contact(
+                    entity = new Chat(
                             entry.getName(),
                             entry.getJid().toString(),
                             new ArrayList<>(),
@@ -105,7 +104,7 @@ public class Roster extends Chats {
                     );
             } else {
                 if(custom_status != null && custom_status.length() > 0)
-                    entity = new Contact(
+                    entity = new Chat(
                             entry.getJid().toString(),
                             entry.getJid().toString(),
                             new ArrayList<>(),
@@ -113,7 +112,7 @@ public class Roster extends Chats {
                             status
                     );
                 else
-                    entity = new Contact(
+                    entity = new Chat(
                             entry.getJid().toString(),
                             entry.getJid().toString(),
                             new ArrayList<>(),
@@ -126,7 +125,7 @@ public class Roster extends Chats {
                     entity.groups.add(group.getName());
                 }
             }
-            Contact finalEntity = entity;
+            Chat finalEntity = entity;
             new Thread(() -> {
                 // Non-async loadVCard function blocking UI thread.
                 try {
@@ -143,9 +142,9 @@ public class Roster extends Chats {
                 }
             }).start();
 
-            contacts.add(entity);
+            chats.add(entity);
         }
-        return contacts;
+        return chats;
     }
 
     @Override
@@ -159,8 +158,8 @@ public class Roster extends Chats {
     }
 
     @Override
-    public Chat getChatById(Object id) {
-        for (Chat chat : contacts) {
+    public dev.tinelix.jabwave.net.base.api.entities.Chat getChatById(Object id) {
+        for (dev.tinelix.jabwave.net.base.api.entities.Chat chat : chats) {
             if(chat.id.equals(id)) {
                 return chat;
             }
@@ -169,9 +168,9 @@ public class Roster extends Chats {
     }
 
     @Override
-    public int getChatIndex(Chat chat) {
-        for(int i = 0; i < contacts.size(); i++) {
-            if(contacts.get(i).equals(chat)) {
+    public int getChatIndex(dev.tinelix.jabwave.net.base.api.entities.Chat chat) {
+        for(int i = 0; i < chats.size(); i++) {
+            if(chats.get(i).equals(chat)) {
                 return i;
             }
         }

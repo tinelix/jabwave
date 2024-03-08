@@ -18,42 +18,41 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
+import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Contact;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 
 public class ChatsGroupSection extends Section {
     private final ChatsAdapter adapter;
     private final Context ctx;
-    private ArrayList<Chat> contacts_exp;
-    private final ArrayList<Chat> contacts;
+    private ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> contacts_exp;
+    private final ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> chats;
     private ChatGroup header;
     private boolean isOpen = true;
 
-    public ChatsGroupSection(Context ctx, ChatGroup header, ArrayList<Chat> contacts, ChatsAdapter adapter) {
+    public ChatsGroupSection(Context ctx, ChatGroup header, ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> chats, ChatsAdapter adapter) {
         super(SectionParameters.builder()
                 .headerResourceId(R.layout.list_item_contacts_group)
                 .itemResourceId(R.layout.list_item_contacts)
                 .build());
         this.ctx = ctx;
-        this.contacts = contacts;
+        this.chats = chats;
         this.contacts_exp = new ArrayList<>();
-        this.contacts_exp.addAll(contacts);
+        this.contacts_exp.addAll(chats);
         this.adapter = adapter;
         this.header = header;
     }
 
     @Override
     public int getContentItemsTotal() {
-        return isOpen ? contacts.size() : 0;
+        return isOpen ? chats.size() : 0;
     }
 
     private int getOnlineCount() {
         int online_count = 0;
-        for (Chat chat: contacts) {
+        for (dev.tinelix.jabwave.net.base.api.entities.Chat chat: chats) {
             if(chat.status > 0) {
                 online_count++;
             }
@@ -81,8 +80,8 @@ public class ChatsGroupSection extends Section {
         ((EntityGroupViewHolder) holder).bind();
     }
 
-    public Chat searchEntityByJid(String jid) {
-        for (Chat chat: contacts) {
+    public dev.tinelix.jabwave.net.base.api.entities.Chat searchEntityByJid(String jid) {
+        for (dev.tinelix.jabwave.net.base.api.entities.Chat chat: chats) {
             if(chat.id.equals(jid)) {
                 return chat;
             }
@@ -91,16 +90,16 @@ public class ChatsGroupSection extends Section {
     }
 
     public int searchEntityIndexByJid(String jid) {
-        for (int i = 0; i < contacts.size(); i++) {
-            if(contacts.get(i).id.equals(jid)) {
+        for (int i = 0; i < chats.size(); i++) {
+            if(chats.get(i).id.equals(jid)) {
                 return i;
             }
         }
         return -1;
     }
 
-    public void updateEntity(int index, Contact entity) {
-        contacts.set(index, entity);
+    public void updateEntity(int index, Chat entity) {
+        chats.set(index, entity);
     }
 
     class EntityViewHolder extends RecyclerView.ViewHolder {
@@ -123,7 +122,7 @@ public class ChatsGroupSection extends Section {
         }
 
         public void bind(int position) {
-            Chat chat = contacts_exp.get(position);
+            dev.tinelix.jabwave.net.base.api.entities.Chat chat = contacts_exp.get(position);
             ((TextView) view.findViewById(R.id.contact_name))
                     .setText(chat.title);
             if (chat.status == 0) {
@@ -149,7 +148,7 @@ public class ChatsGroupSection extends Section {
         }
 
         @SuppressLint("UseCompatLoadingForDrawables")
-        private void loadPhotoCache(Chat chat) {
+        private void loadPhotoCache(dev.tinelix.jabwave.net.base.api.entities.Chat chat) {
             int placeholder_resid;
             switch (chat.type) {
                 case 3:
@@ -168,8 +167,8 @@ public class ChatsGroupSection extends Section {
             contact_avatar.setImageDrawable(
                     ContextCompat.getDrawable(ctx, placeholder_resid)
             );
-            if(chat.network_type == 0 && chat instanceof Contact) {
-                Contact contact = ((Contact) chat);
+            if(chat.network_type == 0 && chat instanceof Chat) {
+                Chat contact = ((Chat) chat);
                 if (contact.getVCard() != null && contact.getVCard().getAvatar() != null) {
                     Glide.with(ctx)
                             .load(contact.getVCard().getAvatar())
@@ -226,9 +225,9 @@ public class ChatsGroupSection extends Section {
             arrow.setBounds(0, 0, 90, 90);
             groupname.setCompoundDrawables(arrow, null, null, null);
             if(header.withOnlineCount) {
-                members_counter.setText(String.format("%s / %s", getOnlineCount(), contacts.size()));
-            } else if(contacts.size() > 1) {
-                members_counter.setText(String.format("%s", contacts.size()));
+                members_counter.setText(String.format("%s / %s", getOnlineCount(), chats.size()));
+            } else if(chats.size() > 1) {
+                members_counter.setText(String.format("%s", chats.size()));
             } else {
                 members_counter.setVisibility(View.GONE);
             }
@@ -241,7 +240,7 @@ public class ChatsGroupSection extends Section {
             if(!isOpen) {
                 contacts_exp.clear();
             } else {
-                contacts_exp.addAll(contacts);
+                contacts_exp.addAll(chats);
             }
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right

@@ -1,5 +1,7 @@
 package dev.tinelix.jabwave.net.xmpp.api.entities;
 
+import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.mam.MamManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
@@ -11,10 +13,10 @@ import java.util.Date;
 import java.util.List;
 
 import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
+import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
-public class Contact extends Chat {
+public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
     // Contact Class used in Contacts list (AppActivity)
     public int type;
     public String title;
@@ -24,12 +26,12 @@ public class Contact extends Chat {
     public BareJid bareJid;
     private VCard vCard;
 
-    public Contact(String title) {
+    public Chat(String title) {
         super(title, 0);
         this.title = title;
     }
 
-    public Contact(String title, String jid, ArrayList<String> groups, String custom_status, int status) {
+    public Chat(String title, String jid, ArrayList<String> groups, String custom_status, int status) {
         super(jid, title, 0);
         this.title = title;
         this.jid = jid;
@@ -38,7 +40,7 @@ public class Contact extends Chat {
         this.status = status;
     }
 
-    public Contact(String title, String jid, ArrayList<String> groups, int status) {
+    public Chat(String title, String jid, ArrayList<String> groups, int status) {
         super(jid, title, 0);
         /* Main statuses in XMPP Contacts:
         /       0 - offline,
@@ -87,7 +89,8 @@ public class Contact extends Chat {
                 text = "[Unsupported message type]";
             }
 
-            dev.tinelix.jabwave.net.base.api.entities.Message message = new dev.tinelix.jabwave.net.base.api.entities.Message(i, this.id, chat_id, text,
+            dev.tinelix.jabwave.net.base.api.entities.Message message =
+                    new dev.tinelix.jabwave.net.base.api.entities.Message(i, this.id, chat_id, text,
                     new Date(System.currentTimeMillis()), !id.equals(client.jid));
             this.messages.add(message);
         }
@@ -104,5 +107,18 @@ public class Contact extends Chat {
 
     public void setVCard(VCard vCard) {
         this.vCard = vCard;
+    }
+
+    @Override
+    public void sendMessage(BaseClient client, String text, OnClientAPIResultListener listener) {
+        try {
+            ChatManager chatmanager =
+                    ChatManager.getInstanceFor(((XMPPClient) client).getConnection());
+            org.jivesoftware.smack.chat2.Chat chat =
+                    chatmanager.chatWith(JidCreate.entityBareFrom(jid));
+            chat.send(text);
+        } catch (Exception e) {
+
+        }
     }
 }

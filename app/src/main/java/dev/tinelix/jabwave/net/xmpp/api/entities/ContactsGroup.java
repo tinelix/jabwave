@@ -1,6 +1,6 @@
 package dev.tinelix.jabwave.net.xmpp.api.entities;
 
-public class ContactsGroup extends Contact {
+public class ContactsGroup extends Chat {
     // ContactsGroup Class used in Contacts Groups list (AppActivity)
     public String title;
 
