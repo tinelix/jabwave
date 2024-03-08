@@ -111,6 +111,10 @@ public class MessengerActivity extends JabwaveActivity {
                 );
             } else {
                 chat.sendMessage(service.getClient(), editor.getEditorArea().getText().toString());
+                Global.triggerReceiverIntent(
+                        MessengerActivity.this,
+                        HandlerMessages.MESSAGE_SENT
+                );
             }
         });
     }
