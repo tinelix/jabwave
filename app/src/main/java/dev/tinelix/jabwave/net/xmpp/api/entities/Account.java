@@ -22,8 +22,8 @@ public class Account extends dev.tinelix.jabwave.net.base.api.entities.Account {
                 first_name = card.getFirstName();
                 last_name = card.getLastName();
             } else if(card.getField("FN") != null) {
-                first_name = card.getField("FN");
-                last_name = "";
+                first_name = card.getField("FN").split(" ")[0];
+                last_name = card.getField("FN").split(" ")[1];
             } else {
                 first_name = card.getNickName() != null ? card.getNickName() : "";
                 last_name = "";
