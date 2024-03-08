@@ -82,31 +82,36 @@ public class MessengerActivity extends JabwaveActivity {
 
     private void setUiListeners() {
         MessageEditor editor = findViewById(R.id.message_editor);
-        chat.sendMessage(service.getClient(),
-                editor.getEditorArea().getText().toString(),
-                new OnClientAPIResultListener() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public boolean onSuccess(HashMap<String, Object> map) {
-                        Global.triggerReceiverIntent(
-                                MessengerActivity.this,
-                                HandlerMessages.MESSAGE_SENT
-                        );
-                        return false;
-                    }
+        editor.setSendButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chat.sendMessage(service.getClient(),
+                        editor.getEditorArea().getText().toString(),
+                        new OnClientAPIResultListener() {
+                            @SuppressLint("NotifyDataSetChanged")
+                            @Override
+                            public boolean onSuccess(HashMap<String, Object> map) {
+                                Global.triggerReceiverIntent(
+                                        MessengerActivity.this,
+                                        HandlerMessages.MESSAGE_SENT
+                                );
+                                return false;
+                            }
 
-                    @Override
-                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
-                        editor.getEditorArea().setText("");
-                        Toast.makeText(
-                                MessengerActivity.this,
-                                getResources().getString(R.string.error),
-                                Toast.LENGTH_LONG
-                        ).show();
-                        return false;
-                    }
-                }
-        );
+                            @Override
+                            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                                editor.getEditorArea().setText("");
+                                Toast.makeText(
+                                        MessengerActivity.this,
+                                        getResources().getString(R.string.error),
+                                        Toast.LENGTH_LONG
+                                ).show();
+                                return false;
+                            }
+                        }
+                );
+            }
+        });
     }
 
     private void loadChat() {
