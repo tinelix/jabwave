@@ -98,7 +98,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 msg_text = view.findViewById(R.id.msg_date);
             } else {
                 msg_timestamp.setText(msg.formatTimestamp());
-                if((chat.type == 0 || chat.type == 3) && msg.isIncoming()) {
+                if(chat.type == 3) {
+                    msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
+                    msg_text.setMaxWidth((int) (256 * ctx.getResources().getDisplayMetrics().scaledDensity));
+                    msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
+                    msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
+                } else if(((chat.type == 0) && msg.isIncoming())) {
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
@@ -111,10 +116,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
                     msg_author.setText(
                             msg.getSender() != null ?
-                                    String.format("%s %s",
-                                            msg.getSender().first_name,
-                                            msg.getSender().last_name
-                                    ) : chat.title
+                                String.format("%s %s",
+                                     msg.getSender().first_name,
+                                     msg.getSender().last_name
+                                ) : chat.title
                     );
                     msg_author.setVisibility(View.VISIBLE);
                     msg_author.setTextColor(ctx.getResources().getColor(R.color.authorInMessageColor));
