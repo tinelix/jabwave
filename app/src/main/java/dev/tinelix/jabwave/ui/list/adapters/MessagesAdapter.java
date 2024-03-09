@@ -5,24 +5,28 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.helper.widget.Flow;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.entities.Message;
+import dev.tinelix.jabwave.ui.views.AttachView;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder> {
     private final Context ctx;
     private final ArrayList<Message> messages;
     private final Chat chat;
+    private final ClientService service;
 
-    public MessagesAdapter(Context context, ArrayList<Message> messages, Chat chat) {
+    public MessagesAdapter(Context context, ArrayList<Message> messages, Chat chat,
+                           ClientService service) {
         this.ctx = context;
         this.messages = messages;
         this.messages.add(0,
@@ -34,6 +38,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 )
         );
         this.chat = chat;
+        this.service = service;
     }
 
     @NonNull
@@ -67,16 +72,18 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
 
         private final CardView msg_card;
         private final TextView msg_author;
+        private final LinearLayout flow_container;
         private TextView msg_text;
         private final TextView msg_timestamp;
-        private final Flow flow_layout;
+        private final AttachView attach_view;
         private final View view;
 
         public Holder(@NonNull View view) {
             super(view);
             this.view = view;
             msg_text = view.findViewById(R.id.msg_text);
-            flow_layout = view.findViewById(R.id.flow_layout);
+            attach_view = view.findViewById(R.id.flow_layout);
+            flow_container = view.findViewById(R.id.flow_container);
             msg_timestamp = view.findViewById(R.id.msg_timestamp);
             msg_card = view.findViewById(R.id.msg_card);
             msg_author = view.findViewById(R.id.msg_author);
@@ -112,6 +119,20 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
             }
 
             msg_text.setText(msg.text);
+
+            if(msg.getAttachments() != null && msg.getAttachments().size() > 0) {
+                attach_view.removeAllViews();
+                attach_view.loadAttachments(msg.getAttachments(), service);
+                flow_container.setVisibility(View.VISIBLE);
+                if(msg.text.length() == 0) {
+                    msg_text.setVisibility(View.GONE);
+                }
+            }
+            if(msg_text.getText().length() > 100) {
+                ((LinearLayout) view.findViewById(R.id.message_text_area)).setOrientation(LinearLayout.VERTICAL);
+                ((LinearLayout.LayoutParams) msg_text.getLayoutParams()).setMargins(0, 0, 0, 0);
+                ((LinearLayout.LayoutParams) msg_text.getLayoutParams()).gravity = Gravity.RIGHT;
+            }
         }
     }
 

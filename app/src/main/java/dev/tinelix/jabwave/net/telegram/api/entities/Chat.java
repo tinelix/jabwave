@@ -21,9 +21,11 @@ import java.util.concurrent.CountDownLatch;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.net.base.api.BaseClient;
+import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
 import dev.tinelix.jabwave.net.base.api.entities.Message;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.net.telegram.api.attachments.PhotoAttachment;
 
 public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
     // Contact Class used in Contacts list (AppActivity)
@@ -58,14 +60,6 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
         this.id = id;
     }
 
-    public VCard getVCard() {
-        return vCard;
-    }
-
-    public void setVCard(VCard vCard) {
-        this.vCard = vCard;
-    }
-
     public void loadPhoto(byte[] bytes, File file) {
         try {
             DataInputStream dis = new DataInputStream(new FileInputStream(file));
@@ -74,6 +68,16 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Message searchMessageById(long id) {
+        for(Message message : messages) {
+            if(message.id == id) {
+                return message;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -110,10 +114,18 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
             long author_id = msg.senderId instanceof TdApi.MessageSenderChat ?
                     ((TdApi.MessageSenderChat) msg.senderId).chatId :
                     ((TdApi.MessageSenderUser) msg.senderId).userId;
+            ArrayList<Attachment> attachments = new ArrayList<>();
             String text = "[Unsupported message type]";
             switch(msg.content.getConstructor()) {
                 case TdApi.MessageText.CONSTRUCTOR:
                     text = ((TdApi.MessageText) msg.content).text.text;
+                    break;
+                case TdApi.MessagePhoto.CONSTRUCTOR:
+                    TdApi.MessagePhoto photo = ((TdApi.MessagePhoto) msg.content);
+                    TdApi.PhotoSize size = photo.photo.sizes[photo.photo.sizes.length - 1];
+                    PhotoAttachment attach = new PhotoAttachment(photo);
+                    attachments.add(attach);
+                    text = photo.caption.text;
                     break;
             }
 
@@ -133,6 +145,7 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                         Message message = new Message(id, chat_id, author_id, finalText,
                                 new Date(msg.date), !msg.isOutgoing);
                         message.setSender(finalSender);
+                        message.setAttachments(attachments);
                         msgs.add(message);
                         latch.countDown();
                         if(latch.getCount() == 0) {
@@ -150,6 +163,7 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                 });
             } else {
                 Message message = new Message(id, chat_id, author_id, text, new Date(msg.date), !msg.isOutgoing);
+                message.setAttachments(attachments);
                 msgs.add(message);
                 latch.countDown();
                 if(latch.getCount() == 0) {

@@ -65,6 +65,7 @@ android {
         versionCode 1
         versionName "0.0.1-prealpha"
         multiDexEnabled true
+
     }
 
     buildTypes {
@@ -108,4 +109,5 @@ dependencies {
     implementation "androidx.emoji2:emoji2:1.4.0"
     implementation 'com.github.mediapark-pk:Base58-android:0.1'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'org.apmem.tools:layouts:1.10@aar'
 }

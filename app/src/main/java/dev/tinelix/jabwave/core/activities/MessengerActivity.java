@@ -3,12 +3,16 @@ package dev.tinelix.jabwave.core.activities;
 import android.annotation.SuppressLint;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.drinkless.td.libcore.telegram.TdApi;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -124,6 +128,7 @@ public class MessengerActivity extends JabwaveActivity {
                         );
                         chat.loadMessages(service.getClient(),
                                 new OnClientAPIResultListener() {
+                                    @SuppressLint("NotifyDataSetChanged")
                                     @Override
                                     public boolean onSuccess(HashMap<String, Object> map) {
                                         messages = chat.getMessages();
@@ -156,7 +161,7 @@ public class MessengerActivity extends JabwaveActivity {
 
     private void createMessagesAdapter() {
         messages_list = findViewById(R.id.messages_list);
-        adapter = new MessagesAdapter(this, messages, chat);
+        adapter = new MessagesAdapter(this, messages, chat, service);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         messages_list.setLayoutManager(llm);

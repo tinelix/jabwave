@@ -3,8 +3,11 @@ package dev.tinelix.jabwave.net.base.api.entities;
 import android.annotation.SuppressLint;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
 
 public class Message {
     public long id;
@@ -15,6 +18,7 @@ public class Message {
     private Date timestamp;
     private boolean isHeader;
     private ChatSender sender;
+    protected ArrayList<Attachment> attachments;
 
     public Message(long id, Object chat_id, Object member_id, String text, Date timestamp, boolean isIncoming) {
         this.id = id;
@@ -23,6 +27,7 @@ public class Message {
         this.timestamp = timestamp;
         this.text = text;
         this.isIncoming = isIncoming;
+        attachments = new ArrayList<>();
     }
 
     public Message(boolean isHeader, String header_title) {
@@ -56,5 +61,13 @@ public class Message {
 
     public void setSender(ChatSender sender) {
         this.sender = sender;
+    }
+
+    public ArrayList<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(ArrayList<Attachment> attachments) {
+        this.attachments = attachments;
     }
 }

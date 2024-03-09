@@ -126,10 +126,11 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
             chatmanager.addOutgoingListener((to, messageBuilder, chat1) -> {
                 Message msg = messageBuilder.build();
                 if(text.length() > 0) {
-                    dev.tinelix.jabwave.net.base.api.entities.Message message = new dev.tinelix.jabwave.net.base.api.entities.Message(
-                            0, msg.getFrom(), msg.getFrom(),
-                            text, new Date(System.currentTimeMillis()), false
-                    );
+                    dev.tinelix.jabwave.net.base.api.entities.Message message =
+                            new dev.tinelix.jabwave.net.base.api.entities.Message(
+                                    0, msg.getFrom(), msg.getFrom(),
+                                    text, new Date(System.currentTimeMillis()), false
+                            );
                     messages.add(message);
                 }
                 listener.onSuccess(new HashMap<>());

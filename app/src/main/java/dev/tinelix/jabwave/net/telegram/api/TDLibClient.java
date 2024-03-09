@@ -136,6 +136,10 @@ public class TDLibClient extends BaseClient implements Client.ResultHandler, Cli
       return function;
    }
 
+   public void downloadFile(TdApi.File file, OnClientAPIResultListener listener) {
+
+   }
+
    public interface ApiHandler {
       void onSuccess(TdApi.Function function, TdApi.Object object);
       void onFail(TdApi.Function function, Throwable throwable);

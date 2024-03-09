@@ -78,4 +78,13 @@ public class Chat {
     public ArrayList<Message> getMessages() {
         return messages;
     }
+
+    public Message searchMessageById(long id) {
+        for(Message message : messages) {
+            if(message.id == id) {
+                return message;
+            }
+        }
+        return null;
+    }
 }
