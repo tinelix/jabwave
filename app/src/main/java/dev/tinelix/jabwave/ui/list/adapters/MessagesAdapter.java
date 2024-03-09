@@ -112,7 +112,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                     ((FrameLayout.LayoutParams) msg_card.getLayoutParams()).gravity = Gravity.END;
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.outMessageTextColor));
                 } else {
-                    flow_container_space.setVisibility(View.VISIBLE);
+                    if(msg.getAttachments() != null && msg.getAttachments().size() > 0) {
+                        flow_container_space.setVisibility(View.VISIBLE);
+                    }
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
