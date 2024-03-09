@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -73,6 +74,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
         private final CardView msg_card;
         private final TextView msg_author;
         private final LinearLayout flow_container;
+        private final Space flow_container_space;
         private TextView msg_text;
         private final TextView msg_timestamp;
         private final AttachView attach_view;
@@ -84,6 +86,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
             msg_text = view.findViewById(R.id.msg_text);
             attach_view = view.findViewById(R.id.flow_layout);
             flow_container = view.findViewById(R.id.flow_container);
+            flow_container_space = view.findViewById(R.id.container_space);
             msg_timestamp = view.findViewById(R.id.msg_timestamp);
             msg_card = view.findViewById(R.id.msg_card);
             msg_author = view.findViewById(R.id.msg_author);
@@ -124,14 +127,27 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 attach_view.removeAllViews();
                 attach_view.loadAttachments(msg.getAttachments(), service);
                 flow_container.setVisibility(View.VISIBLE);
+                if(msg.isIncoming()) {
+                    flow_container_space.setVisibility(View.VISIBLE);
+                }
                 if(msg.text.length() == 0) {
                     msg_text.setVisibility(View.GONE);
+                    ((LinearLayout) view.findViewById(R.id.message_text_area))
+                            .setOrientation(LinearLayout.VERTICAL);
+                    ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
+                            .setMargins(0, 0, 0, 0);
+                    ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
+                            .gravity = Gravity.RIGHT;
                 }
+                msg_card.getLayoutParams().width = (int) (220 * ctx.getResources().getDisplayMetrics().scaledDensity);
             }
-            if(msg_text.getText().length() > 100) {
-                ((LinearLayout) view.findViewById(R.id.message_text_area)).setOrientation(LinearLayout.VERTICAL);
-                ((LinearLayout.LayoutParams) msg_text.getLayoutParams()).setMargins(0, 0, 0, 0);
-                ((LinearLayout.LayoutParams) msg_text.getLayoutParams()).gravity = Gravity.RIGHT;
+            if(msg.text.length() > 100 || msg.text.split("\n").length > 1) {
+                ((LinearLayout) view.findViewById(R.id.message_text_area))
+                        .setOrientation(LinearLayout.VERTICAL);
+                ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
+                        .setMargins(0, 0, 0, 0);
+                ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
+                        .gravity = Gravity.RIGHT;
             }
         }
     }

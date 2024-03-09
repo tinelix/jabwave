@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -31,7 +32,6 @@ public class AttachView extends FlowLayout {
 
     public AttachView(Context context) {
         super(context);
-
     }
 
     public AttachView(Context context, AttributeSet attrs) {
@@ -55,10 +55,8 @@ public class AttachView extends FlowLayout {
 
         int placeholder_resid = R.drawable.ic_photo;
         int error_resid = R.drawable.ic_broken_attach_big_white;
-
+        int dp = (int) (getResources().getDisplayMetrics().scaledDensity);
         if(photos.size() > 1) {
-            int max_height = getMaxPhotoHeight(photos);
-            int dp = (int) (getResources().getDisplayMetrics().scaledDensity);
             for (int i = 0; i < photos.size(); i++) {
                 PhotoAttachment photo = photos.get(i);
                 ImageView iv = new ImageView(getContext());
@@ -145,12 +143,39 @@ public class AttachView extends FlowLayout {
                 }
             });
             addView(iv);
-            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            FlowLayout.LayoutParams lp = ((FlowLayout.LayoutParams) iv.getLayoutParams());
-            lp.setWeight(0);
-            lp.width = FlowLayout.LayoutParams.MATCH_PARENT;
-            iv.setLayoutParams(lp);
+            rescaleImageView(photo.getSize(), iv);
         }
+    }
+
+    private void rescaleImageView(int[] size, ImageView iv) {
+        /* Scaling photo to target size
+           (code taken from the Conversations XMPP client)
+
+           size[0] -> original photo width
+           size[1] -> original photo height
+        */
+        int dp = (int) (getResources().getDisplayMetrics().scaledDensity);
+        float target = 256 * dp;
+        float targetH = 300 * dp;
+        int scaledW;
+        int scaledH;
+
+        if(Math.max(size[1], size[0]) * dp <= target) {
+            scaledW = size[0] * dp;
+            scaledH = size[1] * dp;
+        } else if(Math.max(size[0], size[1]) <= target) {
+            scaledW = size[0];
+            scaledH = size[1];
+        } else if(size[0] <= size[1]){
+            scaledW = (int) ((double) size[0] / ((double) size[1] / targetH));
+            scaledH = (int) targetH;
+        } else {
+            scaledW = (int) target;
+            scaledH = (int) ((double) size[1] / ((double) size[0] / target));
+        }
+
+        iv.getLayoutParams().width = scaledW;
+        iv.getLayoutParams().height = scaledH;
     }
 
     private int getMaxPhotoHeight(ArrayList<PhotoAttachment> photos) {
@@ -158,6 +183,15 @@ public class AttachView extends FlowLayout {
         for(int i = 0; i < photos.size(); i++) {
             PhotoAttachment photo = photos.get(i);
             heights.add(photo.getSize()[1]);
+        }
+        return Collections.max(heights);
+    }
+
+    private int getMaxPhotoWidth(ArrayList<PhotoAttachment> photos) {
+        List<Integer> heights = new ArrayList<>();
+        for(int i = 0; i < photos.size(); i++) {
+            PhotoAttachment photo = photos.get(i);
+            heights.add(photo.getSize()[0]);
         }
         return Collections.max(heights);
     }

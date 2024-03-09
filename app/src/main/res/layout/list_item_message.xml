@@ -43,7 +43,7 @@
 
                 <LinearLayout
                     android:id="@+id/flow_container"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone"
@@ -52,12 +52,15 @@
                     <Space
                         android:id="@+id/container_space"
                         android:layout_width="match_parent"
-                        android:layout_height="4dp" />
+                        android:layout_height="4dp"
+                        android:visibility="gone" />
 
                     <dev.tinelix.jabwave.ui.views.AttachView
                         android:id="@+id/flow_layout"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/backgroundDark"
+                        android:gravity="center"
                         app:weightDefault="1.0">
 
                         <ImageView
@@ -91,11 +94,11 @@
                         android:id="@+id/msg_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxWidth="220dp"
                         android:text="Message text"
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        android:visibility="visible" />
+                        android:visibility="visible"
+                        android:maxWidth="220dp"/>
 
                     <TextView
                         android:id="@+id/msg_timestamp"
