@@ -103,6 +103,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                     msg_text.setMaxWidth((int) (256 * ctx.getResources().getDisplayMetrics().scaledDensity));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
+                    flow_container_space.setVisibility(View.GONE);
                 } else if(((chat.type == 0) && msg.isIncoming())) {
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
