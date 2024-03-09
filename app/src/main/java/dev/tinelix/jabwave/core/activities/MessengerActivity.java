@@ -24,6 +24,7 @@ import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
 import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.entities.Message;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
@@ -193,6 +194,26 @@ public class MessengerActivity extends JabwaveActivity {
                 editor.getEditorArea().setText("");
                 adapter.notifyDataSetChanged();
                 break;
+            case HandlerMessages.CHATS_LOADED:
+                updateFileFromMessage(data);
+                break;
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void updateFileFromMessage(Bundle data) {
+        int file_id = data.getInt("file_id");
+        int msg_pos = chat.getMessageIndexById(file_id);
+        Message msg = chat.messages.get(msg_pos);
+        int attach_pos = msg.getAttachmentIndex(file_id);
+        Attachment attachment = msg.getAttachments().get(attach_pos);
+        if(data.getBoolean("updateComplete")) {
+            attachment.updateState(1);
+            ArrayList<Attachment> attachments = msg.getAttachments();
+            attachments.set(attach_pos, attachment);
+            msg.setAttachments(attachments);
+            chat.messages.set(msg_pos, msg);
+            adapter.notifyDataSetChanged();
         }
     }
 }

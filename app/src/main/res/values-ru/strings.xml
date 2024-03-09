@@ -31,5 +31,11 @@
     <string name="message">Сообщение</string>
     <string name="broadcast">Транслируемая публикация</string>
     <string name="no_messages">Нет сообщений</string>
-    <string name="error">Error</string>
+    <string name="error">Ошибка</string>
+
+    <!-- Alert Dialogs !-->
+    <string name="open_link_title">Открыть ссылку?</string>
+    <string name="open_link_summary">
+        Вы действительно хотите открыть %s?\nМы заботимся о вашей безопасности.
+    </string>
 </resources>

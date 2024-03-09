@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.net.base.api.entities.ChatSender;
+import dev.tinelix.jabwave.net.base.api.entities.Message;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.base.api.entities.Chat;

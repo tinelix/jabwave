@@ -30,7 +30,7 @@
 
                 <TextView
                     android:id="@+id/msg_author"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
@@ -54,7 +54,7 @@
                         android:layout_height="4dp"
                         android:visibility="gone" />
 
-                    <dev.tinelix.jabwave.ui.views.AttachView
+                    <dev.tinelix.jabwave.ui.views.AttachFlowLayout
                         android:id="@+id/flow_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/photo_example_3" />
 
-                    </dev.tinelix.jabwave.ui.views.AttachView>
+                    </dev.tinelix.jabwave.ui.views.AttachFlowLayout>
 
                 </LinearLayout>
 
@@ -97,6 +97,7 @@
                         android:id="@+id/msg_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:autoLink="web"
                         android:maxWidth="220dp"
                         android:text="Message text"
                         android:textColor="@color/white"

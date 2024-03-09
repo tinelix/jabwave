@@ -70,4 +70,23 @@ public class Message {
     public void setAttachments(ArrayList<Attachment> attachments) {
         this.attachments = attachments;
     }
+
+    public Attachment searchAttachment(int file_id) {
+        for(Attachment attachment : attachments) {
+            if(attachment.id == file_id) {
+                return attachment;
+            }
+        }
+        return null;
+    }
+
+    public int getAttachmentIndex(int file_id) {
+        for(int i = 0; i < attachments.size(); i++) {
+            Attachment attachment = attachments.get(i);
+            if(attachment.id == file_id) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }

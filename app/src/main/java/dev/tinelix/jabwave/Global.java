@@ -1,9 +1,12 @@
 package dev.tinelix.jabwave;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -67,5 +70,21 @@ public class Global {
             intent.putExtra("msg", message);
             ctx.sendBroadcast(intent);
         }
+    }
+
+    public static void showLinkOpeningDialog(Context ctx, String url) {
+        AlertDialog dialog = new AlertDialog.Builder(ctx)
+                .setTitle(ctx.getResources().getString(R.string.open_link_title))
+                .setMessage(ctx.getResources().getString(R.string.open_link_summary, url))
+                .setNegativeButton(ctx.getResources().getString(android.R.string.cancel), null)
+                .setPositiveButton(
+                        ctx.getResources().getString(android.R.string.cancel),
+                        (dialog1, which) -> {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(url));
+                            ctx.startActivity(intent);
+                        }
+                ).create();
+        dialog.show();
     }
 }

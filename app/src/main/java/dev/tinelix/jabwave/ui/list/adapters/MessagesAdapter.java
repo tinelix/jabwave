@@ -18,7 +18,7 @@ import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.entities.Message;
-import dev.tinelix.jabwave.ui.views.AttachView;
+import dev.tinelix.jabwave.ui.views.AttachFlowLayout;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder> {
     private final Context ctx;
@@ -77,7 +77,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
         private final Space flow_container_space;
         private TextView msg_text;
         private final TextView msg_timestamp;
-        private final AttachView attach_view;
+        private final AttachFlowLayout attach_view;
         private final View view;
 
         public Holder(@NonNull View view) {
@@ -98,13 +98,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 msg_text = view.findViewById(R.id.msg_date);
             } else {
                 msg_timestamp.setText(msg.formatTimestamp());
+                flow_container_space.setVisibility(View.GONE);
                 if(chat.type == 3) {
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setMaxWidth((int) (256 * ctx.getResources().getDisplayMetrics().scaledDensity));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
-                    flow_container_space.setVisibility(View.GONE);
-                } else if(((chat.type == 0) && msg.isIncoming())) {
+                } else if(chat.type == 0 && msg.isIncoming()) {
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
@@ -112,6 +112,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                     ((FrameLayout.LayoutParams) msg_card.getLayoutParams()).gravity = Gravity.END;
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.outMessageTextColor));
                 } else {
+                    flow_container_space.setVisibility(View.VISIBLE);
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
@@ -133,9 +134,6 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 attach_view.removeAllViews();
                 attach_view.loadAttachments(msg.getAttachments(), service);
                 flow_container.setVisibility(View.VISIBLE);
-                if(msg.isIncoming()) {
-                    flow_container_space.setVisibility(View.VISIBLE);
-                }
                 if(msg.text.length() == 0) {
                     msg_text.setVisibility(View.GONE);
                     ((LinearLayout) view.findViewById(R.id.message_text_area))

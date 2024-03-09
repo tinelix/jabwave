@@ -33,4 +33,10 @@
     <string name="broadcast">Broadcast</string>
     <string name="no_messages">No messages</string>
     <string name="error">Error</string>
+
+    <!-- Alert Dialogs !-->
+    <string name="open_link_title">Open link?</string>
+    <string name="open_link_summary">
+        Do you want to open %s?\nWe care about your safety.
+    </string>
 </resources>

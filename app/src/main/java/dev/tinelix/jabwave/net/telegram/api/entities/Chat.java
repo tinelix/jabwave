@@ -1,9 +1,7 @@
 package dev.tinelix.jabwave.net.telegram.api.entities;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
-import org.drinkless.td.libcore.telegram.Client;
 import org.drinkless.td.libcore.telegram.TdApi;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
@@ -12,20 +10,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
-import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.net.base.api.BaseClient;
 import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
 import dev.tinelix.jabwave.net.base.api.entities.Message;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.telegram.api.attachments.PhotoAttachment;
+import dev.tinelix.jabwave.net.telegram.api.attachments.VideoAttachment;
 
 public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
     // Contact Class used in Contacts list (AppActivity)
@@ -116,16 +112,23 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                     ((TdApi.MessageSenderUser) msg.senderId).userId;
             ArrayList<Attachment> attachments = new ArrayList<>();
             String text = "[Unsupported message type]";
+            Attachment attach;
             switch(msg.content.getConstructor()) {
                 case TdApi.MessageText.CONSTRUCTOR:
                     text = ((TdApi.MessageText) msg.content).text.text;
                     break;
                 case TdApi.MessagePhoto.CONSTRUCTOR:
-                    TdApi.MessagePhoto photo = ((TdApi.MessagePhoto) msg.content);
+                    TdApi.MessagePhoto photo = (TdApi.MessagePhoto) msg.content;
                     TdApi.PhotoSize size = photo.photo.sizes[photo.photo.sizes.length - 1];
-                    PhotoAttachment attach = new PhotoAttachment(photo);
+                    attach = new PhotoAttachment(photo);
                     attachments.add(attach);
                     text = photo.caption.text;
+                    break;
+                case TdApi.MessageVideo.CONSTRUCTOR:
+                    TdApi.MessageVideo video = (TdApi.MessageVideo) msg.content;
+                    text = video.caption.text;
+                    attach = new VideoAttachment(video.video);
+                    attachments.add(attach);
                     break;
             }
 
@@ -209,5 +212,15 @@ public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
                     }
                 }
         );
+    }
+
+    @Override
+    public int getMessageIndexByFileId(int file_id) {
+        for(int i = 0; i < messages.size(); i++) {
+            if(messages.get(i).searchAttachment(file_id) != null) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

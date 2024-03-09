@@ -5,9 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -24,23 +22,26 @@ import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
 import dev.tinelix.jabwave.net.base.api.attachments.PhotoAttachment;
+import dev.tinelix.jabwave.net.base.api.attachments.VideoAttachment;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 
-public class AttachView extends FlowLayout {
+public class AttachFlowLayout extends FlowLayout {
     private ArrayList<Attachment> attachments;
     private ArrayList<PhotoAttachment> photos;
+    private ArrayList<VideoAttachment> videos;
 
-    public AttachView(Context context) {
+    public AttachFlowLayout(Context context) {
         super(context);
     }
 
-    public AttachView(Context context, AttributeSet attrs) {
+    public AttachFlowLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     public void loadAttachments(ArrayList<Attachment> attachments, ClientService service) {
         this.attachments = attachments;
         this.photos = new ArrayList<>();
+        this.videos = new ArrayList<>();
         for (int i = 0; i < attachments.size(); i++) {
             Attachment attachment = attachments.get(i);
             switch (attachment.getType()) {
@@ -50,9 +51,19 @@ public class AttachView extends FlowLayout {
                         photos.add(photo);
                     }
                     break;
+                case 1:
+                    if(attachment instanceof VideoAttachment) {
+                        VideoAttachment video = (VideoAttachment) attachment;
+                        videos.add(video);
+                    }
             }
         }
 
+        loadPhotos(photos, service);
+        loadVideos(videos, service);
+    }
+
+    private void loadPhotos(ArrayList<PhotoAttachment> photos, ClientService service) {
         int placeholder_resid = R.drawable.ic_photo;
         int error_resid = R.drawable.ic_broken_attach_big_white;
         int dp = (int) (getResources().getDisplayMetrics().scaledDensity);
@@ -103,7 +114,7 @@ public class AttachView extends FlowLayout {
                 iv.setAdjustViewBounds(true);
                 iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
-        } else {
+        } else if(photos.size() == 1) {
             PhotoAttachment photo = photos.get(0);
             ImageView iv = new ImageView(getContext());
             iv.setId(View.generateViewId());
@@ -144,6 +155,29 @@ public class AttachView extends FlowLayout {
             });
             addView(iv);
             rescaleImageView(photo.getSize(), iv);
+        }
+    }
+
+    private void loadVideos(ArrayList<VideoAttachment> videos, ClientService service) {
+        for (int i = 0; i < videos.size(); i++) {
+            VideoAttachment video = videos.get(i);
+            VideoAttachView vav = new VideoAttachView(getContext());
+            int id = View.generateViewId();
+            vav.setId(id);
+            addView(vav);
+            vav.loadAttachment(video, service);
+            video.downloadThumbnail(service.getClient(), new OnClientAPIResultListener() {
+                @Override
+                public boolean onSuccess(HashMap<String, Object> map) {
+                    vav.loadAttachment(video, service);
+                    return false;
+                }
+
+                @Override
+                public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                    return false;
+                }
+            });
         }
     }
 

@@ -2,7 +2,7 @@ package dev.tinelix.jabwave.net.base.api.attachments;
 
 public class Attachment {
     private final int type;
-    protected long id;
+    public long id;
     protected boolean isSecret;
     protected boolean isSpoiler;
     public int state; // 0 - Loading, 1 - Loaded

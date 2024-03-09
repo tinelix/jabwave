@@ -87,4 +87,24 @@ public class Chat {
         }
         return null;
     }
+
+    public int getMessageIndexById(long id) {
+        for(int i = 0; i < messages.size(); i++) {
+            Message message = messages.get(i);
+            if(message.id == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int getMessageIndexByFileId(int file_id) {
+        for(int i = 0; i < messages.size(); i++) {
+            Message message = messages.get(i);
+            if(message.getAttachmentIndex(file_id) > -1) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
