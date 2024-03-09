@@ -26,16 +26,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingBottom="4dp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
-                android:paddingTop="4dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/msg_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="Author name"
                     android:textColor="@color/white"
@@ -87,8 +87,12 @@
 
                 <LinearLayout
                     android:id="@+id/message_text_area"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp">
 
                     <dev.tinelix.jabwave.ui.views.base.TightTextView
                         android:id="@+id/msg_text"

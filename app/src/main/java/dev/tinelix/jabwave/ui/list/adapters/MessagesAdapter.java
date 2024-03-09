@@ -135,9 +135,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                     ((LinearLayout) view.findViewById(R.id.message_text_area))
                             .setOrientation(LinearLayout.VERTICAL);
                     ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
-                            .setMargins(0, 0, 0, 0);
-                    ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
-                            .gravity = Gravity.RIGHT;
+                            .setMarginStart(0);
+                    msg_timestamp.setGravity(Gravity.END);
                 }
                 msg_card.getLayoutParams().width = (int) (220 * ctx.getResources().getDisplayMetrics().scaledDensity);
             }
@@ -145,9 +144,8 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 ((LinearLayout) view.findViewById(R.id.message_text_area))
                         .setOrientation(LinearLayout.VERTICAL);
                 ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
-                        .setMargins(0, 0, 0, 0);
-                ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
-                        .gravity = Gravity.RIGHT;
+                        .setMarginStart(0);
+                msg_timestamp.setGravity(Gravity.END);
             }
         }
     }
