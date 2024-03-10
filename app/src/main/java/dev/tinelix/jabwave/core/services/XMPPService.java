@@ -157,7 +157,6 @@ public class XMPPService extends ClientService {
                 });
                 sendMessageToActivity(status);
                 services = new NetworkServices(client);
-                services.discoverServices();
             } catch (Exception ex) {
                 status = "error";
                 ex.printStackTrace();

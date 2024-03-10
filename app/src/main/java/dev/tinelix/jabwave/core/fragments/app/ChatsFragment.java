@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.drinkless.td.libcore.telegram.TdApi;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -27,10 +25,9 @@ import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.net.base.api.entities.Chat;
 import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
 import dev.tinelix.jabwave.ui.list.sections.ChatsGroupSection;
-import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
-public class ContactsListFragment extends Fragment {
+public class ChatsFragment extends Fragment {
     private JabwaveApp app;
     private ArrayList<ChatGroup> groups;
     private ArrayList<Chat> contacts;
@@ -47,7 +44,18 @@ public class ContactsListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_contacts, null);
+        view = inflater.inflate(R.layout.fragment_entity, null);
+        try {
+            loadLocalContacts();
+        } catch (Exception ignored) {
+
+        }
+        if(getActivity() instanceof AppActivity) {
+            AppActivity activity = ((AppActivity) getActivity());
+            activity.getSupportActionBar().setTitle(
+                    getResources().getString(R.string.app_name)
+            );
+        }
         return view;
     }
 
@@ -97,6 +105,8 @@ public class ContactsListFragment extends Fragment {
         if(groups == null) {
             groups = new ArrayList<>();
         }
+        ArrayList<Chat> chats = new ArrayList<>();
+        chats.addAll(this.contacts);
         ChatsGroupSection entityGroupSection;
         if(groups.size() > 0) {
             for (ChatGroup group : groups) {
@@ -115,12 +125,12 @@ public class ContactsListFragment extends Fragment {
                 ChatGroup account_group = new ChatGroup(
                         getResources().getString(R.string.saved_messages), false, 1
                 );
-                if(contacts.size() > 0) {
-                    if(contacts.get(0).id.equals(service.getAccount().id)) {
+                if(chats.size() > 0) {
+                    if(chats.get(0).id.equals(service.getAccount().id)) {
                         ArrayList<Chat> account_only = new ArrayList<>();
-                        Chat chat = contacts.get(0);
+                        Chat chat = chats.get(0);
                         account_only.add(chat);
-                        contacts.remove(chat);
+                        chats.remove(chat);
                         ChatsGroupSection accountGroupSection =
                                 new ChatsGroupSection(getActivity(), account_group, account_only, chatsAdapter);
                         chatsAdapter.addSection(accountGroupSection);

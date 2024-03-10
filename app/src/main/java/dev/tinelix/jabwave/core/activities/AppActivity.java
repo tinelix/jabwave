@@ -6,7 +6,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,8 +17,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.mediaparkpk.base58android.Base58;
 import com.mediaparkpk.base58android.Base58Exception;
 
-import org.drinkless.td.libcore.telegram.TdApi;
-
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
@@ -28,21 +25,16 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
-import dev.tinelix.jabwave.core.fragments.app.ContactsListFragment;
+import dev.tinelix.jabwave.core.fragments.app.ChatsFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 import dev.tinelix.jabwave.core.services.TelegramService;
 import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.core.utilities.FragmentNavigator;
 import dev.tinelix.jabwave.net.base.SecureStorage;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.net.telegram.api.entities.Account;
-import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
-import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
@@ -103,10 +95,9 @@ public class AppActivity extends JabwaveActivity
     }
 
     private void createMainFragment() {
-        fragment = new ContactsListFragment();
-        ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.app_fragment, fragment);
-        ft.commit();
+        fragment = FragmentNavigator.switchToAnotherFragment(
+                getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_CHATS
+        );
     }
 
     private void registerBroadcastReceiver() {
@@ -158,8 +149,8 @@ public class AppActivity extends JabwaveActivity
     }
 
     private void getContacts() {
-        if(fragment instanceof ContactsListFragment) {
-            ((ContactsListFragment) fragment).loadContacts();
+        if(fragment instanceof ChatsFragment) {
+            ((ChatsFragment) fragment).loadContacts();
             findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
         }
     }
@@ -176,15 +167,15 @@ public class AppActivity extends JabwaveActivity
                 getContacts();
                 break;
             case HandlerMessages.CHATS_LOADED:
-                if (fragment instanceof ContactsListFragment) {
+                if (fragment instanceof ChatsFragment) {
                     findViewById(R.id.progress).setVisibility(View.GONE);
                     findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
-                    ((ContactsListFragment) fragment).loadLocalContacts();
+                    ((ChatsFragment) fragment).loadLocalContacts();
                 }
                 break;
             case HandlerMessages.CHATS_UPDATED:
-                if (fragment instanceof ContactsListFragment) {
-                    ((ContactsListFragment) fragment).refreshAdapter();
+                if (fragment instanceof ChatsFragment) {
+                    ((ChatsFragment) fragment).refreshAdapter();
                 }
                 break;
         }
@@ -192,6 +183,7 @@ public class AppActivity extends JabwaveActivity
 
     private void updateNavView() {
         NavigationView navView = findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener(this);
         View header = navView.getHeaderView(0);
         TextView profile_name = header.findViewById(R.id.profile_name);
         TextView profile_id = header.findViewById(R.id.screen_name);
@@ -242,12 +234,16 @@ public class AppActivity extends JabwaveActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawer.closeDrawer(GravityCompat.START);
+        if(item.getItemId() == R.id.services) {
+            fragment = FragmentNavigator.switchToAnotherFragment(
+                    getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_SERVICES
+            );
+        }
         return false;
     }
 
     @Override
     protected void onDestroy() {
-        service.stopSelf();
         service.stopSelf();
         unregisterReceiver(jwReceiver);
         super.onDestroy();
@@ -257,6 +253,10 @@ public class AppActivity extends JabwaveActivity
     public void handleOnBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if(!(fragment instanceof ChatsFragment)) {
+            fragment = FragmentNavigator.switchToAnotherFragment(
+                    getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_CHATS
+            );
         } else {
             super.handleOnBackPressed();
         }

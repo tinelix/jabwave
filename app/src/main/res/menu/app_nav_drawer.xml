@@ -7,6 +7,10 @@
         android:icon="@drawable/ic_outline_group_chat"
         android:title="@string/new_group" />
     <item
+        android:id="@+id/services"
+        android:icon="@drawable/ic_signpost"
+        android:title="@string/services" />
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_outline_settings"
         android:title="@string/settings" />

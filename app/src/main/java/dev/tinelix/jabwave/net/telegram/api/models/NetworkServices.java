@@ -18,6 +18,7 @@ public class NetworkServices extends dev.tinelix.jabwave.net.base.api.models.Net
 
     @Override
     public ArrayList<Service> discoverServices() {
+        services = new ArrayList<>();
         // Well, Telegram not providing XMPP-like services. Therefore, you need to add it manually.
         Service service = new Service(0, 0, "Telegram News", "telegram");
         services.add(service);
