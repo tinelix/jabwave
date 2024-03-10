@@ -20,7 +20,7 @@ import dev.tinelix.jabwave.net.telegram.api.entities.Account;
 import dev.tinelix.jabwave.net.telegram.api.entities.Authenticator;
 import dev.tinelix.jabwave.net.telegram.api.entities.Chat;
 import dev.tinelix.jabwave.net.telegram.api.models.Chats;
-import dev.tinelix.jabwave.net.telegram.api.models.NetworkServices;
+import dev.tinelix.jabwave.net.telegram.api.models.Services;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
 /**
@@ -112,7 +112,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                     ((Authenticator) auth).checkAuthState();
                     if(!((Authenticator) auth).isAuthorized())
                         ((Authenticator) auth).checkPhoneNumber(phone_number);
-                    services = new NetworkServices(client);
+                    services = new Services(client);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

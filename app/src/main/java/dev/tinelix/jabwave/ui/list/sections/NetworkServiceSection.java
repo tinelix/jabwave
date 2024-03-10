@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,15 +15,18 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import androidx.collection.ArraySet;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
-import dev.tinelix.jabwave.net.base.api.entities.Service;
-import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
+import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.net.base.api.entities.ServiceEntity;
+import dev.tinelix.jabwave.net.base.api.models.NetworkService;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
-import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.ui.list.adapters.NetworkServicesAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
@@ -29,39 +34,29 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 public class NetworkServiceSection extends Section {
     private final NetworkServicesAdapter adapter;
     private final Context ctx;
-    private ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> contacts_exp;
-    private final ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> chats;
-    private Service header;
+    private final ArrayList<ServiceEntity> entities;
+    private final ClientService service;
+    private NetworkService net_service;
     private boolean isOpen = true;
 
-    public NetworkServiceSection(Context ctx, Service header,
-                                 ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> chats,
-                                 NetworkServicesAdapter adapter) {
+    public NetworkServiceSection(Context ctx, NetworkService net_service,
+                                 NetworkServicesAdapter adapter,
+                                 ClientService service) {
         super(SectionParameters.builder()
-                .headerResourceId(R.layout.list_item_contacts_group)
+                .headerResourceId(R.layout.list_item_service)
                 .itemResourceId(R.layout.list_item_contacts)
                 .build());
         this.ctx = ctx;
-        this.chats = chats;
-        this.contacts_exp = new ArrayList<>();
-        this.contacts_exp.addAll(chats);
+        this.entities = new ArrayList<>();
+        this.entities.addAll(net_service.getEntities());
         this.adapter = adapter;
-        this.header = header;
+        this.net_service = net_service;
+        this.service = service;
     }
 
     @Override
     public int getContentItemsTotal() {
-        return isOpen ? chats.size() : 0;
-    }
-
-    private int getOnlineCount() {
-        int online_count = 0;
-        for (dev.tinelix.jabwave.net.base.api.entities.Chat chat: chats) {
-            if(chat.status > 0) {
-                online_count++;
-            }
-        }
-        return online_count;
+        return isOpen ? entities.size() : 0;
     }
 
     @Override
@@ -84,26 +79,26 @@ public class NetworkServiceSection extends Section {
         ((EntityGroupViewHolder) holder).bind();
     }
 
-    public dev.tinelix.jabwave.net.base.api.entities.Chat searchEntityByJid(String jid) {
-        for (dev.tinelix.jabwave.net.base.api.entities.Chat chat: chats) {
-            if(chat.id.equals(jid)) {
-                return chat;
+    public ServiceEntity searchEntityByJid(String jid) {
+        for (ServiceEntity entity : entities) {
+            if(entity.id.equals(jid)) {
+                return entity;
             }
         }
         return null;
     }
 
     public int searchEntityIndexByJid(String jid) {
-        for (int i = 0; i < chats.size(); i++) {
-            if(chats.get(i).id.equals(jid)) {
+        for (int i = 0; i < entities.size(); i++) {
+            if(entities.get(i).id.equals(jid)) {
                 return i;
             }
         }
         return -1;
     }
 
-    public void updateEntity(int index, Chat entity) {
-        chats.set(index, entity);
+    public void updateEntity(int index, ServiceEntity entity) {
+        entities.set(index, entity);
     }
 
     class EntityViewHolder extends RecyclerView.ViewHolder {
@@ -126,88 +121,29 @@ public class NetworkServiceSection extends Section {
         }
 
         public void bind(int position) {
-            dev.tinelix.jabwave.net.base.api.entities.Chat chat = contacts_exp.get(position);
+            ServiceEntity entity = entities.get(position);
             ((TextView) view.findViewById(R.id.contact_name))
-                    .setText(chat.title);
-            if (chat.status == 0) {
-                contact_status.setVisibility(View.GONE);
-            } else if(chat.status > 0) {
-                contact_status.setText(
-                        getResources().getStringArray(R.array.default_xmpp_statuses)[chat.status]
-                );
-            }
-
-            loadPhotoCache(chat);
-            view.setOnClickListener(v -> {
-                Intent intent = new Intent(ctx, MessengerActivity.class);
-                intent.putExtra("network_type", chat.network_type);
-                if(chat.network_type == 0) {
-                    intent.putExtra("chat_id", (String) chat.id);
-                } else {
-                    intent.putExtra("chat_id", (long) chat.id);
-                }
-                intent.putExtra("chat_title", chat.title);
-                ctx.startActivity(intent);
-            });
-        }
-
-        @SuppressLint("UseCompatLoadingForDrawables")
-        private void loadPhotoCache(dev.tinelix.jabwave.net.base.api.entities.Chat chat) {
-            int placeholder_resid;
-            switch (chat.type) {
-                case 3:
-                    placeholder_resid = R.drawable.ic_campaign_accent;
-                    break;
-                case 2:
-                    placeholder_resid = R.drawable.ic_group_accent;
-                    break;
-                case 1:
-                    placeholder_resid = R.drawable.ic_secret_chat_accent;
-                    break;
-                default:
-                    placeholder_resid = R.drawable.ic_person_accent;
-                    break;
-            }
-            contact_avatar.setImageDrawable(
-                    ContextCompat.getDrawable(ctx, placeholder_resid)
-            );
-            if(chat.network_type == 0 && chat instanceof Chat) {
-                Chat contact = ((Chat) chat);
-                if (contact.getVCard() != null && contact.getVCard().getAvatar() != null) {
-                    Glide.with(ctx)
-                            .load(contact.getVCard().getAvatar())
-                            .apply(new RequestOptions()
-                                    .override(400, 400)
-                                    .placeholder(placeholder_resid)
-                                    .error(placeholder_resid)
-                            )
-                            .into(contact_avatar);
-                }
+                    .setText(entity.title);
+            if (entity.id instanceof String) {
+                contact_status.setText((String) entity.id);
+            } else if (entity.id instanceof Long || entity.id instanceof Integer) {
+                contact_status.setText(String.format("%s", entity.id));
             } else {
-                if(chat.photo != null) {
-                    Glide.with(ctx)
-                            .load(chat.photo)
-                            .apply(new RequestOptions()
-                                    .override(400, 400)
-                                    .placeholder(placeholder_resid)
-                                    .error(placeholder_resid)
-                            )
-                            .into(contact_avatar);
-                }
+                contact_status.setVisibility(View.GONE);
             }
         }
     }
 
     class EntityGroupViewHolder extends RecyclerView.ViewHolder {
         private final View view;
-        private final TextView groupname;
-        private final TextView members_counter;
+        private final TextView service_title;
+        private final TextView entites_counter;
 
         public EntityGroupViewHolder(View itemView) {
             super(itemView);
             this.view = itemView;
-            this.groupname = view.findViewById(R.id.groupname);
-            this.members_counter = view.findViewById(R.id.members_count);
+            this.service_title = view.findViewById(R.id.service_name);
+            this.entites_counter = view.findViewById(R.id.entities_count);
         }
 
         public Resources getResources() {
@@ -216,14 +152,17 @@ public class NetworkServiceSection extends Section {
 
         @SuppressLint("UseCompatLoadingForDrawables")
         public void bind() {
-            groupname.setText(String.format("%s (%s)", header.title, header.node));
-            groupname.setOnClickListener(v -> toggleGroupList());
+            service_title.setText(String.format("%s (%s)", net_service.title, net_service.node));
+            service_title.setOnClickListener(v -> toggleGroupList());
+            if(net_service.getEntities().size() == 0) {
+                isOpen = false;
+            }
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
             );
             arrow.setBounds(0, 0, 90, 90);
-            groupname.setCompoundDrawables(arrow, null, null, null);
-            members_counter.setText(String.format("%s", chats.size()));
+            service_title.setCompoundDrawables(arrow, null, null, null);
+            entites_counter.setText(String.format("%s", entities.size()));
             //((TextView) view.findViewById(R.id.members)).setText(getSectionItemsTotal());
         }
 
@@ -231,15 +170,37 @@ public class NetworkServiceSection extends Section {
         private void toggleGroupList() {
             isOpen = !isOpen;
             if(!isOpen) {
-                contacts_exp.clear();
+                entities.clear();
             } else {
-                contacts_exp.addAll(chats);
+                if(net_service.getEntities().size() > 0) {
+                    entities.addAll(net_service.getEntities());
+                } else {
+                    view.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                    new Thread(() -> {
+                        net_service.getEntities(service.getClient());
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            view.findViewById(R.id.progress).setVisibility(View.GONE);
+                            adapter.notifyDataSetChanged();
+                            isOpen = true;
+                        });
+                    }).start();
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            new Handler(Looper.getMainLooper()).post(
+                                    () -> entites_counter.setText(
+                                            String.format("%s", net_service.getEntities().size())
+                                    )
+                            );
+                        }
+                    }, 0, 200);
+                }
             }
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
             );
             arrow.setBounds(0, 0, 90, 90);
-            groupname.setCompoundDrawables(arrow, null, null, null);
+            service_title.setCompoundDrawables(arrow, null, null, null);
             adapter.notifyDataSetChanged();
         }
     }

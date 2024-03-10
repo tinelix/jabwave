@@ -23,9 +23,8 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.net.base.api.entities.Account;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.base.api.models.Chats;
-import dev.tinelix.jabwave.net.xmpp.api.models.NetworkServices;
+import dev.tinelix.jabwave.net.xmpp.api.models.Services;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
@@ -156,7 +155,7 @@ public class XMPPService extends ClientService {
                     return false;
                 });
                 sendMessageToActivity(status);
-                services = new NetworkServices(client);
+                services = new Services(client);
             } catch (Exception ex) {
                 status = "error";
                 ex.printStackTrace();
