@@ -33,15 +33,9 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     private static final String ACTION_STOP = "stop_service";
 
     private static final String PHONE_NUMBER = "phone_number";
-    public Account account;
     private Context ctx;
 
     private String status = "done";
-
-    private TDLibClient client = null;
-
-    public Chats chats;
-    public Authenticator authenticator;
 
     private Intent intent;
 
@@ -111,12 +105,12 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                 status = "preparing";
                 try {
                     this.phone_number = phone_number;
-                    this.client = new TDLibClient(getApplicationContext(), this, this);
+                    client = new TDLibClient(getApplicationContext(), this, this);
                     isConnected = true;
-                    authenticator = new Authenticator(client);
-                    authenticator.checkAuthState();
-                    if(!authenticator.isAuthorized())
-                        authenticator.checkPhoneNumber(phone_number);
+                    auth = new Authenticator((TDLibClient) client);
+                    ((Authenticator) auth).checkAuthState();
+                    if(!((Authenticator) auth).isAuthorized())
+                        ((Authenticator) auth).checkPhoneNumber(phone_number);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -133,7 +127,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     }
 
     private void runClientFunction(int constructor, Bundle params) {
-        TdApi.Function function = client.createFunction(constructor, params);
+        TdApi.Function function = ((TDLibClient) client).createFunction(constructor, params);
         client.send(function, new OnClientAPIResultListener() {
             @Override
             public boolean onSuccess(HashMap<String, Object> map) {
@@ -212,7 +206,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
 
     public void stopService() {
         if(isConnected()) {
-            client.destroy();
+            ((TDLibClient) client).destroy();
             stopSelf();
         }
     }
@@ -229,7 +223,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             if(function.getConstructor() == TdApi.SetAuthenticationPhoneNumber.CONSTRUCTOR
                 || function.getConstructor() == TdApi.CheckAuthenticationCode.CONSTRUCTOR
                 || function.getConstructor() == TdApi.CheckAuthenticationPassword.CONSTRUCTOR) {
-                authenticator.checkAuthState();
+                ((Authenticator) auth).checkAuthState();
                 sendMessageToActivity(status);
             }
         }
@@ -265,7 +259,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                     status = "required_cloud_password";
                     break;
                 case TdApi.AuthorizationStateReady.CONSTRUCTOR:
-                    authenticator.setAuthState(state);
+                    ((Authenticator) auth).setAuthState(state);
                     status = "authorized";
                     break;
                 default:
@@ -318,38 +312,16 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     }
 
     @Override
-    public TDLibClient getClient() {
-        return client;
-    }
-
-    @Override
     public Chats getChats() {
         if(chats == null) {
-            chats = new Chats(client);
+            chats = new Chats(((TDLibClient) client));
         }
-        return chats;
-    }
-
-
-
-    @Override
-    public Account getAccount() {
-        return account;
-    }
-
-    @Override
-    public void setAccount(dev.tinelix.jabwave.net.base.api.entities.Account account) {
-        this.account = (Account) account;
-    }
-
-    @Override
-    public Authenticator getAuthenticator() {
-        return authenticator;
+        return (Chats) chats;
     }
 
     @Override
     public dev.tinelix.jabwave.net.base.api.entities.Account createAccount() {
-        account = new Account(client,
+        account = new Account(((TDLibClient) client),
                 new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {

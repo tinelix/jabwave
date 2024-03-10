@@ -25,6 +25,7 @@ import dev.tinelix.jabwave.net.base.api.entities.Account;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.base.api.models.Chats;
+import dev.tinelix.jabwave.net.xmpp.api.models.NetworkServices;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
@@ -47,11 +48,9 @@ public class XMPPService extends ClientService {
 
     private String status = "done";
 
-    private XMPPClient client;
     private Intent intent;
     private Roster roster;
     private XMPPTCPConnection conn;
-    private dev.tinelix.jabwave.net.xmpp.api.entities.Account account;
 
     public XMPPService() {
         super("XMPPService");
@@ -63,7 +62,7 @@ public class XMPPService extends ClientService {
         }
 
         public XMPPClient getClient() {
-            return XMPPService.this.client;
+            return (XMPPClient) XMPPService.this.client;
         }
 
         public Roster getRoster() {
@@ -140,23 +139,25 @@ public class XMPPService extends ClientService {
                 });
                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
                 status = "authorizing";
-                listenConnection(client);
+                listenConnection((XMPPClient) client);
                 try {
-                    client.start(server, username, new String(Base58.decode(password)));
+                    ((XMPPClient) client).start(server, username, new String(Base58.decode(password)));
                 } catch (Base58Exception e) {
                     Log.e(JabwaveApp.XMPP_SERV_TAG,
                             "Authentication with Base58 failed. Retrying with plain password..."
                     );
-                    client.start(server, username, password);
+                    ((XMPPClient) client).start(server, username, password);
                 }
                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                 status = "authorized";
                 buildHelloPresence(conn);
-                roster = new Roster(client, map -> {
+                roster = new Roster(((XMPPClient) client), map -> {
                     sendMessageToActivity("presence_changed");
                     return false;
                 });
                 sendMessageToActivity(status);
+                services = new NetworkServices(client);
+                services.discoverServices();
             } catch (Exception ex) {
                 status = "error";
                 ex.printStackTrace();
@@ -222,11 +223,6 @@ public class XMPPService extends ClientService {
         return getRoster();
     }
 
-    @Override
-    public XMPPClient getClient() {
-        return client;
-    }
-
     public boolean isConnected() {
         if(conn != null) {
             return conn.isConnected();
@@ -287,13 +283,8 @@ public class XMPPService extends ClientService {
     }
 
     @Override
-    public dev.tinelix.jabwave.net.xmpp.api.entities.Account getAccount() {
-        return account;
-    }
-
-    @Override
     public Account createAccount() {
-        account = new dev.tinelix.jabwave.net.xmpp.api.entities.Account(client);
+        account = new dev.tinelix.jabwave.net.xmpp.api.entities.Account((XMPPClient) client);
         return account;
     }
 

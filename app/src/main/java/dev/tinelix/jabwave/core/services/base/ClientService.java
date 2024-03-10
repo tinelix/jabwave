@@ -16,15 +16,17 @@ import dev.tinelix.jabwave.net.base.api.entities.Account;
 import dev.tinelix.jabwave.net.base.api.entities.Authenticator;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.base.api.models.Chats;
+import dev.tinelix.jabwave.net.base.api.models.NetworkServices;
 
 public class ClientService extends IntentService {
 
-    private Authenticator auth;
-    private Account account;
-    private Chats chats;
-    private BaseClient client;
+    protected Authenticator auth;
+    protected Account account;
+    protected Chats chats;
+    protected BaseClient client;
+    protected NetworkServices services;
     protected int authType;
-    private ClientServiceBinder binder = new ClientServiceBinder();
+    protected ClientServiceBinder binder = new ClientServiceBinder();
 
     public class ClientServiceBinder extends Binder {
         public OnClientAPIResultListener listener;
@@ -79,6 +81,10 @@ public class ClientService extends IntentService {
 
     public BaseClient getClient() {
         return client;
+    }
+
+    public NetworkServices getNetworkServices() {
+        return services;
     }
 
     public void setAccount(Account account) {
