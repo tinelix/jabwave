@@ -131,6 +131,10 @@ public class NetworkServiceSection extends Section {
             } else {
                 contact_status.setVisibility(View.GONE);
             }
+            int placeholder_resid = R.drawable.ic_group_accent;
+            contact_avatar.setImageDrawable(
+                    ContextCompat.getDrawable(ctx, placeholder_resid)
+            );
         }
     }
 
