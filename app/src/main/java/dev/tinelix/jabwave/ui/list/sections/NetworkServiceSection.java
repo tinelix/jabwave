@@ -178,6 +178,7 @@ public class NetworkServiceSection extends Section {
                         net_service.getEntities(service.getClient());
                         new Handler(Looper.getMainLooper()).post(() -> {
                             view.findViewById(R.id.progress).setVisibility(View.GONE);
+                            entities.addAll(net_service.getEntities());
                             adapter.notifyDataSetChanged();
                         });
                     }).start();
