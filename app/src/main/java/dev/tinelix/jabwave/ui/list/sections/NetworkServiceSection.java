@@ -164,7 +164,7 @@ public class NetworkServiceSection extends Section {
             );
             arrow.setBounds(0, 0, 90, 90);
             service_title.setCompoundDrawables(arrow, null, null, null);
-            entites_counter.setText(String.format("%s", entities.size()));
+            entites_counter.setText(String.format("%s", net_service.getEntities().size()));
             //((TextView) view.findViewById(R.id.members)).setText(getSectionItemsTotal());
         }
 
@@ -176,6 +176,7 @@ public class NetworkServiceSection extends Section {
             } else {
                 if(net_service.getEntities().size() > 0) {
                     entities.addAll(net_service.getEntities());
+                    adapter.notifyDataSetChanged();
                 } else {
                     view.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                     new Thread(() -> {
