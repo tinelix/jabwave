@@ -1,10 +1,14 @@
 package dev.tinelix.jabwave.net.xmpp.api;
 
+import android.content.Context;
+
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.filter.StanzaFilter;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
@@ -20,8 +24,10 @@ import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
 import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
+import dev.tinelix.jabwave.net.xmpp.api.stanzas.ClientVersionStanza;
 
 public class XMPPClient extends BaseClient {
+    private final Context ctx;
     private AbstractXMPPConnection conn;
     private final OnClientAPIResultListener listener;
     private ConnectionListener connListener;
@@ -29,10 +35,11 @@ public class XMPPClient extends BaseClient {
     public EntityBareJid entitiyBareJid;
     public String server;
 
-    public XMPPClient(AbstractXMPPConnection conn, OnClientAPIResultListener listener) {
+    public XMPPClient(Context ctx, AbstractXMPPConnection conn, OnClientAPIResultListener listener) {
         super(false, "xmpp");
         this.conn = conn;
         this.listener = listener;
+        this.ctx = ctx;
     }
 
     public void start(String server, String jid, String password) {
@@ -48,6 +55,20 @@ public class XMPPClient extends BaseClient {
                             true
                     );
             conn = new XMPPTCPConnection(config);
+            conn.addStanzaListener(packet -> {
+                try {
+                    ClientIdentityParams params = new ClientIdentityParams(ctx);
+                    HashMap<String, String> map = params.getClientIdentity();
+                    ClientVersionStanza stanza = new ClientVersionStanza(packet.getFrom().toString());
+                    stanza.setClientInfo(
+                            map.get("client_name"),
+                            map.get("client_version"),
+                            map.get("os_version"));
+                    sendStanza(stanza);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, stanza -> stanza.getNamespace().equals("jabber:iq:version"));
             conn.connect();
             conn.login(jid, password, Authenticator.generateXMPPResource());
             Presence presence = conn
@@ -93,6 +114,7 @@ public class XMPPClient extends BaseClient {
         return conn;
     }
 
+    @SuppressWarnings("Convert2MethodRef")
     public void listenConnection(OnClientAPIResultListener listener) {
         if(connListener != null) {
             conn.removeConnectionListener(connListener);

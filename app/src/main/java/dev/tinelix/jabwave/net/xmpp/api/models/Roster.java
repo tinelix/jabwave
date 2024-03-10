@@ -80,6 +80,7 @@ public class Roster extends Chats {
             List<Presence> presences = roster.getAllPresences(entry.getJid());
             String custom_status = "";
             int status = 0;
+            int type;
             if(presences.size() > 0) {
                 Presences presencesModel = new Presences(entity, presences);
                 Presence hpPresence = presencesModel.getHighestPriorityPresence();
@@ -91,16 +92,16 @@ public class Roster extends Chats {
             if(entry.getName() != null) {
                 if(custom_status != null && custom_status.length() > 0)
                     entity = new Chat(
-                            entry.getName(),
                             entry.getJid().toString(),
+                            entry.getName(),
                             new ArrayList<>(),
                             custom_status,
                             status
                     );
                 else
                     entity = new Chat(
-                            entry.getName(),
                             entry.getJid().toString(),
+                            entry.getName(),
                             new ArrayList<>(),
                             status
                     );

@@ -125,7 +125,7 @@ public class XMPPService extends ClientService {
             JabwaveApp app = (JabwaveApp) getApplicationContext();
             try {
                 createAuthConfig(server, username, password);
-                client = new XMPPClient(conn, new OnClientAPIResultListener() {
+                client = new XMPPClient(ctx, conn, new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
                         return true;
