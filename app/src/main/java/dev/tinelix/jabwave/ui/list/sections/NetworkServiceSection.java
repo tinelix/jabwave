@@ -158,7 +158,7 @@ public class NetworkServiceSection extends Section {
         public void bind() {
             service_title.setText(String.format("%s (%s)", net_service.title, net_service.node));
             service_title.setOnClickListener(v -> toggleGroupList());
-            isOpen = net_service.getEntities().size() != 0;
+            isOpen = entities.size() != 0;
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
             );
