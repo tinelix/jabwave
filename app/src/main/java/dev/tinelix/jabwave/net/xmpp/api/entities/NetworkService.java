@@ -31,7 +31,7 @@ public class NetworkService extends dev.tinelix.jabwave.net.base.api.models.Netw
             List<DiscoverItems.Item> items =
                     sdm.discoverItems(JidCreate.bareFrom((String) id)).getItems();
             for (DiscoverItems.Item item: items) {
-                if(entities.size() <= 200) {
+                if(entities.size() < 200) {
                     DiscoverInfo info = sdm.discoverInfo(item.getEntityID());
                     String title = "No name";
                     if (info.getIdentities().size() > 0) {

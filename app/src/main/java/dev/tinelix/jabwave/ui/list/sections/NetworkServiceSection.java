@@ -154,9 +154,7 @@ public class NetworkServiceSection extends Section {
         public void bind() {
             service_title.setText(String.format("%s (%s)", net_service.title, net_service.node));
             service_title.setOnClickListener(v -> toggleGroupList());
-            if(net_service.getEntities().size() == 0) {
-                isOpen = false;
-            }
+            isOpen = net_service.getEntities().size() != 0;
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
             );
@@ -181,7 +179,6 @@ public class NetworkServiceSection extends Section {
                         new Handler(Looper.getMainLooper()).post(() -> {
                             view.findViewById(R.id.progress).setVisibility(View.GONE);
                             adapter.notifyDataSetChanged();
-                            isOpen = true;
                         });
                     }).start();
                     new Timer().schedule(new TimerTask() {
