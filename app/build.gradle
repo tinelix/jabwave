@@ -90,7 +90,7 @@ android {
             dimension 'version'
             versionNameSuffix '.tdlib'
             applicationId 'dev.tinelix.jabwave.td'
-            buildConfigField "String", "BUILD_VARIANT", "tdlib"
+            buildConfigField "String", "BUILD_VARIANT", "\"tdlib\""
             buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
             buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
         }
@@ -98,7 +98,7 @@ android {
             dimension 'version'
             versionNameSuffix '.smack'
             applicationId 'dev.tinelix.jabwave.sm'
-            buildConfigField "String", "BUILD_VARIANT", "smack"
+            buildConfigField "String", "BUILD_VARIANT", "\"smack\""
         }
         combo {
             dimension 'version'
