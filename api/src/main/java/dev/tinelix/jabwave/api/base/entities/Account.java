@@ -11,6 +11,13 @@ public class Account {
     public byte[] photo_small;
     public String username;
 
+    /**
+     * Default constructor for Account class.
+     * @param id Account ID
+     * @param first_name First name from account information
+     * @param last_name Last name from account information
+     */
+
     public Account(Object id, String first_name, String last_name) {
         this.id = id;
         this.first_name = first_name;

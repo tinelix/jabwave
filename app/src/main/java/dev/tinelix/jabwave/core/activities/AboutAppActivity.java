@@ -15,7 +15,12 @@ public class AboutAppActivity extends JabwaveActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_app);
+        setActionBar();
         loadAppInfo();
+    }
+
+    private void setActionBar() {
+
     }
 
     private void loadAppInfo() {

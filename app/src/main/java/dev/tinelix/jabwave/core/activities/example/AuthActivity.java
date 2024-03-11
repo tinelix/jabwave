@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.core.activities.base;
+package dev.tinelix.jabwave.core.activities.example;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -42,6 +42,12 @@ import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.views.base.XConstraintLayout;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
+
+/** <b>AuthActivity</b> - it is app wizard screen class with sign-in forms
+ *  (username, password and etc.)
+ *  <br>
+ *  <br>Use this example for creating custom Network API client compatible with base Jabwave API.
+ **/
 
 public class AuthActivity extends AppCompatActivity {
     public Handler handler;
@@ -119,6 +125,12 @@ public class AuthActivity extends AppCompatActivity {
         unregisterReceiver(jwReceiver);
     }
 
+    /** Authorization function from sign-in screen, sends data to authorization server.
+
+     @param username Username, phone number or another string
+     @param password Password
+     **/
+
     public void signIn(String username, String password) {
         HashMap<String, String> credentials;
         String[] username_mask = username.split("@");
@@ -138,10 +150,11 @@ public class AuthActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public void sendCloudPassword(String password) {
+    /** Handling UI/Network message received from broadcast receiver.
 
-    }
-
+        @param message Message code
+        @param data Additional message information
+     **/
     public void receiveState(int message, Bundle data) {
         if(message == HandlerMessages.AUTHORIZED) {
             SharedPreferences.Editor editor;
@@ -192,11 +205,7 @@ public class AuthActivity extends AppCompatActivity {
         Snackbar snackbar;
         int error_string_id = R.string.auth_error_network;
         if(message == HandlerMessages.AUTHENTICATION_ERROR) {
-            if(global_prefs.getString("network_type", "").equals("telegram")) {
-                error_string_id = R.string.invalid_pn_or_passw;
-            } else {
-                error_string_id = R.string.invalid_jid_or_passw;
-            }
+            error_string_id = R.string.invalid_jid_or_passw;
             snackbar = Snackbar.make(auth_layout, error_string_id, Snackbar.LENGTH_LONG);
         } else {
             snackbar = Snackbar

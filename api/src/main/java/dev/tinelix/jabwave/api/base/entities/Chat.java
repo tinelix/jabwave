@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
+/**
+ * Chat class used in contacts list.
+ */
+
 public class Chat {
     // Base Chat Class used in Contacts list (AppActivity)
     public int type;
@@ -15,7 +19,11 @@ public class Chat {
     public int status;
     public byte[] photo;
     public ArrayList<Message> messages;
-
+    /**
+     * Default constructor for Chat class.
+     * @param title Chat name
+     * @param network_type Network type (for compatibility with String/Integer/Long IDs)
+     */
     public Chat(String title, int network_type) {
         /*
             Network Type available values:
@@ -26,6 +34,13 @@ public class Chat {
         this.title = title;
         this.groups = new ArrayList<>();
     }
+
+    /**
+     * Default constructor for Chat class.
+     * @param id String/Integer/Long ID
+     * @param title Chat name
+     * @param network_type Network type (for compatibility with String/Integer/Long IDs)
+     */
 
     public Chat(Object id, String title, int network_type) {
         /*

@@ -23,9 +23,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_menu"
+            app:navigationIcon="@drawable/ic_back"
             app:subtitleTextColor="?android:attr/textColorSecondaryInverse"
-            app:title="@string/app_name" />
+            app:title="@string/about_app" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -62,6 +62,7 @@
                         android:id="@+id/imageView"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
+                        android:padding="6dp"
                         app:srcCompat="@mipmap/ic_launcher" />
 
                     <LinearLayout

@@ -1,11 +1,35 @@
 package dev.tinelix.jabwave.api.base.attachments;
 
 public class Attachment {
+
+    /** <b>Attachment</b> class used for messages bubbles.**/
+
     private final int type;
     public long id;
     protected boolean isSecret;
     protected boolean isSpoiler;
     public int state; // 0 - Loading, 1 - Loaded
+
+    /**
+     * Default constructor for Attachment class.
+     * @param id Attachment ID
+     * @param type Attachment Type
+     * <br><br>
+     * <b>Attachment Type available values:</b>
+     * <br><code>0</code> - <i>Photo</i>
+     * <br>(must be PhotoAttachment)
+     * <br><code>1</code> - <i>Video</i>
+     * <br>(must be VideoAttachment)
+     * <br><code>2</code> - <i>Audio</i>
+     * <br>(must be AudioAttachment)
+     * <br><code>3</code> - <i>Voice</i>
+     * <br>(must be VoiceAttachment)
+     * <br><code>4</code> - <i>VideoCircle</i>
+     * <br>(must be VideoCircleAttachment, extended from VoiceAttachment)
+     * <br><code>5</code> - <i>Sticker</i>
+     * <br>(must be StickerAttachment)
+     * <br><code>6</code> - <i>Unsupported type</i>
+     */
 
     public Attachment(long id, int type) {
         /*  Attachment Type available values:

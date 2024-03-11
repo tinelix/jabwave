@@ -7,6 +7,11 @@ public class PhotoAttachment extends Attachment {
     protected byte[] array;
     protected int[] size;
 
+    /**
+     * Default constructor for PhotoAttachment class.
+     * @param id Attachment ID
+     */
+
     public PhotoAttachment(long id) {
         super(id, 0);
     }

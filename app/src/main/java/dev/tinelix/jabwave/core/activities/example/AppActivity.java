@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.core.activities.base;
+package dev.tinelix.jabwave.core.activities.example;
 
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.fragments.app.ChatsFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 import dev.tinelix.jabwave.core.services.base.ClientService;
@@ -35,6 +36,12 @@ import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
+
+/** <b>AppActivity</b> - it is main app screen class with navigation view, contacts
+ *  and services list.
+ *  <br>
+ *  <br>Use this example for creating custom Network API client compatible with base Jabwave API.
+ **/
 
 public class AppActivity extends JabwaveActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -99,17 +106,10 @@ public class AppActivity extends JabwaveActivity
 
     private void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
-        if(app.getCurrentNetworkType().equals("telegram")) {
-            registerReceiver(
-                    jwReceiver,
-                    new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE")
-            );
-        } else {
-            registerReceiver(
-                    jwReceiver,
-                    new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
-            );
-        }
+        registerReceiver(
+                jwReceiver,
+                new IntentFilter("dev.tinelix.jabwave.BASE_RECEIVE")
+        );
     }
 
     private void connect() {
@@ -144,6 +144,11 @@ public class AppActivity extends JabwaveActivity
         }
     }
 
+    /** Handling UI/Network message received from broadcast receiver.
+
+        @param message Message code, see constants in {@link HandlerMessages HandlerMessages class}
+        @param data Additional message information
+     **/
     @SuppressLint("NotifyDataSetChanged")
     public void receiveState(int message, Bundle data) {
         switch (message) {

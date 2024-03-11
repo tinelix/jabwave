@@ -9,6 +9,10 @@ import java.util.concurrent.TimeUnit;
 
 import dev.tinelix.jabwave.api.base.attachments.Attachment;
 
+/**
+ * Message - an object that stores information about message.
+ */
+
 public class Message {
     public long id;
     public Object member_id;
@@ -20,6 +24,16 @@ public class Message {
     private ChatSender sender;
     protected ArrayList<Attachment> attachments;
 
+    /**
+     * Default constructor of Message class.
+     * @param id Message ID
+     * @param id Chat ID
+     * @param member_id Chat Sender ID
+     * @param text Message body
+     * @param timestamp Message timestamp (formatted after creating object)
+     * @param isIncoming Incoming message or not
+     */
+
     public Message(long id, Object chat_id, Object member_id, String text, Date timestamp, boolean isIncoming) {
         this.id = id;
         this.chat_id = chat_id;
@@ -29,6 +43,12 @@ public class Message {
         this.isIncoming = isIncoming;
         attachments = new ArrayList<>();
     }
+
+    /**
+     * Constructor of Message class for draw date header
+     * @param isHeader Contains date header or not
+     * @param header_title Header title
+     */
 
     public Message(boolean isHeader, String header_title) {
         this.isHeader = isHeader;

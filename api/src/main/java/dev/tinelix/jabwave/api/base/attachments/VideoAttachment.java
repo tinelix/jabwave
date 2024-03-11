@@ -11,6 +11,11 @@ public class VideoAttachment extends Attachment {
     protected byte[] thumbnail;
     protected String local_path;
 
+    /**
+     * Default constructor for VideoAttachment class.
+     * @param id Attachment ID
+     */
+
     public VideoAttachment(long id) {
         super(id, 1);
     }
