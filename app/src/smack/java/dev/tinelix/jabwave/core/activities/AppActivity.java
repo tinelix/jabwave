@@ -221,13 +221,18 @@ public class AppActivity extends JabwaveActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawer.closeDrawer(GravityCompat.START);
-        if(item.getItemId() == R.id.services) {
-            fragment = FragmentNavigator.switchToAnotherFragment(
+        switch (item.getItemId()) {
+            case R.id.services -> fragment = FragmentNavigator.switchToAnotherFragment(
                     getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_SERVICES
             );
+            case R.id.about_app -> {
+                Intent intent = new Intent(this, AboutAppActivity.class);
+                startActivity(intent);
+            }
         }
         return false;
     }

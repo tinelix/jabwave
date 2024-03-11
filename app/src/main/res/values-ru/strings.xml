@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- About Application Activity !-->
+    <string name="about_app_version">Версия %1$s\r\nКоммит: %2$s</string>
+    <string name="about_app_license"><![CDATA[
+        Эта программа является свободным программным обеспечением: вы можете распространять и/или
+        изменять его в соответствии с условиями лицензии
+        <a href="file:///android_res/raw/agpl_3.html">GNU Affero General Public License версии 3.0</a>
+        или поздней версии, опубликованной Фондом свободного программного обеспечения.
+        <br><br>БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, ВКЛЮЧАЯ КОММЕРЧЕСКУЮ ЦЕННОСТЬ ИЛИ ПРИГОДНОСТЬ ДЛЯ КОНКРЕТНЫХ ЦЕЛЕЙ.
+    ]]></string>
+    <string name="source_code">Исходный код</string>
+
     <!-- Authorization Activity !-->
     <string name="auth_phone_number">Номер телефона</string>
     <string name="auth_password">Пароль</string>
@@ -26,6 +37,7 @@
     <string name="new_group">Создать группу</string>
     <string name="services">Сервисы</string>
     <string name="settings">Настройки</string>
+    <string name="about_app">О приложении</string>
 
     <!-- Messenger Activity !-->
     <string name="send">Отправить</string>
