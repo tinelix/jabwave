@@ -126,7 +126,7 @@ public class NetworkServiceSection extends Section {
                 contact_status.setVisibility(View.GONE);
             }
             int placeholder_resid;
-            switch (service.type) {
+            switch (net_service.type) {
                 case 2:
                     placeholder_resid = R.drawable.ic_campaign_accent;
                     break;
