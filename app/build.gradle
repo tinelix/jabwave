@@ -58,7 +58,6 @@ android {
     namespace 'dev.tinelix.jabwave'
     compileSdk 34
 
-
     defaultConfig {
         applicationId "dev.tinelix.jabwave"
         minSdk 19
@@ -82,8 +81,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_18
-        targetCompatibility JavaVersion.VERSION_18
+        sourceCompatibility JavaVersion.VERSION_15
+        targetCompatibility JavaVersion.VERSION_15
     }
     buildFeatures {
         viewBinding true
