@@ -32,6 +32,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/messengerBackgroundColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,49 +42,60 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="16dp">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    app:srcCompat="@mipmap/ic_launcher" />
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:orientation="vertical">
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/app_name"
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        app:srcCompat="@mipmap/ic_launcher" />
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/app_name"
-                        android:textColor="@color/accentColor"
-                        android:textSize="16sp" />
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/app_version"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="@string/about_app_version" />
+                        <TextView
+                            android:id="@+id/app_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/app_name"
+                            android:textColor="@color/accentColor"
+                            android:textSize="16sp" />
 
+                        <TextView
+                            android:id="@+id/app_version"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/about_app_version" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp">
 
@@ -97,6 +109,10 @@
                         style="@style/Widget.AppCompat.Button.Borderless.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:insetBottom="0dp"
+                        android:insetLeft="-4dp"
+                        android:insetRight="-4dp"
+                        android:insetTop="0dp"
                         android:text="@string/source_code"
                         android:textAlignment="viewStart"
                         android:textAllCaps="false"
@@ -121,7 +137,7 @@
                         android:id="@+id/license_notification"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
+                        android:layout_margin="8dp"
                         android:text="@string/about_app_license"
                         android:textColor="?attr/colorOnBackground" />
                 </LinearLayout>
