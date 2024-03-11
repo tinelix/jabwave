@@ -11,14 +11,7 @@ import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 public class ChatSender extends dev.tinelix.jabwave.api.base.entities.ChatSender {
     public ChatSender(BaseClient client, Object id, int type) {
         super(client, id, type);
-        switch (type) {
-            case TdApi.MessageSenderChat.CONSTRUCTOR:
-                this.type = 1;
-                break;
-            default:
-                this.type = 0;
-                break;
-        }
+        this.type = type == TdApi.MessageSenderChat.CONSTRUCTOR ? 1 : 0;
     }
 
     @Override
