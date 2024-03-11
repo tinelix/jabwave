@@ -21,11 +21,11 @@ public class Services extends dev.tinelix.jabwave.api.base.models.Services {
                 0, 0, "Telegram", "telegram.org", false
         );
         ArrayList<ServiceEntity> entities = netService.getEntities();
-        entities.add(new ServiceEntity(0, "Telegram News"));
-        entities.add(new ServiceEntity(1, "Trending Stickers"));
-        entities.add(new ServiceEntity(2, "Premium Bot"));
-        entities.add(new ServiceEntity(3, "BotFather"));
-        entities.add(new ServiceEntity(4, "Stickers"));
+        entities.add(new ServiceEntity("@telegram", "Telegram News"));
+        entities.add(new ServiceEntity("@TrendingStickers", "Trending Stickers"));
+        entities.add(new ServiceEntity("@PremiumBot", "Premium Bot"));
+        entities.add(new ServiceEntity("@BotFather", "BotFather"));
+        entities.add(new ServiceEntity("@Stickers", "Stickers"));
 
         netServices.add(netService);
         return netServices;
