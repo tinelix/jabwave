@@ -2,6 +2,7 @@ package dev.tinelix.jabwave.core.fragments.auth;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -21,8 +22,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import dev.tinelix.jabwave.BuildConfig;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.activities.base.AuthActivity;
+import dev.tinelix.jabwave.core.activities.AuthActivity;
 import dev.tinelix.jabwave.ui.list.adapters.SimpleSpinnerAdapter;
 import dev.tinelix.jabwave.ui.list.items.SimpleListItem;
 
@@ -86,10 +88,16 @@ public class AuthFragment extends Fragment {
             e.printStackTrace();
         }
         SharedPreferences.Editor editor = global_prefs.edit();
-        if (position == 0) {
-            username_til.setHint(R.string.auth_phone_number);
-            password_til.setVisibility(View.GONE);
-            editor.putString("network_type", "telegram");
+        if(BuildConfig.BUILD_VARIANT.equals("combo") || BuildConfig.BUILD_VARIANT.equals("tdlib")) {
+            if (position == 0) {
+                username_til.setHint(R.string.auth_phone_number);
+                password_til.setVisibility(View.GONE);
+                editor.putString("network_type", "telegram");
+            } else {
+                username_til.setHint(R.string.auth_jid);
+                password_til.setVisibility(View.VISIBLE);
+                editor.putString("network_type", "auth");
+            }
         } else {
             username_til.setHint(R.string.auth_jid);
             password_til.setVisibility(View.VISIBLE);

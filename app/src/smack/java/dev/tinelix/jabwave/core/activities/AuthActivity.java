@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.core.activities.base;
+package dev.tinelix.jabwave.core.activities;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -32,11 +32,11 @@ import java.util.HashMap;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.activities.MainActivity;
 import dev.tinelix.jabwave.core.fragments.auth.AuthCloudPasswordFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
+import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
@@ -130,7 +130,7 @@ public class AuthActivity extends AppCompatActivity {
         credentials = new SecureStorage().createCredentialsMap(
                 this.username, this.server, this.password
         );
-        service = new ClientService("undefined");
+        service = new XMPPService();
         service.start(this, clientConnection, credentials);
 
         ft = getSupportFragmentManager().beginTransaction();
@@ -138,23 +138,18 @@ public class AuthActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public void sendCloudPassword(String password) {
-
+    public void signIn(String signin_code) {
+        // Not used for 'smack' build flavor
     }
 
     public void receiveState(int message, Bundle data) {
         if(message == HandlerMessages.AUTHORIZED) {
             SharedPreferences.Editor editor;
-            if(global_prefs.getString("network_type", "").equals("telegram")) {
-                editor = telegram_prefs.edit();
-                editor.putString("phone_number", username);
-            } else {
-                editor = xmpp_prefs.edit();
-                editor.putString("server", server);
-                editor.putString("username", username);
-                editor.putString("password_hash",
-                        Base58.encode(password.getBytes(StandardCharsets.UTF_8)));
-            }
+            editor = xmpp_prefs.edit();
+            editor.putString("server", server);
+            editor.putString("username", username);
+            editor.putString("password_hash",
+                    Base58.encode(password.getBytes(StandardCharsets.UTF_8)));
             editor.apply();
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
@@ -219,10 +214,8 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         unregisterBroadcastReceiver();
-        if(service != null) {
-            if (service.isConnected()) {
-                service.stopSelf();
-            }
+        if(service.isConnected()) {
+            service.stopSelf();
         }
         super.onDestroy();
     }

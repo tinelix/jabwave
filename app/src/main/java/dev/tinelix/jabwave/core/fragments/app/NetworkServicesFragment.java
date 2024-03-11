@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.activities.base.AppActivity;
+import dev.tinelix.jabwave.core.activities.AppActivity;
 import dev.tinelix.jabwave.api.base.entities.Chat;
 import dev.tinelix.jabwave.api.base.models.NetworkService;
 import dev.tinelix.jabwave.api.base.models.ChatGroup;
