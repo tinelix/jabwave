@@ -160,6 +160,7 @@ public class NetworkServiceSection extends Section {
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
             );
+            view.findViewById(R.id.divider).setVisibility(isOpen ? View.VISIBLE : View.INVISIBLE);
             arrow.setBounds(0, 0, 90, 90);
             service_title.setCompoundDrawables(arrow, null, null, null);
             entites_counter.setText(String.format("%s", net_service.getEntities().size()));
@@ -171,13 +172,14 @@ public class NetworkServiceSection extends Section {
             isOpen = !isOpen;
             if(!isOpen) {
                 entities.clear();
-                view.findViewById(R.id.divider).setVisibility(View.GONE);
+                view.findViewById(R.id.divider).setVisibility(View.INVISIBLE);
             } else {
                 if(net_service.getEntities().size() > 0) {
                     view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
                     entities.addAll(net_service.getEntities());
                     adapter.notifyDataSetChanged();
                 } else {
+                    view.findViewById(R.id.divider).setVisibility(View.INVISIBLE);
                     view.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                     new Thread(() -> {
                         net_service.getEntities(service.getClient());
