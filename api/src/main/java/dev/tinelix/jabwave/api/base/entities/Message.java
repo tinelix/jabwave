@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.base.api.entities;
+package dev.tinelix.jabwave.api.base.entities;
 
 import android.annotation.SuppressLint;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
+import dev.tinelix.jabwave.api.base.attachments.Attachment;
 
 public class Message {
     public long id;

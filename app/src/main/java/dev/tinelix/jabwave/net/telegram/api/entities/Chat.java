@@ -16,14 +16,14 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
-import dev.tinelix.jabwave.net.base.api.entities.Message;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.attachments.Attachment;
+import dev.tinelix.jabwave.api.base.entities.Message;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.attachments.PhotoAttachment;
 import dev.tinelix.jabwave.net.telegram.api.attachments.VideoAttachment;
 
-public class Chat extends dev.tinelix.jabwave.net.base.api.entities.Chat {
+public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
     // Contact Class used in Contacts list (AppActivity)
     public String title;
     public long id;

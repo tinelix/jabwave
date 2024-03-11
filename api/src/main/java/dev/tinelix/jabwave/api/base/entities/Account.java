@@ -1,7 +1,6 @@
-package dev.tinelix.jabwave.net.base.api.entities;
+package dev.tinelix.jabwave.api.base.entities;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.api.base.BaseClient;
 
 public class Account {
     protected BaseClient client;

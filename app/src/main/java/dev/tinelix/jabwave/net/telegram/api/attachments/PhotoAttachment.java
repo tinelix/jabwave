@@ -4,17 +4,15 @@ import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
-import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
 public class PhotoAttachment
-        extends dev.tinelix.jabwave.net.base.api.attachments.PhotoAttachment {
+        extends dev.tinelix.jabwave.api.base.attachments.PhotoAttachment {
 
     private TdApi.File file;
 

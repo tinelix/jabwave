@@ -14,7 +14,7 @@ import java.util.HashMap;
 import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 import dev.tinelix.jabwave.net.telegram.api.entities.Account;
 import dev.tinelix.jabwave.net.telegram.api.entities.Authenticator;
@@ -322,7 +322,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     }
 
     @Override
-    public dev.tinelix.jabwave.net.base.api.entities.Account createAccount() {
+    public dev.tinelix.jabwave.api.base.entities.Account createAccount() {
         account = new Account(((TDLibClient) client),
                 new OnClientAPIResultListener() {
                     @Override

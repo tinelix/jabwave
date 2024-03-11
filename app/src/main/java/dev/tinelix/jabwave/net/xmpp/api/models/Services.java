@@ -8,11 +8,11 @@ import org.jxmpp.jid.impl.JidCreate;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.models.NetworkService;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.models.NetworkService;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
-public class Services extends dev.tinelix.jabwave.net.base.api.models.Services {
+public class Services extends dev.tinelix.jabwave.api.base.models.Services {
 
     private ServiceDiscoveryManager sdm;
     private XMPPClient client;

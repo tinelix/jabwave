@@ -4,10 +4,10 @@ import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.HashMap;
 
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 
-public class Authenticator extends dev.tinelix.jabwave.net.base.api.entities.Authenticator
+public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authenticator
         implements OnClientAPIResultListener {
 
     private final TDLibClient client;

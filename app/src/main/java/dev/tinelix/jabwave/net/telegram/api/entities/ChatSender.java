@@ -5,10 +5,10 @@ import org.drinkless.td.libcore.telegram.TdApi;
 import java.util.HashMap;
 import java.util.Objects;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
-public class ChatSender extends dev.tinelix.jabwave.net.base.api.entities.ChatSender {
+public class ChatSender extends dev.tinelix.jabwave.api.base.entities.ChatSender {
     public ChatSender(BaseClient client, Object id, int type) {
         super(client, id, type);
         switch (type) {

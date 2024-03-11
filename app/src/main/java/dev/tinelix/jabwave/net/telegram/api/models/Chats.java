@@ -12,13 +12,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.net.base.api.entities.ChatSender;
-import dev.tinelix.jabwave.net.base.api.entities.Message;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.entities.ChatSender;
+import dev.tinelix.jabwave.api.base.entities.Message;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
+import dev.tinelix.jabwave.api.base.entities.Chat;
 
-public class Chats extends dev.tinelix.jabwave.net.base.api.models.Chats {
+public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
 
     private TDLibClient client;
     public ArrayList<Chat> chats;

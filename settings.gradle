@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "Jabwave"
 include ':app'
 include ':tdlib'
+include ':api'

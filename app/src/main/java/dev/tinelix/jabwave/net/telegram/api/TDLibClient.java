@@ -12,8 +12,8 @@ import java.util.Locale;
 
 import androidx.annotation.Nullable;
 import dev.tinelix.jabwave.BuildConfig;
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.SecureStorage;
 
 public class TDLibClient extends BaseClient implements Client.ResultHandler, Client.ExceptionHandler {

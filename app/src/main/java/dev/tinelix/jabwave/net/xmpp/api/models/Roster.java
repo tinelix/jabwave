@@ -9,8 +9,6 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.roster.RosterListener;
-import org.jivesoftware.smackx.muc.MultiUserChat;
-import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.Jid;
@@ -21,18 +19,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
-import dev.tinelix.jabwave.net.base.api.models.Chats;
+import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
+import dev.tinelix.jabwave.api.base.models.Chats;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
-import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
+import dev.tinelix.jabwave.api.base.models.ChatGroup;
 
 public class Roster extends Chats {
 
     private final XMPPConnection conn;
     private final org.jivesoftware.smack.roster.Roster roster;
     private final OnClientUpdateListener listener;
-    private ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> chats;
+    private ArrayList<dev.tinelix.jabwave.api.base.entities.Chat> chats;
 
     public Roster(XMPPClient client, OnClientUpdateListener listener) {
         super(client);
@@ -70,7 +68,7 @@ public class Roster extends Chats {
     }
 
     @Override
-    public ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> getList() {
+    public ArrayList<dev.tinelix.jabwave.api.base.entities.Chat> getList() {
         chats = new ArrayList<>();
         Collection <RosterEntry> entries = roster.getEntries();
         Collection<RosterGroup> groups = roster.getGroups();
@@ -161,8 +159,8 @@ public class Roster extends Chats {
     }
 
     @Override
-    public dev.tinelix.jabwave.net.base.api.entities.Chat getChatById(Object id) {
-        for (dev.tinelix.jabwave.net.base.api.entities.Chat chat : chats) {
+    public dev.tinelix.jabwave.api.base.entities.Chat getChatById(Object id) {
+        for (dev.tinelix.jabwave.api.base.entities.Chat chat : chats) {
             if(chat.id.equals(id)) {
                 return chat;
             }
@@ -171,7 +169,7 @@ public class Roster extends Chats {
     }
 
     @Override
-    public int getChatIndex(dev.tinelix.jabwave.net.base.api.entities.Chat chat) {
+    public int getChatIndex(dev.tinelix.jabwave.api.base.entities.Chat chat) {
         for(int i = 0; i < chats.size(); i++) {
             if(chats.get(i).equals(chat)) {
                 return i;

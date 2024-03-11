@@ -20,10 +20,10 @@ import java.util.List;
 
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
-import dev.tinelix.jabwave.net.base.api.attachments.PhotoAttachment;
-import dev.tinelix.jabwave.net.base.api.attachments.VideoAttachment;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.attachments.Attachment;
+import dev.tinelix.jabwave.api.base.attachments.PhotoAttachment;
+import dev.tinelix.jabwave.api.base.attachments.VideoAttachment;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
 public class AttachFlowLayout extends FlowLayout {
     private ArrayList<Attachment> attachments;

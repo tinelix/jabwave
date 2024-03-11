@@ -16,8 +16,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
-import dev.tinelix.jabwave.net.base.api.entities.Message;
+import dev.tinelix.jabwave.api.base.entities.Chat;
+import dev.tinelix.jabwave.api.base.entities.Message;
 import dev.tinelix.jabwave.ui.views.AttachFlowLayout;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder> {

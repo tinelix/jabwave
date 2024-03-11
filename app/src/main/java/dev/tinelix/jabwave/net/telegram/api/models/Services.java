@@ -2,10 +2,10 @@ package dev.tinelix.jabwave.net.telegram.api.models;
 
 import java.util.ArrayList;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.models.NetworkService;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.models.NetworkService;
 
-public class Services extends dev.tinelix.jabwave.net.base.api.models.Services {
+public class Services extends dev.tinelix.jabwave.api.base.models.Services {
 
 
     public Services(BaseClient client) {

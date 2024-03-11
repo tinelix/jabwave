@@ -20,8 +20,8 @@ import androidx.annotation.Nullable;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.base.api.attachments.VideoAttachment;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.attachments.VideoAttachment;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
 public class VideoAttachView extends FrameLayout {
 

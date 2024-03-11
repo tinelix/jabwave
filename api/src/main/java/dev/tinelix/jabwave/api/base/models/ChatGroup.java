@@ -1,6 +1,6 @@
-package dev.tinelix.jabwave.net.base.api.models;
+package dev.tinelix.jabwave.api.base.models;
 
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
+import dev.tinelix.jabwave.api.base.entities.Chat;
 
 public class ChatGroup extends Chat {
     public boolean withOnlineCount;

@@ -8,10 +8,10 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
-public class VideoAttachment extends dev.tinelix.jabwave.net.base.api.attachments.VideoAttachment {
+public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.VideoAttachment {
     private TdApi.Video video;
 
     public VideoAttachment(TdApi.Video video) {

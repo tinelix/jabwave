@@ -1,8 +1,8 @@
-package dev.tinelix.jabwave.net.base.api.models;
+package dev.tinelix.jabwave.api.base.models;
 
 import java.util.ArrayList;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
+import dev.tinelix.jabwave.api.base.BaseClient;
 
 public class Services {
     protected final BaseClient client;

@@ -1,15 +1,13 @@
-package dev.tinelix.jabwave.net.base.api;
+package dev.tinelix.jabwave.api.base;
 
 import android.content.Context;
 import android.os.Build;
 
 import java.util.HashMap;
 
-import dev.tinelix.jabwave.BuildConfig;
-import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.net.base.api.entities.Authenticator;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.base.api.models.Chats;
+import dev.tinelix.jabwave.api.base.entities.Authenticator;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.models.Chats;
 
 public class BaseClient {
 
@@ -61,8 +59,8 @@ public class BaseClient {
         private String client_version;
         private String os_version;
         public ClientIdentityParams(Context ctx) {
-            client_name = ctx.getResources().getString(R.string.app_name);
-            client_version = BuildConfig.VERSION_NAME;
+            client_name = "Jabwave";
+            client_version = "0.0.1";
             os_version = String.format("Android %s", Build.VERSION.RELEASE);
         }
 

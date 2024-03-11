@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.base.api.listeners;
+package dev.tinelix.jabwave.api.base.listeners;
 
 import java.util.HashMap;
 

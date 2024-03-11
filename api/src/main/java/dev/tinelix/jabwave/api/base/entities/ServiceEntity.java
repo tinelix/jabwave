@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.base.api.entities;
+package dev.tinelix.jabwave.api.base.entities;
 
 public class ServiceEntity {
     public final String title;

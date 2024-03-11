@@ -8,10 +8,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
 
-public class Account extends dev.tinelix.jabwave.net.base.api.entities.Account {
+public class Account extends dev.tinelix.jabwave.api.base.entities.Account {
     private TDLibClient client;
     public String username;
     private String phone_number;

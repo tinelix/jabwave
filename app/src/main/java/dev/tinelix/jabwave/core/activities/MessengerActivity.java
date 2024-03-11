@@ -3,16 +3,10 @@ package dev.tinelix.jabwave.core.activities;
 import android.annotation.SuppressLint;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Looper;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
-
-import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -24,10 +18,10 @@ import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.base.api.attachments.Attachment;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
-import dev.tinelix.jabwave.net.base.api.entities.Message;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.attachments.Attachment;
+import dev.tinelix.jabwave.api.base.entities.Chat;
+import dev.tinelix.jabwave.api.base.entities.Message;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.MessagesAdapter;
 import dev.tinelix.jabwave.ui.views.MessageEditor;

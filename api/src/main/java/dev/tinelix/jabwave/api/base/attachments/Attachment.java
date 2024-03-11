@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.base.api.attachments;
+package dev.tinelix.jabwave.api.base.attachments;
 
 public class Attachment {
     private final int type;

@@ -11,12 +11,12 @@ import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.entities.Account;
-import dev.tinelix.jabwave.net.base.api.entities.Authenticator;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.base.api.models.Chats;
-import dev.tinelix.jabwave.net.base.api.models.Services;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.entities.Account;
+import dev.tinelix.jabwave.api.base.entities.Authenticator;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.models.Chats;
+import dev.tinelix.jabwave.api.base.models.Services;
 
 public class ClientService extends IntentService {
 

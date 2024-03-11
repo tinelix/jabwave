@@ -1,9 +1,9 @@
-package dev.tinelix.jabwave.net.base.api.entities;
+package dev.tinelix.jabwave.api.base.entities;
 
 import java.util.ArrayList;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
 public class Chat {
     // Base Chat Class used in Contacts list (AppActivity)

@@ -34,7 +34,7 @@ import dev.tinelix.jabwave.core.services.TelegramService;
 import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.core.utilities.FragmentNavigator;
-import dev.tinelix.jabwave.net.base.SecureStorage;
+import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
@@ -188,7 +188,7 @@ public class AppActivity extends JabwaveActivity
         TextView profile_name = header.findViewById(R.id.profile_name);
         TextView profile_id = header.findViewById(R.id.screen_name);
         ShapeableImageView profile_photo = header.findViewById(R.id.profile_avatar);
-        dev.tinelix.jabwave.net.base.api.entities.Account account = service.getAccount();
+        dev.tinelix.jabwave.api.base.entities.Account account = service.getAccount();
         if(app.getCurrentNetworkType().equals("telegram")) {
             profile_name.setText(
                     String.format("%s %s", account.first_name, account.last_name)

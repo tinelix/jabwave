@@ -1,14 +1,13 @@
 package dev.tinelix.jabwave.net.telegram;
 
 import com.mediaparkpk.base58android.Base58;
-import com.mediaparkpk.base58android.Base58Exception;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import dev.tinelix.jabwave.BuildConfig;
 
-public class SecureStorage extends dev.tinelix.jabwave.net.base.SecureStorage {
+public class SecureStorage extends dev.tinelix.jabwave.api.base.SecureStorage {
     /**
         <h2>Secure storage for Telegram API Keys</h2>
         See <i><code>getTDAppToken()</code></i> function in <code>build.gradle</code>

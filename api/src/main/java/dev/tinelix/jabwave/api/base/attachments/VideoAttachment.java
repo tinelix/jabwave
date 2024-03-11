@@ -1,7 +1,7 @@
-package dev.tinelix.jabwave.net.base.api.attachments;
+package dev.tinelix.jabwave.api.base.attachments;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
 public class VideoAttachment extends Attachment {
 

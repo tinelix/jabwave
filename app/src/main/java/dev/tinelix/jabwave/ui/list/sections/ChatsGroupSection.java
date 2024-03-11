@@ -20,19 +20,19 @@ import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
-import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
+import dev.tinelix.jabwave.api.base.models.ChatGroup;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 
 public class ChatsGroupSection extends Section {
     private final ChatsAdapter adapter;
     private final Context ctx;
-    private ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> contacts_exp;
-    private final ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> chats;
+    private ArrayList<dev.tinelix.jabwave.api.base.entities.Chat> contacts_exp;
+    private final ArrayList<dev.tinelix.jabwave.api.base.entities.Chat> chats;
     private ChatGroup header;
     private boolean isOpen = true;
 
-    public ChatsGroupSection(Context ctx, ChatGroup header, ArrayList<dev.tinelix.jabwave.net.base.api.entities.Chat> chats, ChatsAdapter adapter) {
+    public ChatsGroupSection(Context ctx, ChatGroup header, ArrayList<dev.tinelix.jabwave.api.base.entities.Chat> chats, ChatsAdapter adapter) {
         super(SectionParameters.builder()
                 .headerResourceId(R.layout.list_item_contacts_group)
                 .itemResourceId(R.layout.list_item_contacts)
@@ -52,7 +52,7 @@ public class ChatsGroupSection extends Section {
 
     private int getOnlineCount() {
         int online_count = 0;
-        for (dev.tinelix.jabwave.net.base.api.entities.Chat chat: chats) {
+        for (dev.tinelix.jabwave.api.base.entities.Chat chat: chats) {
             if(chat.status > 0) {
                 online_count++;
             }
@@ -80,8 +80,8 @@ public class ChatsGroupSection extends Section {
         ((EntityGroupViewHolder) holder).bind();
     }
 
-    public dev.tinelix.jabwave.net.base.api.entities.Chat searchEntityByJid(String jid) {
-        for (dev.tinelix.jabwave.net.base.api.entities.Chat chat: chats) {
+    public dev.tinelix.jabwave.api.base.entities.Chat searchEntityByJid(String jid) {
+        for (dev.tinelix.jabwave.api.base.entities.Chat chat: chats) {
             if(chat.id.equals(jid)) {
                 return chat;
             }
@@ -122,7 +122,7 @@ public class ChatsGroupSection extends Section {
         }
 
         public void bind(int position) {
-            dev.tinelix.jabwave.net.base.api.entities.Chat chat = contacts_exp.get(position);
+            dev.tinelix.jabwave.api.base.entities.Chat chat = contacts_exp.get(position);
             ((TextView) view.findViewById(R.id.contact_name))
                     .setText(chat.title);
             if (chat.status == 0) {
@@ -148,7 +148,7 @@ public class ChatsGroupSection extends Section {
         }
 
         @SuppressLint("UseCompatLoadingForDrawables")
-        private void loadPhotoCache(dev.tinelix.jabwave.net.base.api.entities.Chat chat) {
+        private void loadPhotoCache(dev.tinelix.jabwave.api.base.entities.Chat chat) {
             int placeholder_resid;
             switch (chat.type) {
                 case 3:

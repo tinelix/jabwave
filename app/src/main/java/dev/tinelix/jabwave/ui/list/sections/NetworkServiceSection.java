@@ -2,7 +2,6 @@ package dev.tinelix.jabwave.ui.list.sections;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -10,23 +9,18 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.collection.ArraySet;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.activities.MessengerActivity;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.base.api.entities.ServiceEntity;
-import dev.tinelix.jabwave.net.base.api.models.NetworkService;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
+import dev.tinelix.jabwave.api.base.entities.ServiceEntity;
+import dev.tinelix.jabwave.api.base.models.NetworkService;
 import dev.tinelix.jabwave.ui.list.adapters.NetworkServicesAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;

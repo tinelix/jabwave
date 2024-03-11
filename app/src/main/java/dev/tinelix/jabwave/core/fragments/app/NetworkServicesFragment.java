@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.AppActivity;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
-import dev.tinelix.jabwave.net.base.api.models.NetworkService;
-import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
-import dev.tinelix.jabwave.net.base.api.models.Services;
+import dev.tinelix.jabwave.api.base.entities.Chat;
+import dev.tinelix.jabwave.api.base.models.NetworkService;
+import dev.tinelix.jabwave.api.base.models.ChatGroup;
+import dev.tinelix.jabwave.api.base.models.Services;
 import dev.tinelix.jabwave.ui.list.adapters.NetworkServicesAdapter;
 import dev.tinelix.jabwave.ui.list.sections.NetworkServiceSection;
 

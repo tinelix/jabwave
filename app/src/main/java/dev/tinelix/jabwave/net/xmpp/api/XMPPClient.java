@@ -6,24 +6,20 @@ import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.filter.StanzaFilter;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
-import org.jxmpp.jid.BareJid;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 
 import java.util.HashMap;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientUpdateListener;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
-import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
 import dev.tinelix.jabwave.net.xmpp.api.stanzas.ClientVersionStanza;
 
 public class XMPPClient extends BaseClient {

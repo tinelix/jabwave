@@ -1,10 +1,10 @@
-package dev.tinelix.jabwave.net.base.api.models;
+package dev.tinelix.jabwave.api.base.models;
 
 import java.util.ArrayList;
 
-import dev.tinelix.jabwave.net.base.api.BaseClient;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.entities.Chat;
 
 public class Chats {
     private final BaseClient client;

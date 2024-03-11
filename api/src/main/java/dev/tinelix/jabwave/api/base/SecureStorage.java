@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.base;
+package dev.tinelix.jabwave.api.base;
 
 import com.mediaparkpk.base58android.Base58;
 

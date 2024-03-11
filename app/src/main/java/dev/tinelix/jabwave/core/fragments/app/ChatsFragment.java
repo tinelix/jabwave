@@ -19,11 +19,11 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.AppActivity;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.base.api.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.base.api.models.Chats;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.models.Chats;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
-import dev.tinelix.jabwave.net.base.api.entities.Chat;
-import dev.tinelix.jabwave.net.base.api.models.ChatGroup;
+import dev.tinelix.jabwave.api.base.entities.Chat;
+import dev.tinelix.jabwave.api.base.models.ChatGroup;
 import dev.tinelix.jabwave.ui.list.sections.ChatsGroupSection;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 

@@ -8,7 +8,7 @@ import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
-public class Account extends dev.tinelix.jabwave.net.base.api.entities.Account {
+public class Account extends dev.tinelix.jabwave.api.base.entities.Account {
 
     public Account(XMPPClient client) {
         super(client);
