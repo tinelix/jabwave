@@ -36,8 +36,6 @@ import dev.tinelix.jabwave.core.fragments.auth.AuthCloudPasswordFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
-import dev.tinelix.jabwave.core.services.TelegramService;
-import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
@@ -122,22 +120,16 @@ public class AuthActivity extends AppCompatActivity {
 
     public void signIn(String username, String password) {
         HashMap<String, String> credentials;
-        if(global_prefs.getString("network_type", "").equals("telegram")) {
-            this.username = username;
-            credentials = new SecureStorage().createCredentialsMap(username);
-            service = new TelegramService();
-        } else {
-            String[] username_mask = username.split("@");
-            if (username_mask.length == 2) {
-                this.username = username_mask[0];
-                this.server = username_mask[1];
-            }
-            this.password = password;
-            credentials = new SecureStorage().createCredentialsMap(
-                    this.username, this.server, this.password
-            );
-            service = new XMPPService();
+        String[] username_mask = username.split("@");
+        if (username_mask.length == 2) {
+            this.username = username_mask[0];
+            this.server = username_mask[1];
         }
+        this.password = password;
+        credentials = new SecureStorage().createCredentialsMap(
+                this.username, this.server, this.password
+        );
+        service = new ClientService("undefined");
         service.start(this, clientConnection, credentials);
 
         ft = getSupportFragmentManager().beginTransaction();

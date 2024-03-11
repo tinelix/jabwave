@@ -107,6 +107,22 @@ android {
             buildConfigField "String", "BUILD_VARIANT", "\"combo\""
         }
     }
+
+    sourceSets {
+        tdlib {
+            setRoot('src/tdlib/java')
+        }
+        smack {
+            java {
+                setRoot('src/smack/java')
+            }
+        }
+        combo {
+            java {
+                setRoot('src/combo/java')
+            }
+        }
+    }
 }
 
 dependencies {

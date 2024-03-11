@@ -10,7 +10,6 @@ import org.jxmpp.jid.parts.Resourcepart;
 import java.util.Random;
 
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
 
 public class JabwaveApp extends Application {
     public String version;
@@ -89,33 +88,6 @@ public class JabwaveApp extends Application {
 
     public SharedPreferences getTelegramPreferences() {
         return telegram_prefs;
-    }
-
-    public Resourcepart getXMPPResource() {
-        try {
-            if (getXmppPreferences().contains("jid_resource")) {
-                return Resourcepart.from(
-                        getXmppPreferences().getString("jid_resource", "")
-                );
-            } else {
-                byte[] random_resource_binary = new byte[] {
-                        (byte) new Random().nextInt(255),
-                        (byte) new Random().nextInt(255),
-                        (byte) new Random().nextInt(255),
-                        (byte) new Random().nextInt(255),
-                };
-                String hex4 = Global.bytesToHex(random_resource_binary);
-                String res_name = String.format("TinelixJabwave-%s", hex4);
-                Resourcepart res_part = Authenticator.generateXMPPResource(res_name);
-                SharedPreferences.Editor editor = getXmppPreferences().edit();
-                editor.putString("jid_resource", res_name);
-                editor.apply();
-                return res_part;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return null;
     }
 
     public String getCurrentNetworkType() {

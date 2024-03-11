@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
+import dev.tinelix.jabwave.api.base.entities.Chat;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.api.base.models.ChatGroup;
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
@@ -167,30 +167,6 @@ public class ChatsGroupSection extends Section {
             contact_avatar.setImageDrawable(
                     ContextCompat.getDrawable(ctx, placeholder_resid)
             );
-            if(chat.network_type == 0 && chat instanceof Chat) {
-                Chat contact = ((Chat) chat);
-                if (contact.getVCard() != null && contact.getVCard().getAvatar() != null) {
-                    Glide.with(ctx)
-                            .load(contact.getVCard().getAvatar())
-                            .apply(new RequestOptions()
-                                    .override(400, 400)
-                                    .placeholder(placeholder_resid)
-                                    .error(placeholder_resid)
-                            )
-                            .into(contact_avatar);
-                }
-            } else {
-                if(chat.photo != null) {
-                    Glide.with(ctx)
-                            .load(chat.photo)
-                            .apply(new RequestOptions()
-                                    .override(400, 400)
-                                    .placeholder(placeholder_resid)
-                                    .error(placeholder_resid)
-                            )
-                            .into(contact_avatar);
-                }
-            }
         }
     }
 
