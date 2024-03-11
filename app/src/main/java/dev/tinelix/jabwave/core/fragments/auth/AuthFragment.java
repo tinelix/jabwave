@@ -37,6 +37,9 @@ public class AuthFragment extends Fragment {
         Button sign_in_btn = view.findViewById(R.id.sign_in_btn);
         TextInputEditText username_edit = view.findViewById(R.id.username_edit);
         TextInputEditText password_edit = view.findViewById(R.id.password_edit);
+        global_prefs = PreferenceManager.getDefaultSharedPreferences(
+                Objects.requireNonNull(getContext()).getApplicationContext()
+        );
         sign_in_btn.setOnClickListener(view -> {
             if (getActivity() != null) {
                 if (getActivity() instanceof AuthActivity) {
@@ -49,9 +52,6 @@ public class AuthFragment extends Fragment {
         });
         ((LinearLayoutCompat) view.findViewById(R.id.auth_layout)).setGravity(Gravity.CENTER);
         createNetworksAdapter();
-        global_prefs = PreferenceManager.getDefaultSharedPreferences(
-                Objects.requireNonNull(getContext()).getApplicationContext()
-        );
         return view;
     }
 
@@ -70,6 +70,8 @@ public class AuthFragment extends Fragment {
                 }
         );
         network_spinner.setAdapter(adapter);
+        network_spinner.setSelection(0);
+        setAuthNetwork(0);
     }
 
     private void setAuthNetwork(int position) {
