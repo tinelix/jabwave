@@ -110,6 +110,22 @@ android {
 }
 
 dependencies {
+    // Combo build-specified dependencies
+    comboImplementation project(path: ':tdlib')
+    comboImplementation project(path: ':tdlib-wrap')
+    comboImplementation 'org.jxmpp:jxmpp-jid:1.0.3'
+    comboImplementation "org.igniterealtime.smack:smack-tcp:4.4.0"
+    comboImplementation "org.igniterealtime.smack:smack-im:4.4.0"
+
+    // Smack build-specified dependencies
+    smackImplementation 'org.jxmpp:jxmpp-jid:1.0.3'
+    smackImplementation "org.igniterealtime.smack:smack-tcp:4.4.0"
+    smackImplementation "org.igniterealtime.smack:smack-im:4.4.0"
+
+    // TDLib build-specified dependencies
+    tdlibImplementation project(path: ':tdlib')
+    tdlibImplementation project(path: ':tdlib-wrap')
+
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -118,13 +134,9 @@ dependencies {
     implementation ("org.igniterealtime.smack:smack-android-extensions:4.4.0") {
         exclude module: 'xpp3'
     }
-    implementation 'org.jxmpp:jxmpp-jid:1.0.3'
-    implementation "org.igniterealtime.smack:smack-tcp:4.4.0"
-    implementation "org.igniterealtime.smack:smack-im:4.4.0"
     implementation 'com.github.bumptech.glide:glide:4.12.0'
-    implementation project(path: ':tdlib')
     implementation project(path: ':api')
-    implementation project(path: ':tdlib-wrap')
+
     annotationProcessor ('com.github.bumptech.glide:compiler:4.12.0')
     implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v3.2.0'
     implementation "androidx.emoji2:emoji2:1.4.0"
