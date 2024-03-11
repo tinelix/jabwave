@@ -125,7 +125,7 @@ public class NetworkServiceSection extends Section {
             } else {
                 contact_status.setVisibility(View.GONE);
             }
-            int placeholder_resid = switch (net_service.type) {
+            int placeholder_resid = switch (entity.type) {
                 case 2 -> R.drawable.ic_campaign_accent;
                 case 1 -> R.drawable.ic_group_accent;
                 default -> R.drawable.ic_misc_services_accent;
