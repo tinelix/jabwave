@@ -1,0 +1,353 @@
+package dev.tinelix.jabwave.core.services;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.util.Log;
+
+import org.drinkless.td.libcore.telegram.TdApi;
+
+import java.util.HashMap;
+
+import androidx.annotation.NonNull;
+import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
+import dev.tinelix.jabwave.api.tdlwrap.entities.Account;
+import dev.tinelix.jabwave.api.tdlwrap.entities.Authenticator;
+import dev.tinelix.jabwave.api.tdlwrap.entities.Chat;
+import dev.tinelix.jabwave.api.tdlwrap.models.Chats;
+import dev.tinelix.jabwave.api.tdlwrap.models.Services;
+import dev.tinelix.jabwave.api.base.SecureStorage;
+import dev.tinelix.jabwave.ui.enums.HandlerMessages;
+
+/**
+ * <b>Telegram (TDLib) client service</b>. Based on ClientService class.
+ */
+
+public class TelegramService extends ClientService implements TDLibClient.ApiHandler, TDLibClient.ClientHandler {
+
+    private static final String ACTION_START = "start_service";
+    private static final String ACTION_SEND_CLIENT_CMD = "sendClientCmd";
+    private static final String ACTION_STOP = "stop_service";
+
+    private static final String PHONE_NUMBER = "phone_number";
+    private Context ctx;
+
+    private String status = "done";
+
+    private Intent intent;
+
+    private String phone_number;
+    private boolean isConnected;
+
+    public TelegramService() {
+        super(JabwaveApp.TELEGRAM_SERV_TAG);
+    }
+
+    @Override
+    public void start(@NonNull Context ctx, ServiceConnection connection, HashMap<String, String> map) {
+        this.ctx = ctx;
+        phone_number = map.get("username");
+        if(status.equals("done") || isConnected()) {
+            intent = new Intent(ctx, TelegramService.class);
+            intent.setAction(ACTION_START);
+            intent.putExtra(PHONE_NUMBER, phone_number);
+            ctx.startService(intent);
+            Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Service started.");
+            ctx.bindService(intent, connection, BIND_AUTO_CREATE);
+        } else {
+            Log.w(JabwaveApp.TELEGRAM_SERV_TAG, "Service already started.");
+        }
+    }
+
+    public void stop(Context context) {
+        ctx = context;
+        if(intent == null) {
+            intent = new Intent(context, getClass());
+        }
+        intent.setAction(ACTION_STOP);
+        stopService(intent);
+    }
+
+    public void stop(Context context, Intent intent) {
+        ctx = context;
+        if(intent == null) {
+            intent = new Intent(context, getClass());
+        }
+        intent.setAction(ACTION_STOP);
+        stopService(intent);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        if (intent != null) {
+            final String action = intent.getAction();
+            final String phone_number = intent.getStringExtra(PHONE_NUMBER);
+            authType = 1;
+            if(action.equals("ACTION_RUN_FUNCTION")) {
+                if(client != null)
+                    runClientFunction(
+                            intent.getIntExtra("function_constructor", 0),
+                            intent.getBundleExtra("function_parameters")
+                    );
+            } else {
+                handleAction(action, phone_number);
+            }
+        }
+    }
+
+    private void handleAction(String action, String phone_number) {
+        switch (action) {
+            case ACTION_START:
+                Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Preparing...");
+                status = "preparing";
+                try {
+                    this.phone_number = phone_number;
+                    BaseClient.ClientIdentityParams params = new BaseClient.ClientIdentityParams();
+                    SecureStorage storage = new SecureStorage();
+                    client = new TDLibClient(
+                            getApplicationContext(), this, this, storage, params
+                    );
+                    isConnected = true;
+                    auth = new Authenticator((TDLibClient) client);
+                    ((Authenticator) auth).checkAuthState();
+                    if(!((Authenticator) auth).isAuthorized())
+                        ((Authenticator) auth).checkPhoneNumber(phone_number);
+                    services = new Services(client);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case ACTION_STOP:
+                try {
+                    status = "done";
+                    sendMessageToActivity(status);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+        }
+    }
+
+    private void runClientFunction(int constructor, Bundle params) {
+        TdApi.Function function = ((TDLibClient) client).createFunction(constructor, params);
+        client.send(function, new OnClientAPIResultListener() {
+            @Override
+            public boolean onSuccess(HashMap<String, Object> map) {
+                return false;
+            }
+
+            @Override
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                return false;
+            }
+        });
+    }
+
+    private void sendMessageToActivity(String status) {
+        Intent intent = new Intent();
+        switch (status) {
+            case "required_phone_number":
+                intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
+                break;
+            case "error":
+                intent.putExtra("msg", HandlerMessages.NO_INTERNET_CONNECTION);
+                break;
+            case "required_auth_code":
+                intent.putExtra("msg", HandlerMessages.REQUIRED_AUTH_CODE);
+                break;
+            case "required_cloud_password":
+                intent.putExtra("msg", HandlerMessages.REQUIRED_CLOUD_PASSWORD);
+                break;
+            case "authorized":
+                intent.putExtra("msg", HandlerMessages.AUTHORIZED);
+                break;
+            case "account_loaded":
+                intent.putExtra("msg", HandlerMessages.ACCOUNT_LOADED);
+                break;
+            case "update_chat_status":
+                intent.putExtra("msg", HandlerMessages.CHATS_UPDATED);
+                break;
+            case "done":
+                intent.putExtra("msg", HandlerMessages.DONE);
+                break;
+            default:
+                intent.putExtra("msg", HandlerMessages.UNKNOWN_ERROR);
+                break;
+        }
+        intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
+        sendBroadcast(intent);
+    }
+
+    private void sendMessageToActivity(String status, Bundle data) {
+        Intent intent = new Intent();
+        switch (status) {
+            case "required_auth_code":
+                intent.putExtra("msg", HandlerMessages.REQUIRED_AUTH_CODE);
+                break;
+            case "required_cloud_password":
+                intent.putExtra("msg", HandlerMessages.REQUIRED_CLOUD_PASSWORD);
+                break;
+            case "auth_error":
+                intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
+                break;
+            case "update_file":
+                intent.putExtra("msg", HandlerMessages.FILES_UPDATED);
+                break;
+            case "presence_changed":
+                intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
+                break;
+        }
+        intent.putExtra("data", data);
+        intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
+        sendBroadcast(intent);
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void stopService() {
+        if(isConnected()) {
+            ((TDLibClient) client).destroy();
+            stopSelf();
+        }
+    }
+
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    @SuppressLint("SwitchIntDef")
+    @Override
+    public void onSuccess(TdApi.Function function, TdApi.Object object) {
+        Log.d("TelegramApi", String.format("Ok?_%s", function.getClass().getSimpleName()));
+        if(object instanceof TdApi.Ok) {
+            if(function.getConstructor() == TdApi.SetAuthenticationPhoneNumber.CONSTRUCTOR
+                || function.getConstructor() == TdApi.CheckAuthenticationCode.CONSTRUCTOR
+                || function.getConstructor() == TdApi.CheckAuthenticationPassword.CONSTRUCTOR) {
+                ((Authenticator) auth).checkAuthState();
+                sendMessageToActivity(status);
+            }
+        }
+    }
+
+    @Override
+    public void onFail(TdApi.Function function, Throwable throwable) {
+        throwable.printStackTrace();
+        if(throwable instanceof TDLibClient.Error) {
+            status = ((TDLibClient.Error) throwable).getTag();
+        }
+        Bundle data = new Bundle();
+        data.getInt("function", function.getConstructor());
+        sendMessageToActivity(status, data);
+    }
+
+    @SuppressLint("SwitchIntDef")
+    @Override
+    public void onUpdate(TdApi.Object object) {
+        //Log.d(JabwaveApp.APP_TAG, String.format("Updating data to %s...", object.getClass().getSimpleName()));
+        if(object instanceof TdApi.UpdateAuthorizationState) {
+            TdApi.AuthorizationState state =
+                    ((TdApi.UpdateAuthorizationState) object).authorizationState;
+            Log.d(JabwaveApp.APP_TAG, String.format("Updating authorization state to %s...", state.getClass().getSimpleName()));
+            switch (state.getConstructor()) {
+                case TdApi.AuthorizationStateWaitPhoneNumber.CONSTRUCTOR:
+                    status = "auth_error";
+                    break;
+                case TdApi.AuthorizationStateWaitCode.CONSTRUCTOR:
+                    status = "required_auth_code";
+                    break;
+                case TdApi.AuthorizationStateWaitPassword.CONSTRUCTOR:
+                    status = "required_cloud_password";
+                    break;
+                case TdApi.AuthorizationStateReady.CONSTRUCTOR:
+                    ((Authenticator) auth).setAuthState(state);
+                    status = "authorized";
+                    break;
+                default:
+                    break;
+            }
+            sendMessageToActivity(status);
+        } else if(object instanceof TdApi.UpdateUserStatus) {
+            TdApi.UpdateUserStatus userStatus = ((TdApi.UpdateUserStatus) object);
+            Chat chat = null;
+            switch(userStatus.status.getConstructor()) {
+                case TdApi.UserStatusOnline.CONSTRUCTOR:
+                    chat = (Chat) getChats().getChatById(userStatus.userId);
+                    if(chat != null)
+                        chat.status = 1;
+                    break;
+                case TdApi.UserStatusOffline.CONSTRUCTOR:
+                    chat = (Chat) getChats().getChatById(userStatus.userId);
+                    if(chat != null)
+                        chat.status = 0;
+                    break;
+            }
+            if(chat != null) {
+                if (getChats().getChatIndex(chat) >= 0) {
+                    getChats().chats.set(getChats().getChatIndex(chat), chat);
+                    status = "update_chat_status";
+                    sendMessageToActivity(status);
+                }
+            }
+        } else if(object instanceof TdApi.UpdateFile) {
+            TdApi.UpdateFile updateFile = ((TdApi.UpdateFile) object);
+            Bundle data = new Bundle();
+            data.putInt("file_id", updateFile.file.id);
+            data.putLong("updateSize", updateFile.file.local.downloadedSize);
+            data.putLong("fullSize", updateFile.file.size);
+            data.putBoolean("updateComplete", updateFile.file.local.isDownloadingCompleted
+                    || updateFile.file.remote.isUploadingCompleted);
+            data.putBoolean("isUpload", updateFile.file.remote.isUploadingActive
+                    || updateFile.file.remote.isUploadingCompleted);
+            Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                    String.format(
+                            "Downloading file #%s: %s/%s KB...",
+                            updateFile.file.id,
+                            updateFile.file.local.downloadedSize / 1024,
+                            updateFile.file.size / 1024
+                    )
+            );
+            status = "update_file";
+            sendMessageToActivity(status, data);
+        }
+    }
+
+    @Override
+    public Chats getChats() {
+        if(chats == null) {
+            chats = new Chats(((TDLibClient) client));
+        }
+        return (Chats) chats;
+    }
+
+    @Override
+    public dev.tinelix.jabwave.api.base.entities.Account createAccount() {
+        account = new Account(((TDLibClient) client),
+                new OnClientAPIResultListener() {
+                    @Override
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        sendMessageToActivity("account_loaded");
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
+                    }
+                }
+        );
+        return account;
+    }
+
+    @Override
+    public int getAuthType() {
+        return authType;
+    }
+}
