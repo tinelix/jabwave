@@ -31,13 +31,22 @@ public class NetworkService extends dev.tinelix.jabwave.api.base.models.NetworkS
             List<DiscoverItems.Item> items =
                     sdm.discoverItems(JidCreate.bareFrom((String) id)).getItems();
             for (DiscoverItems.Item item: items) {
+                int type = 0;
                 if(entities.size() < 200) {
                     DiscoverInfo info = sdm.discoverInfo(item.getEntityID());
                     String title = "No name";
                     if (info.getIdentities().size() > 0) {
                         title = info.getIdentities().get(0).getName();
                     }
-                    ServiceEntity entity = new ServiceEntity(item.getEntityID().toString(), title);
+                    for(DiscoverInfo.Feature feat : info.getFeatures()) {
+                        if (feat.getVar().equals("http://jabber.org/protocol/muc")) {
+                            type = 1;
+                            break;
+                        } else if(feat.getVar().equals("http://jabber.org/protocol/pubsub")) {
+                            type = 2;
+                        }
+                    }
+                    ServiceEntity entity = new ServiceEntity(item.getEntityID().toString(), type, title);
                     entities.add(entity);
                 } else {
                     break;

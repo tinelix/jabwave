@@ -125,7 +125,18 @@ public class NetworkServiceSection extends Section {
             } else {
                 contact_status.setVisibility(View.GONE);
             }
-            int placeholder_resid = R.drawable.ic_group_accent;
+            int placeholder_resid;
+            switch (service.type) {
+                case 2:
+                    placeholder_resid = R.drawable.ic_campaign_accent;
+                    break;
+                case 1:
+                    placeholder_resid = R.drawable.ic_group_accent;
+                    break;
+                default:
+                    placeholder_resid = R.drawable.ic_misc_services_accent;
+                    break;
+            }
             contact_avatar.setImageDrawable(
                     ContextCompat.getDrawable(ctx, placeholder_resid)
             );
