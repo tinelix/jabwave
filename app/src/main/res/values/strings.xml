@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Jabwave</string>
 
     <!-- About Application Activity !-->
-    <string name="about_app_version">Version %1$s\r\nCommit: %2$s</string>
+    <string name="about_app_version">Version %1$s\nCommit: %2$s</string>
     <string name="source_code">Исходный код</string>
     <string name="about_app_license"><![CDATA[
         This program is free software: you may redistribute and/or modify it under the terms

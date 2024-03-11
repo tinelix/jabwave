@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- About Application Activity !-->
-    <string name="about_app_version">Версия %1$s\r\nКоммит: %2$s</string>
+    <string name="about_app_version">Версия %1$s\nКоммит: %2$s</string>
     <string name="about_app_license"><![CDATA[
         Эта программа является свободным программным обеспечением: вы можете распространять и/или
         изменять его в соответствии с условиями лицензии
