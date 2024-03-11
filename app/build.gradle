@@ -112,14 +112,17 @@ android {
         tdlib {
             java.srcDirs = ['src/tdlib/java']
             res.srcDirs = ['src/tdlib/res']
+            manifest.srcFile 'src/tdlib/AndroidManifest.xml'
         }
         smack {
             java.srcDirs = ['src/smack/java']
             res.srcDirs = ['src/smack/res']
+            manifest.srcFile 'src/smack/AndroidManifest.xml'
         }
         combo {
             java.srcDirs = ['src/combo/java']
             res.srcDirs = ['src/combo/res']
+            manifest.srcFile 'src/combo/AndroidManifest.xml'
         }
     }
 }

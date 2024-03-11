@@ -30,6 +30,8 @@ import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.fragments.app.ChatsFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
+import dev.tinelix.jabwave.core.services.TelegramService;
+import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.core.utilities.FragmentNavigator;
 import dev.tinelix.jabwave.api.base.SecureStorage;
@@ -115,17 +117,25 @@ public class AppActivity extends JabwaveActivity
 
     private void connect() {
         HashMap<String, String> credentials;
-        try {
-            String server = app.getXmppPreferences().getString("server", "");
-            String username = app.getXmppPreferences().getString("username", "");
-            String password = new String(Base58.decode(
-                    app.getXmppPreferences().getString("password_hash", "")
-            ), StandardCharsets.UTF_8);
-            credentials = new SecureStorage().createCredentialsMap(server, username, password);
-            service = new ClientService("base");
-            service.start(this, clientConnection, credentials);
-        } catch (Base58Exception e) {
-            e.printStackTrace();
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            credentials = new SecureStorage().createCredentialsMap(
+                    app.getTelegramPreferences().getString("phone_number", "")
+            );
+            service = new TelegramService();
+            ((TelegramService) service).start(this, clientConnection, credentials);
+        } else {
+            try {
+                String server = app.getXmppPreferences().getString("server", "");
+                String username = app.getXmppPreferences().getString("username", "");
+                String password = new String(Base58.decode(
+                        app.getXmppPreferences().getString("password_hash", "")
+                ), StandardCharsets.UTF_8);
+                credentials = new SecureStorage().createCredentialsMap(server, username, password);
+                service = new XMPPService();
+                ((XMPPService) service).start(this, clientConnection, credentials);
+            } catch (Base58Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }

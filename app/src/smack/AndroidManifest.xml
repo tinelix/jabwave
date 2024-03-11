@@ -29,6 +29,14 @@
             </intent-filter>
         </receiver>
 
+        <service
+            android:name=".core.services.XMPPService"
+            android:exported="false" />
+
+        <service
+            android:name=".core.services.TelegramService"
+            android:exported="false" />
+
         <activity
             android:name=".core.activities.MainActivity"
             android:exported="true"

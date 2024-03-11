@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import dev.tinelix.jabwave.core.activities.base.AppActivity;
-import dev.tinelix.jabwave.core.activities.base.AuthActivity;
+import dev.tinelix.jabwave.core.activities.AppActivity;
+import dev.tinelix.jabwave.core.activities.AuthActivity;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
 
 public class JabwaveReceiver extends BroadcastReceiver {
