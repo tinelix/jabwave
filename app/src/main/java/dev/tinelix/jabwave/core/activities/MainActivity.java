@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.core.activities.base.AppActivity;
+import dev.tinelix.jabwave.core.activities.base.AuthActivity;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 
 public class MainActivity extends JabwaveActivity {

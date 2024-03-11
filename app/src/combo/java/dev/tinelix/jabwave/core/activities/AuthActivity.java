@@ -129,7 +129,7 @@ public class AuthActivity extends AppCompatActivity {
         credentials = new SecureStorage().createCredentialsMap(
                 this.username, this.server, this.password
         );
-        service = new ClientService("undefined");
+        service = new ClientService("base");
         service.start(this, clientConnection, credentials);
 
         ft = getSupportFragmentManager().beginTransaction();
@@ -234,10 +234,8 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         unregisterBroadcastReceiver();
-        if(service != null) {
-            if (service.isConnected()) {
-                service.stopSelf();
-            }
+        if(service.isConnected()) {
+            service.stopSelf();
         }
         super.onDestroy();
     }

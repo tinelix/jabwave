@@ -10,7 +10,7 @@ import com.google.android.material.button.MaterialButton;
 
 import androidx.fragment.app.Fragment;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.activities.AuthActivity;
+import dev.tinelix.jabwave.core.activities.base.AuthActivity;
 
 public class AuthTwoFactorFragment extends Fragment {
     @Override

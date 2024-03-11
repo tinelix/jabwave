@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.activities.AuthActivity;
+import dev.tinelix.jabwave.core.activities.base.AuthActivity;
 import dev.tinelix.jabwave.ui.list.adapters.SimpleSpinnerAdapter;
 import dev.tinelix.jabwave.ui.list.items.SimpleListItem;
 

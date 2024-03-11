@@ -122,7 +122,7 @@ public class AppActivity extends JabwaveActivity
                     app.getXmppPreferences().getString("password_hash", "")
             ), StandardCharsets.UTF_8);
             credentials = new SecureStorage().createCredentialsMap(server, username, password);
-            service = new ClientService("undefined");
+            service = new ClientService("base");
             service.start(this, clientConnection, credentials);
         } catch (Base58Exception e) {
             e.printStackTrace();

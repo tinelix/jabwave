@@ -2,16 +2,11 @@ package dev.tinelix.jabwave.core.activities.base;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.view.MenuItem;
-
-import com.google.android.material.navigation.NavigationView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.activities.AppActivity;
 
 public class JabwaveActivity extends AppCompatActivity {
     @Override
