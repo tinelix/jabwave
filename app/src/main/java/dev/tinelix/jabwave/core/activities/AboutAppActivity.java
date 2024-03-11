@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import dev.tinelix.jabwave.BuildConfig;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
+import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
 
 public class AboutAppActivity extends JabwaveActivity {
     @Override
@@ -20,7 +21,9 @@ public class AboutAppActivity extends JabwaveActivity {
     }
 
     private void setActionBar() {
-
+        JabwaveActionBar actionbar = findViewById(R.id.actionbar);
+        actionbar.setNavigationIconTint(R.color.white);
+        setSupportActionBar(actionbar);
     }
 
     private void loadAppInfo() {
