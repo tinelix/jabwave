@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.api.base.entities;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class ServiceEntity {
     public final String title;
     public final Object id;
