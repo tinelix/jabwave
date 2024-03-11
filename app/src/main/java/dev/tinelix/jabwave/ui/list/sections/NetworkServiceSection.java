@@ -171,8 +171,10 @@ public class NetworkServiceSection extends Section {
             isOpen = !isOpen;
             if(!isOpen) {
                 entities.clear();
+                view.findViewById(R.id.divider).setVisibility(View.GONE);
             } else {
                 if(net_service.getEntities().size() > 0) {
+                    view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
                     entities.addAll(net_service.getEntities());
                     adapter.notifyDataSetChanged();
                 } else {
