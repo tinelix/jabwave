@@ -70,7 +70,6 @@ public class AuthFragment extends Fragment {
                 }
         );
         network_spinner.setAdapter(adapter);
-        network_spinner.setSelection(1);
     }
 
     private void setAuthNetwork(int position) {

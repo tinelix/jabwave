@@ -110,17 +110,16 @@ android {
 
     sourceSets {
         tdlib {
-            setRoot('src/tdlib/java')
+            java.srcDirs = ['src/tdlib/java']
+            res.srcDirs = ['src/tdlib/res']
         }
         smack {
-            java {
-                setRoot('src/smack/java')
-            }
+            java.srcDirs = ['src/smack/java']
+            res.srcDirs = ['src/smack/res']
         }
         combo {
-            java {
-                setRoot('src/combo/java')
-            }
+            java.srcDirs = ['src/combo/java']
+            res.srcDirs = ['src/combo/res']
         }
     }
 }
