@@ -1,10 +1,10 @@
 package org.drinkless.td.libcore.telegram;
 
-import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.Nullable;
 
 /**
  * This class contains as static nested classes all other TDLib interface
@@ -875,7 +875,8 @@ public class TdApi {
         /**
          * The thumbnail of the album cover in JPEG format; as defined by the sender. The full size thumbnail is supposed to be extracted from the downloaded file; may be null.
          */
-        @Nullable public Thumbnail albumCoverThumbnail;
+        @Nullable
+        public Thumbnail albumCoverThumbnail;
         /**
          * File containing the audio.
          */
