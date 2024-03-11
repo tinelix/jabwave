@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.telegram.api.models;
+package dev.tinelix.jabwave.api.tdlwrap.models;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -11,11 +11,8 @@ import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.api.base.entities.ChatSender;
-import dev.tinelix.jabwave.api.base.entities.Message;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
 import dev.tinelix.jabwave.api.base.entities.Chat;
 
 public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
@@ -32,7 +29,7 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
     }
 
     @Override
-    public void loadChats(OnClientAPIResultListener listener) {
+    public void loadChats(final OnClientAPIResultListener listener) {
         client.send(new TdApi.GetChats(new TdApi.ChatListMain(), CHATS_MAX_LIMIT),
                 new OnClientAPIResultListener() {
                     @Override
@@ -89,8 +86,8 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
                             chat_type = 0;
                             break;
                     }
-                    dev.tinelix.jabwave.net.telegram.api.entities.Chat chat =
-                            new dev.tinelix.jabwave.net.telegram.api.entities.Chat(
+                    dev.tinelix.jabwave.api.tdlwrap.entities.Chat chat =
+                            new dev.tinelix.jabwave.api.tdlwrap.entities.Chat(
                                     id, chat_type, td_chat.title, new ArrayList<>(), 0
                             );
                     Chats.this.chats.add(chat);
@@ -112,7 +109,7 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Log.d(JabwaveApp.TELEGRAM_SERV_TAG, String.format("%s chats loaded.", this.chats.size()));
+        Log.d(TDLibClient.TELEGRAM_SERV_TAG, String.format("%s chats loaded.", this.chats.size()));
     }
 
     @Override
@@ -122,7 +119,7 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
                 return chat;
             }
         }
-        Log.e(JabwaveApp.TELEGRAM_SERV_TAG,
+        Log.e(TDLibClient.TELEGRAM_SERV_TAG,
                 String.format("Chat not found with ID #%s.", id));
         return null;
     }
@@ -159,8 +156,8 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
                                 break;
                         }
                         long id = td_chat.id;
-                        dev.tinelix.jabwave.net.telegram.api.entities.Chat chat =
-                                new dev.tinelix.jabwave.net.telegram.api.entities.Chat(
+                        dev.tinelix.jabwave.api.tdlwrap.entities.Chat chat =
+                                new dev.tinelix.jabwave.api.tdlwrap.entities.Chat(
                                         id, chat_type, td_chat.title, new ArrayList<>(), 0
                                 );
                         map.put("chat", chat);

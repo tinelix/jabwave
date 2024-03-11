@@ -71,13 +71,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
-            buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
         }
 
         debug {
-            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
-            buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
+
         }
     }
     compileOptions {
@@ -86,6 +83,29 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+    flavorDimensions 'version'
+    productFlavors {
+        tdlib {
+            dimension 'version'
+            versionNameSuffix '.tdlib'
+            applicationId 'dev.tinelix.jabwave.td'
+            buildConfigField "String", "BUILD_VARIANT", "tdlib"
+            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
+            buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
+        }
+        smack {
+            dimension 'version'
+            versionNameSuffix '.smack'
+            applicationId 'dev.tinelix.jabwave.sm'
+            buildConfigField "String", "BUILD_VARIANT", "smack"
+        }
+        combo {
+            dimension 'version'
+            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
+            buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
+            buildConfigField "String", "BUILD_VARIANT", "\"combo\""
+        }
     }
 }
 
@@ -104,6 +124,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation project(path: ':tdlib')
     implementation project(path: ':api')
+    implementation project(path: ':tdlib-wrap')
     annotationProcessor ('com.github.bumptech.glide:compiler:4.12.0')
     implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v3.2.0'
     implementation "androidx.emoji2:emoji2:1.4.0"

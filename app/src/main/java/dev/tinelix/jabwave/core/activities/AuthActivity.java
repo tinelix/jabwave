@@ -40,7 +40,6 @@ import dev.tinelix.jabwave.core.services.TelegramService;
 import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.SecureStorage;
-import dev.tinelix.jabwave.api.base.entities.Authenticator;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.views.base.XConstraintLayout;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
@@ -148,7 +147,7 @@ public class AuthActivity extends AppCompatActivity {
 
     public void signIn(String signin_code) {
         if(global_prefs.getString("network_type", "").equals("telegram")) {
-            ((dev.tinelix.jabwave.net.telegram.api.entities.Authenticator) service.getAuthenticator())
+            ((dev.tinelix.jabwave.api.tdlwrap.entities.Authenticator) service.getAuthenticator())
                     .sendAuthCode(signin_code);
         }
         ft = getSupportFragmentManager().beginTransaction();
@@ -158,7 +157,7 @@ public class AuthActivity extends AppCompatActivity {
 
     public void sendCloudPassword(String password) {
         if(global_prefs.getString("network_type", "").equals("telegram")) {
-            ((dev.tinelix.jabwave.net.telegram.api.entities.Authenticator) service.getAuthenticator())
+            ((dev.tinelix.jabwave.api.tdlwrap.entities.Authenticator) service.getAuthenticator())
                     .sendCloudPassword(password);
         }
         ft = getSupportFragmentManager().beginTransaction();

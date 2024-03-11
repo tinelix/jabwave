@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.telegram.api.entities;
+package dev.tinelix.jabwave.api.tdlwrap.entities;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 

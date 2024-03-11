@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.telegram.api.models;
+package dev.tinelix.jabwave.api.tdlwrap.models;
 
 import java.util.ArrayList;
 

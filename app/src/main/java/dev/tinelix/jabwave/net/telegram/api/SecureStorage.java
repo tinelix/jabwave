@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.telegram;
+package dev.tinelix.jabwave.net.telegram.api;
 
 import com.mediaparkpk.base58android.Base58;
 
@@ -26,19 +26,22 @@ public class SecureStorage extends dev.tinelix.jabwave.api.base.SecureStorage {
 
     @Override
     public HashMap<String, Object> loadAppToken() {
-        try {
-            String decoded_token = new String(
-                    Base58.decode(BuildConfig.TDLIB_APP_TOKEN), StandardCharsets.UTF_8
-            );
-            // кек, этот реджекс похож на логотип вкусно и точка
-            app_id = decoded_token.split("\\.")[0];
-            app_key = decoded_token.split("\\.")[1];
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("app_id", Integer.parseInt(app_id));
-            map.put("app_hash", app_key);
-            return map;
-        } catch (Exception e) {
-            e.printStackTrace();
+        String build_var = BuildConfig.BUILD_VARIANT;
+        if(build_var.equals("combo") || build_var.equals("tdlib")) {
+            try {
+                String decoded_token = new String(
+                        Base58.decode(BuildConfig.TDLIB_APP_TOKEN), StandardCharsets.UTF_8
+                );
+                // кек, этот реджекс похож на логотип вкусно и точка
+                app_id = decoded_token.split("\\.")[0];
+                app_key = decoded_token.split("\\.")[1];
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("app_id", Integer.parseInt(app_id));
+                map.put("app_hash", app_key);
+                return map;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

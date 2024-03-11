@@ -18,3 +18,4 @@ rootProject.name = "Jabwave"
 include ':app'
 include ':tdlib'
 include ':api'
+include ':tdlib-wrap'

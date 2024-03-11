@@ -51,9 +51,37 @@ public class XMPPClient extends BaseClient {
                             true
                     );
             conn = new XMPPTCPConnection(config);
+            conn.connect();
+            conn.login(jid, password, Authenticator.generateXMPPResource());
+            Presence presence = conn
+                    .getStanzaFactory()
+                    .buildPresenceStanza()
+                    .setMode(Presence.Mode.available)
+                    .ofType(Presence.Type.available)
+                    .build();
+            sendStanza(presence);
+            entitiyBareJid = JidCreate.entityBareFrom(String.format("%s@%s", jid, server));
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFail(new HashMap<>(), e);
+        }
+    }
+
+    public void start(String server, String jid, String password, ClientIdentityParams params) {
+        this.server = server;
+        this.jid = jid;
+        SmackConfiguration.DEBUG = true;
+        try {
+            XMPPTCPConnectionConfiguration config =
+                    Authenticator.buildAuthConfig(
+                            server,
+                            jid,
+                            password,
+                            true
+                    );
+            conn = new XMPPTCPConnection(config);
             conn.addStanzaListener(packet -> {
                 try {
-                    ClientIdentityParams params = new ClientIdentityParams(ctx);
                     HashMap<String, String> map = params.getClientIdentity();
                     ClientVersionStanza stanza = new ClientVersionStanza(packet.getFrom().toString());
                     stanza.setClientInfo(

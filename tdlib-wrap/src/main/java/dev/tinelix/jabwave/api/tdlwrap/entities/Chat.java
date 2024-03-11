@@ -1,9 +1,8 @@
-package dev.tinelix.jabwave.net.telegram.api.entities;
+package dev.tinelix.jabwave.api.tdlwrap.entities;
 
 import android.annotation.SuppressLint;
 
 import org.drinkless.td.libcore.telegram.TdApi;
-import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -20,15 +19,14 @@ import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.attachments.Attachment;
 import dev.tinelix.jabwave.api.base.entities.Message;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.telegram.api.attachments.PhotoAttachment;
-import dev.tinelix.jabwave.net.telegram.api.attachments.VideoAttachment;
+import dev.tinelix.jabwave.api.tdlwrap.attachments.PhotoAttachment;
+import dev.tinelix.jabwave.api.tdlwrap.attachments.VideoAttachment;
 
 public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
     // Contact Class used in Contacts list (AppActivity)
     public String title;
     public long id;
     public ArrayList<String> groups;
-    private VCard vCard;
 
     public Chat(String title) {
         super(title, 1);

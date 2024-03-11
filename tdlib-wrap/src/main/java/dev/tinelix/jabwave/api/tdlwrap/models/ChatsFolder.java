@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.telegram.api.models;
+package dev.tinelix.jabwave.api.tdlwrap.models;
 
 import dev.tinelix.jabwave.api.base.models.ChatGroup;
 

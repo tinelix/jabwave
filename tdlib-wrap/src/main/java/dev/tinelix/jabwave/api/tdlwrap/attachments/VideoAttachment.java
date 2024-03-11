@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.telegram.api.attachments;
+package dev.tinelix.jabwave.api.tdlwrap.attachments;
 
 import android.util.Log;
 
@@ -7,9 +7,9 @@ import org.drinkless.td.libcore.telegram.TdApi;
 import java.io.FileInputStream;
 import java.util.HashMap;
 
-import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
 
 public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.VideoAttachment {
     private TdApi.Video video;
@@ -43,11 +43,11 @@ public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.Vi
                                     if (file.local.isDownloadingCompleted) {
                                         VideoAttachment.this.local_path = file.local.path;
                                         state = 1;
-                                        Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                                        Log.d(TDLibClient.TELEGRAM_SERV_TAG,
                                                 String.format("Downloaded file #%s.", file.id)
                                         );
                                     } else {
-                                        Log.e(JabwaveApp.TELEGRAM_SERV_TAG,
+                                        Log.e(TDLibClient.TELEGRAM_SERV_TAG,
                                                 String.format("Unable to download file #%s.", file.id)
                                         );
                                     }
@@ -86,11 +86,11 @@ public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.Vi
                                         FileInputStream fis = new FileInputStream(file.local.path);
                                         fis.read(thumbnail);
                                         state = 1;
-                                        Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                                        Log.d(TDLibClient.TELEGRAM_SERV_TAG,
                                                 String.format("Downloaded file #%s.", file.id)
                                         );
                                     } else {
-                                        Log.e(JabwaveApp.TELEGRAM_SERV_TAG,
+                                        Log.e(TDLibClient.TELEGRAM_SERV_TAG,
                                                 String.format("Unable to download file #%s.", file.id)
                                         );
                                     }

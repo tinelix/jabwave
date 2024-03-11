@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.telegram.api;
+package dev.tinelix.jabwave.api.tdlwrap;
 
 import android.content.Context;
 import android.os.Build;
@@ -11,10 +11,9 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import androidx.annotation.Nullable;
-import dev.tinelix.jabwave.BuildConfig;
 import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.telegram.SecureStorage;
 
 public class TDLibClient extends BaseClient implements Client.ResultHandler, Client.ExceptionHandler {
 
@@ -23,25 +22,31 @@ public class TDLibClient extends BaseClient implements Client.ResultHandler, Cli
    private ClientHandler handler;
    private TdApi.TdlibParameters params;
 
+   public static final String TELEGRAM_SERV_TAG = "TelegramService";
+
    @SuppressWarnings("ConstantConditions")
-   public TDLibClient(Context app_ctx, ApiHandler apiHandler, ClientHandler handler) {
+   public TDLibClient(Context app_ctx,
+                      ApiHandler apiHandler,
+                      ClientHandler handler,
+                      SecureStorage storage,
+                      ClientIdentityParams params
+   ) {
       super(true, "Telegram");
       this.apiHandler = apiHandler;
       this.handler = handler;
       this.params = new TdApi.TdlibParameters();
-      params.applicationVersion = BuildConfig.VERSION_NAME;
-      params.deviceModel = Build.MODEL;
-      params.systemVersion = Build.VERSION.RELEASE;
-      SecureStorage secureStorage = new SecureStorage();
-      HashMap<String, Object> api_map = secureStorage.loadAppToken();
+      this.params.applicationVersion = params.getClientIdentity().get("client_version");
+      this.params.deviceModel = Build.MODEL;
+      this.params.systemVersion = Build.VERSION.RELEASE;
+      HashMap<String, Object> api_map = storage.loadAppToken();
       this.client = Client.create(this, null,this);
       client.send(new TdApi.SetLogVerbosityLevel(0), null);
       try {
-         params.apiId = api_map.containsKey("app_id") ? (int) api_map.get("app_id") : 0;
-         params.apiHash = (String) api_map.get("app_hash");
-         params.databaseDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
-         params.filesDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
-         params.systemLanguageCode = Locale.getDefault().toString();
+         this.params.apiId = api_map.containsKey("app_id") ? (int) api_map.get("app_id") : 0;
+         this.params.apiHash = (String) api_map.get("app_hash");
+         this.params.databaseDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
+         this.params.filesDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
+         this.params.systemLanguageCode = Locale.getDefault().toString();
          sendTdlibParameters();
       } catch (Exception ex) {
          ex.printStackTrace();

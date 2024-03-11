@@ -54,11 +54,11 @@ public class BaseClient {
         return asyncAPI;
     }
 
-    public class ClientIdentityParams {
-        private String client_name;
-        private String client_version;
-        private String os_version;
-        public ClientIdentityParams(Context ctx) {
+    public static class ClientIdentityParams {
+        private final String client_name;
+        private final String client_version;
+        private final String os_version;
+        public ClientIdentityParams() {
             client_name = "Jabwave";
             client_version = "0.0.1";
             os_version = String.format("Android %s", Build.VERSION.RELEASE);

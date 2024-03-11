@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.telegram.api.entities;
+package dev.tinelix.jabwave.api.tdlwrap.entities;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.net.telegram.api.TDLibClient;
+import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
 
 public class Account extends dev.tinelix.jabwave.api.base.entities.Account {
     private TDLibClient client;
