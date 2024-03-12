@@ -9,18 +9,26 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
 import org.jivesoftware.smack.roster.RosterListener;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.Jid;
+import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.api.base.entities.ServiceEntity;
 import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.api.base.models.Chats;
+import dev.tinelix.jabwave.api.base.models.NetworkService;
+import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
 import dev.tinelix.jabwave.api.base.models.ChatGroup;
@@ -31,12 +39,14 @@ public class Roster extends Chats {
     private final org.jivesoftware.smack.roster.Roster roster;
     private final OnClientUpdateListener listener;
     private ArrayList<dev.tinelix.jabwave.api.base.entities.Chat> chats;
+    private XMPPService service;
 
-    public Roster(XMPPClient client, OnClientUpdateListener listener) {
+    public Roster(XMPPService service, XMPPClient client, OnClientUpdateListener listener) {
         super(client);
         this.conn = client.getConnection();
         this.roster = org.jivesoftware.smack.roster.Roster.getInstanceFor(conn);
         this.listener = listener;
+        this.service = service;
         try { Thread.sleep(2000); } catch (InterruptedException ignored) { }
         roster.addRosterListener(new RosterListener() {
             @Override
@@ -79,6 +89,8 @@ public class Roster extends Chats {
             String custom_status = "";
             int status = 0;
             int type;
+            boolean isMuc = isMuc(entry.getJid().asEntityBareJidOrThrow());
+            type = isMuc ? 2 : 0;
             if(presences.size() > 0) {
                 Presences presencesModel = new Presences(entity, presences);
                 Presence hpPresence = presencesModel.getHighestPriorityPresence();
@@ -92,6 +104,7 @@ public class Roster extends Chats {
                     entity = new Chat(
                             entry.getJid().toString(),
                             entry.getName(),
+                            type,
                             new ArrayList<>(),
                             custom_status,
                             status
@@ -100,6 +113,7 @@ public class Roster extends Chats {
                     entity = new Chat(
                             entry.getJid().toString(),
                             entry.getName(),
+                            type,
                             new ArrayList<>(),
                             status
                     );
@@ -142,10 +156,30 @@ public class Roster extends Chats {
                     e.printStackTrace();
                 }
             }).start();
-
             chats.add(entity);
         }
         return chats;
+    }
+
+    public boolean isMuc(@NonNull final EntityBareJid mucId) {
+        Services netServices;
+        if(service.getNetworkServices() == null)
+            netServices = new Services(client);
+        else
+            netServices = (Services) service.getNetworkServices();
+        if(netServices.getServices() == null || netServices.getServices().size() == 0)
+            netServices.discoverServices();
+        ArrayList<NetworkService> netServicesList = netServices.getServices();
+        for (NetworkService service : netServicesList) {
+            boolean equalDomain = service.id.equals(mucId.toString().split("@")[1]);
+            boolean isSupportedMuc = service.isConference();
+            if(equalDomain && isSupportedMuc) {
+                ServiceEntity entity = service.getEntityInfo(mucId.toString());
+                boolean isMuc = entity.type == 1;
+                return isMuc;
+            }
+        }
+        return false;
     }
 
     @Override

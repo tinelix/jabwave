@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.core.fragments.auth;
+package dev.tinelix.jabwave.core.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,20 +12,20 @@ import androidx.fragment.app.Fragment;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.AuthActivity;
 
-public class AuthCloudPasswordFragment extends Fragment {
+public class AuthTwoFactorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cloud_password, container, false);
-        TextView password_edit = view.findViewById(R.id.password_edit);
-        ((MaterialButton) view.findViewById(R.id.password_confirm_btn)).setOnClickListener(
+        View view = inflater.inflate(R.layout.fragment_auth_2fa, container, false);
+        TextView twofactor_edit = view.findViewById(R.id.twofactor_edit);
+        ((MaterialButton) view.findViewById(R.id.twofactor_confirm_btn)).setOnClickListener(
                 view12 -> {
                     if (getActivity() != null) {
                         if (getActivity() instanceof AuthActivity) {
-                            ((AuthActivity) getActivity()).sendCloudPassword(password_edit.getText().toString());
+                            ((AuthActivity) getActivity()).signIn(twofactor_edit.getText().toString());
                         }
                     }
                 });
-        ((MaterialButton) view.findViewById(R.id.password_cancel_btn)).setOnClickListener(
+        ((MaterialButton) view.findViewById(R.id.twofactor_cancel_btn)).setOnClickListener(
                 view1 -> {
                     if(getActivity() != null) {
                         getActivity();//((AuthActivity) getActivity()).changeFragment("auth_form");

@@ -19,6 +19,7 @@ public class NetworkService {
         this.id = id;
         this.node = node;
         this.type = type;
+        this.isConference = isConference;
         entities = new ArrayList<>();
     }
 
@@ -40,5 +41,9 @@ public class NetworkService {
 
     public ArrayList<ServiceEntity> getEntities(BaseClient client) {
         return this.entities;
+    }
+
+    public ServiceEntity getEntityInfo(Object id) {
+        return null;
     }
 }

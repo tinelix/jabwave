@@ -142,6 +142,7 @@ public class ChatsGroupSection extends Section {
                 } else {
                     intent.putExtra("chat_id", (long) chat.id);
                 }
+                intent.putExtra("chat_type", chat.type);
                 intent.putExtra("chat_title", chat.title);
                 ctx.startActivity(intent);
             });
@@ -189,12 +190,7 @@ public class ChatsGroupSection extends Section {
         @SuppressLint("UseCompatLoadingForDrawables")
         public void bind() {
             groupname.setText(header.title);
-            groupname.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggleGroupList();
-                }
-            });
+            groupname.setOnClickListener(v -> toggleGroupList());
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
             );

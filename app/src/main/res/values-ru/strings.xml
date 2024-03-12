@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- About Application Activity !-->
-    <string name="about_app_version">Версия %1$s\nКоммит: %2$s</string>
+    <string name="about_app_version">Версия: %1$s\nКоммит: %2$s</string>
+    <string name="source_code">Исходный код</string>
     <string name="about_app_license"><![CDATA[
         Эта программа является свободным программным обеспечением: вы можете распространять и/или
         изменять его в соответствии с условиями лицензии
@@ -10,7 +11,6 @@
         или поздней версии, опубликованной Фондом свободного программного обеспечения.
         <br><br>БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, ВКЛЮЧАЯ КОММЕРЧЕСКУЮ ЦЕННОСТЬ ИЛИ ПРИГОДНОСТЬ ДЛЯ КОНКРЕТНЫХ ЦЕЛЕЙ.
     ]]></string>
-    <string name="source_code">Исходный код</string>
 
     <!-- Authorization Activity !-->
     <string name="auth_phone_number">Номер телефона</string>

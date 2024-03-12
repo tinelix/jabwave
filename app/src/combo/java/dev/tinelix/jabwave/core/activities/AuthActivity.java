@@ -32,10 +32,10 @@ import java.util.HashMap;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.fragments.auth.AuthCloudPasswordFragment;
+import dev.tinelix.jabwave.core.fragments.AuthCloudPasswordFragment;
+import dev.tinelix.jabwave.core.fragments.AuthTwoFactorFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
-import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;

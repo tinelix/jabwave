@@ -7,7 +7,7 @@ import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.entities.Chat;
 
 public class Chats {
-    private final BaseClient client;
+    protected final BaseClient client;
     private ArrayList<Chat> chats;
     private ArrayList<ChatGroup> groups;
 

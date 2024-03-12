@@ -150,7 +150,7 @@ public class XMPPService extends ClientService {
                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                 status = "authorized";
                 buildHelloPresence(conn);
-                roster = new Roster(((XMPPClient) client), map -> {
+                roster = new Roster(this, ((XMPPClient) client), map -> {
                     sendMessageToActivity("presence_changed");
                     return false;
                 });
