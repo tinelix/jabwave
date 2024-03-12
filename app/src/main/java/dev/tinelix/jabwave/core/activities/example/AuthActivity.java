@@ -180,17 +180,18 @@ public class AuthActivity extends AppCompatActivity {
             }
             ft.commit();
             showSnackBar(message);
-//        Uncomment this code if network requires 2FA and/or password step.
-//        } else if(message == HandlerMessages.REQUIRED_AUTH_CODE) {
-//            fragment = new AuthTwoFactorFragment();
-//            ft = getSupportFragmentManager().beginTransaction();
-//            ft.replace(R.id.fragment, fragment);
-//            ft.commit();
-//        } else if(message == HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
-//            fragment = new AuthCloudPasswordFragment();
-//            ft = getSupportFragmentManager().beginTransaction();
-//            ft.replace(R.id.fragment, fragment);
-//            ft.commit();
+        /* Uncomment this code if network requires 2FA and/or password step.
+        } else if(message == HandlerMessages.REQUIRED_AUTH_CODE) {
+            fragment = new AuthTwoFactorFragment();
+            ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment, fragment);
+            ft.commit();
+        } else if(message == HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
+            fragment = new AuthCloudPasswordFragment();
+            ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment, fragment);
+            ft.commit();
+        */
         }
     }
 
