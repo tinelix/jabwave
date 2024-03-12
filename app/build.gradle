@@ -133,13 +133,13 @@ dependencies {
     comboImplementation project(path: ':tdlib')
     comboImplementation project(path: ':tdlib-wrap')
     comboImplementation 'org.jxmpp:jxmpp-jid:1.0.3'
-    comboImplementation "org.igniterealtime.smack:smack-tcp:4.4.0"
-    comboImplementation "org.igniterealtime.smack:smack-im:4.4.0"
+    comboImplementation "org.igniterealtime.smack:smack-tcp:4.4.6"
+    comboImplementation "org.igniterealtime.smack:smack-im:4.4.6"
 
     // Smack build-specified dependencies
     smackImplementation 'org.jxmpp:jxmpp-jid:1.0.3'
-    smackImplementation "org.igniterealtime.smack:smack-tcp:4.4.0"
-    smackImplementation "org.igniterealtime.smack:smack-im:4.4.0"
+    smackImplementation "org.igniterealtime.smack:smack-tcp:4.4.4"
+    smackImplementation "org.igniterealtime.smack:smack-im:4.4.4"
 
     // TDLib build-specified dependencies
     tdlibImplementation project(path: ':tdlib')
