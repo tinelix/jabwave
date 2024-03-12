@@ -33,8 +33,6 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.core.activities.MainActivity;
-import dev.tinelix.jabwave.core.fragments.AuthCloudPasswordFragment;
-import dev.tinelix.jabwave.core.fragments.AuthTwoFactorFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
@@ -55,11 +53,11 @@ public class AuthActivity extends AppCompatActivity {
     private String server;
     private String username;
     private String password;
-    private Fragment fragment = new AuthTwoFactorFragment();
     private SharedPreferences xmpp_prefs;
     private SharedPreferences telegram_prefs;
     private SharedPreferences global_prefs;
     private JabwaveReceiver jwReceiver;
+    private Fragment fragment;
 
     private ClientService service;
     private final ServiceConnection clientConnection = new ServiceConnection() {
