@@ -16,12 +16,15 @@ import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
 public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
@@ -33,12 +36,8 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
         super(title, network_type, true);
     }
 
-    public SuperChat(Object id, String title, int network_type) {
-        super(id, title, network_type, true);
-    }
-
-    public SuperChat(Object id, String title, int type, int network_type) {
-        super(id, title, type, network_type, true);
+    public SuperChat(Object id, String title) {
+        super(id, title, 0, 0, true);
     }
 
     @Override
@@ -47,9 +46,11 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
             try {
                 mucm = MultiUserChatManager.getInstanceFor(xmppClient.getConnection());
                 muc = mucm.getMultiUserChat(JidCreate.entityBareFrom((String) id));
-                muc.join(Resourcepart.from(nickname));
-                isJoined = true;
-                requiredAuth = false;
+                if(requiredAuth) {
+                    muc.join(Resourcepart.from(nickname));
+                    isJoined = true;
+                    requiredAuth = false;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -63,13 +64,17 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
             return;
         }
         if(client instanceof XMPPClient xmppClient) {
+            mucm = MultiUserChatManager.getInstanceFor(xmppClient.getConnection());
             try {
-                mucm = MultiUserChatManager.getInstanceFor(xmppClient.getConnection());
                 muc = mucm.getMultiUserChat(JidCreate.entityBareFrom((String) id));
-                muc.join(
-                        Resourcepart.from(nickname),
-                        new String(Base58.decode(password_hash), StandardCharsets.UTF_8)
-                );
+                if(requiredAuth) {
+                    muc.join(
+                            Resourcepart.from(nickname),
+                            new String(Base58.decode(password_hash), StandardCharsets.UTF_8)
+                    );
+                    isJoined = true;
+                    requiredAuth = false;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -78,13 +83,17 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
 
     @Override
     public void loadMessages(BaseClient client) {
-        if(requiredAuth && !isJoined) {
-            Log.e(JabwaveApp.XMPP_SERV_TAG,
-                    String.format("SuperChat #%s required authorization.", id));
-            return;
-        }
-        if(client instanceof XMPPClient xmppClient) {
-            try {
+        try {
+            if(client instanceof XMPPClient xmppClient) {
+                mucm = MultiUserChatManager.getInstanceFor(xmppClient.getConnection());
+                muc = mucm.getMultiUserChat(JidCreate.entityBareFrom((String) id));
+                join(client, "tretdm-jabwave");
+                messages = new ArrayList<>();
+                if (requiredAuth && !isJoined) {
+                    Log.e(JabwaveApp.XMPP_SERV_TAG,
+                            String.format("SuperChat #%s requires authorization.", id));
+                    return;
+                }
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(new Date(System.currentTimeMillis()));
                 calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) - 7);
@@ -96,9 +105,9 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                         .build();
                 MamManager.MamQuery mamQuery = mamManager.queryArchive(queryArgs);
                 loadMessages(xmppClient, mamQuery.getMessages());
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -118,6 +127,36 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                     new dev.tinelix.jabwave.api.base.entities.Message(i, this.id, chat_id, text,
                             new Date(System.currentTimeMillis()), !id.equals(client.jid));
             this.messages.add(message);
+        }
+    }
+
+    @Override
+    public void sendMessage(BaseClient client, String text) {
+        try {
+            muc.sendMessage(text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendMessage(BaseClient client, String text, OnClientAPIResultListener listener) {
+        try {
+            muc.addMessageListener(msg -> {
+                if(text.length() > 0) {
+                    dev.tinelix.jabwave.api.base.entities.Message message =
+                            new dev.tinelix.jabwave.api.base.entities.Message(
+                                    0, msg.getFrom(), msg.getFrom(),
+                                    text, new Date(System.currentTimeMillis()), false
+                            );
+                    messages.add(message);
+                }
+                listener.onSuccess(new HashMap<>());
+            });
+            muc.sendMessage(text);
+        } catch (Exception e) {
+            e.printStackTrace();
+            listener.onFail(new HashMap<>(), e);
         }
     }
 }

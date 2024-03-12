@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.api.base.entities.SuperChat;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 import dev.tinelix.jabwave.core.services.base.ClientService;
@@ -37,6 +38,7 @@ public class MessengerActivity extends JabwaveActivity {
     private RecyclerView messages_list;
     private Chat chat;
     private MessagesAdapter adapter;
+    private boolean isSuperChat;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class MessengerActivity extends JabwaveActivity {
         service = app.clientService;
         actionBar = getSupportActionBar();
         int network_type = getIntent().getIntExtra("network_type", 0);
+        isSuperChat = getIntent().getIntExtra("chat_type", 0) == 2;
         if(network_type == 0) {
             chat_id = getIntent().getStringExtra("chat_id");
             if (chat_id != null) {
@@ -114,6 +117,12 @@ public class MessengerActivity extends JabwaveActivity {
                 @Override
                 public boolean onSuccess(HashMap<String, Object> map) {
                     chat = (Chat) map.get("chat");
+                    if(isSuperChat) {
+                        if(chat instanceof SuperChat superChat) {
+                            if(superChat.isRequiredAuth())
+                                superChat.join(service.getClient());
+                        }
+                    }
                     if (chat != null) {
                         MessageEditor editor = findViewById(R.id.message_editor);
                         editor.getEditorArea().setHint(
@@ -148,6 +157,12 @@ public class MessengerActivity extends JabwaveActivity {
             });
         } else {
             chat = service.getChats().getChatById(chat_id);
+            if(isSuperChat) {
+                if(chat instanceof SuperChat superChat) {
+                    if(superChat.isRequiredAuth())
+                        superChat.join(service.getClient(), "tretdm");
+                }
+            }
             chat.loadMessages(service.getClient());
             messages = chat.getMessages();
             createMessagesAdapter();

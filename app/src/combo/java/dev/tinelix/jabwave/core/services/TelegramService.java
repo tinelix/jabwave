@@ -277,23 +277,25 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
         } else if(object instanceof TdApi.UpdateUserStatus) {
             TdApi.UpdateUserStatus userStatus = ((TdApi.UpdateUserStatus) object);
             Chat chat = null;
-            switch(userStatus.status.getConstructor()) {
-                case TdApi.UserStatusOnline.CONSTRUCTOR:
-                    chat = (Chat) getChats().getChatById(userStatus.userId);
-                    if(chat != null)
-                        chat.status = 1;
-                    break;
-                case TdApi.UserStatusOffline.CONSTRUCTOR:
-                    chat = (Chat) getChats().getChatById(userStatus.userId);
-                    if(chat != null)
-                        chat.status = 0;
-                    break;
-            }
-            if(chat != null) {
-                if (getChats().getChatIndex(chat) >= 0) {
-                    getChats().chats.set(getChats().getChatIndex(chat), chat);
-                    status = "update_chat_status";
-                    sendMessageToActivity(status);
+            if(getChats().getChatById(userStatus.userId) instanceof Chat) {
+                switch (userStatus.status.getConstructor()) {
+                    case TdApi.UserStatusOnline.CONSTRUCTOR:
+                        chat = (Chat) getChats().getChatById(userStatus.userId);
+                        if (chat != null)
+                            chat.status = 1;
+                        break;
+                    case TdApi.UserStatusOffline.CONSTRUCTOR:
+                        chat = (Chat) getChats().getChatById(userStatus.userId);
+                        if (chat != null)
+                            chat.status = 0;
+                        break;
+                }
+                if (chat != null) {
+                    if (getChats().getChatIndex(chat) >= 0) {
+                        getChats().chats.set(getChats().getChatIndex(chat), chat);
+                        status = "update_chat_status";
+                        sendMessageToActivity(status);
+                    }
                 }
             }
         } else if(object instanceof TdApi.UpdateFile) {

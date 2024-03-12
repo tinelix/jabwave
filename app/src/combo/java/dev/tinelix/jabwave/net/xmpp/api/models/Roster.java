@@ -32,6 +32,7 @@ import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
 import dev.tinelix.jabwave.api.base.models.ChatGroup;
+import dev.tinelix.jabwave.net.xmpp.api.entities.SuperChat;
 
 public class Roster extends Chats {
 
@@ -67,11 +68,13 @@ public class Roster extends Chats {
             public void presenceChanged(Presence presence) {
                 if(chats != null) {
                     Log.d(JabwaveApp.XMPP_SERV_TAG, String.format("Updated presence from %s", presence.getFrom()));
-                    Chat chat = (Chat) getChatById(presence.getFrom().toString().split("/")[0]);
-                    Presences presences = new Presences(chat, new ArrayList<>());
-                    chat.status = presences.getStatusEnum(presence);
-                    chats.set(getChatIndex(chat), chat);
-                    listener.onUpdate(new HashMap<>());
+                    dev.tinelix.jabwave.api.base.entities.Chat chat = getChatById(presence.getFrom().toString().split("/")[0]);
+                    if(chat instanceof Chat) {
+                        Presences presences = new Presences((Chat) chat, new ArrayList<>());
+                        chat.status = presences.getStatusEnum(presence);
+                        chats.set(getChatIndex(chat), chat);
+                        listener.onUpdate(new HashMap<>());
+                    }
                 }
             }
         });
@@ -83,8 +86,8 @@ public class Roster extends Chats {
         Collection <RosterEntry> entries = roster.getEntries();
         Collection<RosterGroup> groups = roster.getGroups();
         for (RosterEntry entry : entries) {
-            Chat entity = new Chat("");
-            entity.jid = entry.getJid().toString();
+            dev.tinelix.jabwave.api.base.entities.Chat entity = new Chat("");
+            entity.id = entry.getJid().toString();
             List<Presence> presences = roster.getAllPresences(entry.getJid());
             String custom_status = "";
             int status = 0;
@@ -92,47 +95,44 @@ public class Roster extends Chats {
             boolean isMuc = isMuc(entry.getJid().asEntityBareJidOrThrow());
             type = isMuc ? 2 : 0;
             if(presences.size() > 0) {
-                Presences presencesModel = new Presences(entity, presences);
+                Presences presencesModel = new Presences((Chat) entity, presences);
                 Presence hpPresence = presencesModel.getHighestPriorityPresence();
                 if(hpPresence != null) {
                     custom_status = hpPresence.getStatus();
                     status = presencesModel.getStatusEnum(hpPresence);
                 }
             }
-            if(entry.getName() != null) {
-                if(custom_status != null && custom_status.length() > 0)
-                    entity = new Chat(
-                            entry.getJid().toString(),
-                            entry.getName(),
-                            type,
-                            new ArrayList<>(),
-                            custom_status,
-                            status
-                    );
-                else
-                    entity = new Chat(
-                            entry.getJid().toString(),
-                            entry.getName(),
-                            type,
-                            new ArrayList<>(),
-                            status
-                    );
+            String entry_name = entry.getName() != null ? entry.getName() : entry.getJid().toString();
+            if(isMuc) {
+                entity = new SuperChat(
+                        entry.getJid().toString(),
+                        entry_name
+                );
             } else {
-                if(custom_status != null && custom_status.length() > 0)
-                    entity = new Chat(
-                            entry.getJid().toString(),
-                            entry.getJid().toString(),
-                            new ArrayList<>(),
-                            custom_status,
-                            status
-                    );
-                else
-                    entity = new Chat(
-                            entry.getJid().toString(),
-                            entry.getJid().toString(),
-                            new ArrayList<>(),
-                            status
-                    );
+                entity = new Chat(
+                        entry.getJid().toString(),
+                        entry_name,
+                        type,
+                        new ArrayList<>(),
+                        custom_status,
+                        status
+                );
+                Chat finalEntity = (Chat) entity;
+                new Thread(() -> {
+                    // Non-async loadVCard function blocking UI thread.
+                    try {
+                        finalEntity.setVCard(
+                                VCardManager
+                                        .getInstanceFor(conn)
+                                        .loadVCard((EntityBareJid) entry.getJid().asBareJid())
+                        );
+                    } catch (SmackException.NoResponseException |
+                            XMPPException.XMPPErrorException |
+                            SmackException.NotConnectedException |
+                            InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             }
 
             for (RosterGroup group : groups) {
@@ -140,22 +140,6 @@ public class Roster extends Chats {
                     entity.groups.add(group.getName());
                 }
             }
-            Chat finalEntity = entity;
-            new Thread(() -> {
-                // Non-async loadVCard function blocking UI thread.
-                try {
-                    finalEntity.setVCard(
-                            VCardManager
-                                    .getInstanceFor(conn)
-                                    .loadVCard((EntityBareJid) entry.getJid().asBareJid())
-                    );
-                } catch (SmackException.NoResponseException |
-                        XMPPException.XMPPErrorException |
-                        SmackException.NotConnectedException |
-                        InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }).start();
             chats.add(entity);
         }
         return chats;
