@@ -2,7 +2,7 @@
 <resources>
     <color name="actionBarColor">#FF242424</color>
     <color name="actionBarColorNight">#FF424242</color>
-    <color name="accentColor">#FF63A9FF</color>
+    <color name="accentColor">#FF5EA2FF</color>
     <color name="accentColorVariant">#FF2672D0</color>
     <color name="statusBarColor">#FF181818</color>
     <color name="black">#FF000000</color>
@@ -12,11 +12,11 @@
     <color name="menuItemColor">#9FFFFFFF</color>
     <color name="inMessageColor">#FF353535</color>
     <color name="inMessageTextColor">#FFFFFF</color>
-    <color name="outMessageColor">#FF023370</color>
-    <color name="outSelectedMessageColor">#FF134A8E</color>
+    <color name="outMessageColor">#FF00347A</color>
+    <color name="outSelectedMessageColor">#FF1D549E</color>
     <color name="outMessageTextColor">#FFB0D3FF</color>
     <color name="inMsgTimestampColor">#8EFFFFFF</color>
     <color name="messengerBackgroundColor">#FF000000</color>
-    <color name="authorInMessageColor">#FF63A9FF</color>
-    <color name="authorOutMessageColor">#FF5AA4FF</color>
+    <color name="authorInMessageColor">#FFFFFFFF</color>
+    <color name="authorOutMessageColor">#FF64A6FF</color>
 </resources>

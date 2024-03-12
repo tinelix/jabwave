@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="actionBarColor">#FF2672D0</color>
+    <color name="actionBarColor">#FF1779FE</color>
     <color name="actionBarColorNight">#FF424242</color>
-    <color name="accentColor">#FF2672D0</color>
-    <color name="accentColorVariant">#FF2672D0</color>
-    <color name="statusBarColor">#FF1F589F</color>
+    <color name="accentColor">#FF1779fe</color>
+    <color name="accentColorVariant">#FF0072FF</color>
+    <color name="statusBarColor">#FF1158b9</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="backgroundDark">#FF212121</color>
@@ -13,12 +13,12 @@
     <color name="inMessageColor">#FFE6EEFF</color>
     <color name="inMessageTextColor">#FF000000</color>
     <color name="inMsgTimestampColor">#AE000000</color>
-    <color name="outMessageColor">#FF2672D0</color>
+    <color name="outMessageColor">#FF1779FE</color>
     <color name="outSelectedMessageColor">#FF005BCB</color>
     <color name="outMessageTextColor">#FFFFFFFF</color>
     <color name="msgDateLabelColor">#5F5F5F</color>
     <color name="msgTimestampColor">#AEFFFFFF</color>
-    <color name="messengerBackgroundColor">#FFB2D4FF</color>
-    <color name="authorInMessageColor">#FF2672D0</color>
+    <color name="messengerBackgroundColor">#FFB2D3FF</color>
+    <color name="authorInMessageColor">#FF1779FE</color>
     <color name="authorOutMessageColor">#FFFFFFFF</color>
 </resources>
