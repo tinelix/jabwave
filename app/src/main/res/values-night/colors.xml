@@ -12,7 +12,7 @@
     <color name="menuItemColor">#9FFFFFFF</color>
     <color name="inMessageColor">#FF353535</color>
     <color name="inMessageTextColor">#FFFFFF</color>
-    <color name="outMessageColor">#FF00347A</color>
+    <color name="outMessageColor">#FF002A63</color>
     <color name="outSelectedMessageColor">#FF1D549E</color>
     <color name="outMessageTextColor">#FF8BBCFF</color>
     <color name="inMsgTimestampColor">#8EFFFFFF</color>
