@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:iconSpaceReserved="false">
+    <PreferenceCategory
+        android:title="@string/general_category"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:key="account"
+            android:title="@string/account"
+            android:icon="@drawable/ic_account"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="true"
+            />
+
+        <Preference
+            android:key="appearance"
+            android:title="@string/appearance"
+            android:icon="@drawable/ic_color_lens"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="true" />
+
+        <Preference
+            android:key="security"
+            android:title="@string/security"
+            android:icon="@drawable/ic_security"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="true" />
+
+        <Preference
+            android:key="storage"
+            android:title="@string/storage"
+            android:icon="@drawable/ic_storage"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="true" />
+
+        <Preference
+            android:key="notifications"
+            android:title="@string/notifications"
+            android:icon="@drawable/ic_notifications"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/network_settings_category"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:key="traffic_savings"
+            android:title="@string/traffic_savings"
+            android:icon="@drawable/ic_traffic"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="true" />
+
+        <Preference
+            android:key="protocol"
+            android:title="@string/protocol"
+            android:icon="@drawable/ic_protocol"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="true" />
+
+        <Preference
+            android:key="proxy"
+            android:title="@string/proxy"
+            android:icon="@drawable/ic_call_merge"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="true" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -35,6 +35,8 @@
 
     <!-- Menu !-->
     <string name="new_group">Создать группу</string>
+    <string name="general_menu_category">Главное</string>
+    <string name="all_chats">Все чаты</string>
     <string name="services">Сервисы</string>
     <string name="settings">Настройки</string>
     <string name="about_app">О приложении</string>
@@ -51,4 +53,20 @@
     <string name="open_link_summary">
         Вы действительно хотите открыть %s?\nМы заботимся о вашей безопасности.
     </string>
+
+    <!-- Main settings screen !-->
+    <string name="general_settings_category">Общие</string>
+    <string name="account">Аккаунт</string>
+    <string name="appearance">Внешний вид</string>
+    <string name="security">Безопасность</string>
+    <string name="storage">Хранилище</string>
+    <string name="notifications">Уведомления</string>
+    <string name="network_settings_category">Сеть</string>
+    <string name="traffic_savings">Экономия трафика</string>
+    <string name="protocol">Протокол</string>
+    <string name="proxy">Прокси</string>
+    <string name="development_category">Для разработчиков</string>
+    <string name="debug">Отладка</string>
+    <string name="experiments">Эксперименты</string>
+
 </resources>

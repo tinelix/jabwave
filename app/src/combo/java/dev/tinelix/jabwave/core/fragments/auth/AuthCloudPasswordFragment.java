@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.core.fragments;
+package dev.tinelix.jabwave.core.fragments.auth;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

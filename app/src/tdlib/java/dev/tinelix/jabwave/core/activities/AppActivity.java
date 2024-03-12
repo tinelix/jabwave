@@ -219,6 +219,9 @@ public class AppActivity extends JabwaveActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawer.closeDrawer(GravityCompat.START);
         switch (item.getItemId()) {
+            case R.id.all_chats -> fragment = FragmentNavigator.switchToAnotherFragment(
+                    getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_CHATS
+            );
             case R.id.services -> fragment = FragmentNavigator.switchToAnotherFragment(
                     getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_SERVICES
             );

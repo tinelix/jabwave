@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <group>
     <item
         android:id="@+id/new_group"
-        android:icon="@drawable/ic_outline_group_chat"
+        android:icon="@drawable/ic_outline_group_add"
         android:title="@string/new_group" />
-    <item
-        android:id="@+id/services"
-        android:icon="@drawable/ic_outline_signpost"
-        android:title="@string/services" />
-    <item
-        android:id="@+id/settings"
-        android:icon="@drawable/ic_outline_settings"
-        android:title="@string/settings" />
-    <item
-        android:id="@+id/about_app"
-        android:icon="@drawable/ic_outline_info"
-        android:title="@string/about_app" />
+    </group>
+    <group
+        android:id="@+id/general_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/general_group_menu"
+            android:title="@string/general_menu_category">
+            <menu>
+                <item
+                    android:id="@+id/all_chats"
+                    android:icon="@drawable/ic_outline_group_chat"
+                    android:title="@string/all_chats" />
+                <item
+                    android:id="@+id/services"
+                    android:icon="@drawable/ic_outline_signpost"
+                    android:title="@string/services" />
+                <item
+                    android:id="@+id/settings"
+                    android:icon="@drawable/ic_outline_settings"
+                    android:title="@string/settings" />
+                <item
+                    android:id="@+id/about_app"
+                    android:icon="@drawable/ic_outline_info"
+                    android:title="@string/about_app" />
+            </menu>
+        </item>
+    </group>
 </menu>

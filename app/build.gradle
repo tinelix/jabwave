@@ -150,6 +150,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.navigation:navigation-fragment:2.7.7'
     implementation 'androidx.navigation:navigation-ui:2.7.7'
+    implementation "androidx.preference:preference-ktx:1.2.1"
+
     implementation ("org.igniterealtime.smack:smack-android-extensions:4.4.0") {
         exclude module: 'xpp3'
     }
@@ -162,4 +164,5 @@ dependencies {
     implementation 'com.github.mediapark-pk:Base58-android:0.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'org.apmem.tools:layouts:1.10@aar'
+    implementation 'com.takisoft.preferencex:preferencex:1.1.0'
 }
