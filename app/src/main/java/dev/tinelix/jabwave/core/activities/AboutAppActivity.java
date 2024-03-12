@@ -3,6 +3,8 @@ package dev.tinelix.jabwave.core.activities;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;

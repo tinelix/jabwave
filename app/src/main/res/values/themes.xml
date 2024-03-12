@@ -12,7 +12,21 @@
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
     </style>
 
-    <style name="ApplicationTheme.NoActionBar">
+    <style name="ApplicationTheme.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/accentColor</item>
+        <item name="colorPrimaryVariant">@color/accentColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColor</item>
+        <item name="colorSecondaryVariant">@color/accentColor</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColor</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ApplicationTheme.NoActionBar" parent="ApplicationTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
