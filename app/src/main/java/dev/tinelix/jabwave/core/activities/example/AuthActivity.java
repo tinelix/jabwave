@@ -19,29 +19,28 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.mediaparkpk.base58android.Base58;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.core.activities.MainActivity;
 import dev.tinelix.jabwave.core.fragments.AuthCloudPasswordFragment;
 import dev.tinelix.jabwave.core.fragments.AuthTwoFactorFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
+import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 import dev.tinelix.jabwave.core.services.base.ClientService;
-import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.views.base.XConstraintLayout;
-import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 
 /** <b>AuthActivity</b> - it is app wizard screen class with sign-in forms
  *  (username, password and etc.)
@@ -181,16 +180,17 @@ public class AuthActivity extends AppCompatActivity {
             }
             ft.commit();
             showSnackBar(message);
-        } else if(message == HandlerMessages.REQUIRED_AUTH_CODE) {
-            fragment = new AuthTwoFactorFragment();
-            ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment, fragment);
-            ft.commit();
-        } else if(message == HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
-            fragment = new AuthCloudPasswordFragment();
-            ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment, fragment);
-            ft.commit();
+//        Uncomment this code if network requires 2FA and/or password step.
+//        } else if(message == HandlerMessages.REQUIRED_AUTH_CODE) {
+//            fragment = new AuthTwoFactorFragment();
+//            ft = getSupportFragmentManager().beginTransaction();
+//            ft.replace(R.id.fragment, fragment);
+//            ft.commit();
+//        } else if(message == HandlerMessages.REQUIRED_CLOUD_PASSWORD) {
+//            fragment = new AuthCloudPasswordFragment();
+//            ft = getSupportFragmentManager().beginTransaction();
+//            ft.replace(R.id.fragment, fragment);
+//            ft.commit();
         }
     }
 
