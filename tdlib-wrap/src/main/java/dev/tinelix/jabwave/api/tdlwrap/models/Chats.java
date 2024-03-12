@@ -163,10 +163,16 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
                                 break;
                         }
                         long id = td_chat.id;
-                        dev.tinelix.jabwave.api.tdlwrap.entities.Chat chat =
-                                new dev.tinelix.jabwave.api.tdlwrap.entities.Chat(
-                                        id, chat_type, td_chat.title, new ArrayList<>(), 0
-                                );
+                        Chat chat;
+                        if(chat_type == 2) {
+                            chat = new SuperChat(
+                                    id, chat_type, td_chat.title, new ArrayList<>(), 0
+                            );
+                        } else {
+                            chat = new dev.tinelix.jabwave.api.tdlwrap.entities.Chat(
+                                    id, chat_type, td_chat.title, new ArrayList<>(), 0
+                            );
+                        }
                         map.put("chat", chat);
                         listener.onSuccess(map);
                     }
