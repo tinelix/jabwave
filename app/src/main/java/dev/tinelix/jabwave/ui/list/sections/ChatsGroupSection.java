@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.api.base.entities.SuperChat;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
 import dev.tinelix.jabwave.api.base.entities.Chat;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
@@ -151,6 +152,7 @@ public class ChatsGroupSection extends Section {
         @SuppressLint("UseCompatLoadingForDrawables")
         private void loadPhotoCache(dev.tinelix.jabwave.api.base.entities.Chat chat) {
             int placeholder_resid;
+            chat.type = chat instanceof SuperChat ? 2 : chat.type;
             switch (chat.type) {
                 case 3:
                     placeholder_resid = R.drawable.ic_campaign_accent;

@@ -89,11 +89,11 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
                     }
                     Chat chat;
                     if(chat_type == 2) {
-                        chat = new dev.tinelix.jabwave.api.tdlwrap.entities.Chat(
-                                        id, chat_type, td_chat.title, new ArrayList<>(), 0
+                        chat = new SuperChat(
+                                id, chat_type, td_chat.title, new ArrayList<>(), 0
                         );
                     } else {
-                        chat = new SuperChat(
+                        chat = new dev.tinelix.jabwave.api.tdlwrap.entities.Chat(
                                 id, chat_type, td_chat.title, new ArrayList<>(), 0
                         );
                     }

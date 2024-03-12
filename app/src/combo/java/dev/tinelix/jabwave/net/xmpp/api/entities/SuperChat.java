@@ -46,11 +46,9 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
             try {
                 mucm = MultiUserChatManager.getInstanceFor(xmppClient.getConnection());
                 muc = mucm.getMultiUserChat(JidCreate.entityBareFrom((String) id));
-                if(requiredAuth) {
-                    muc.join(Resourcepart.from(nickname));
-                    isJoined = true;
-                    requiredAuth = false;
-                }
+                muc.join(Resourcepart.from(nickname));
+                isJoined = true;
+                requiredAuth = false;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -67,14 +65,12 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
             mucm = MultiUserChatManager.getInstanceFor(xmppClient.getConnection());
             try {
                 muc = mucm.getMultiUserChat(JidCreate.entityBareFrom((String) id));
-                if(requiredAuth) {
-                    muc.join(
-                            Resourcepart.from(nickname),
-                            new String(Base58.decode(password_hash), StandardCharsets.UTF_8)
-                    );
-                    isJoined = true;
-                    requiredAuth = false;
-                }
+                muc.join(
+                        Resourcepart.from(nickname),
+                        new String(Base58.decode(password_hash), StandardCharsets.UTF_8)
+                );
+                isJoined = true;
+                requiredAuth = false;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -85,9 +81,6 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
     public void loadMessages(BaseClient client) {
         try {
             if(client instanceof XMPPClient xmppClient) {
-                mucm = MultiUserChatManager.getInstanceFor(xmppClient.getConnection());
-                muc = mucm.getMultiUserChat(JidCreate.entityBareFrom((String) id));
-                join(client, "tretdm-jabwave");
                 messages = new ArrayList<>();
                 if (requiredAuth && !isJoined) {
                     Log.e(JabwaveApp.XMPP_SERV_TAG,

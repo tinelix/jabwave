@@ -118,10 +118,9 @@ public class MessengerActivity extends JabwaveActivity {
                 public boolean onSuccess(HashMap<String, Object> map) {
                     chat = (Chat) map.get("chat");
                     if(isSuperChat) {
-                        if(chat instanceof SuperChat superChat) {
-                            if(superChat.isRequiredAuth())
-                                superChat.join(service.getClient());
-                        }
+                        assert chat != null;
+                        if(((SuperChat) chat).isRequiredAuth())
+                            ((SuperChat) chat).join(service.getClient(), "tretdm-jabwave");
                     }
                     if (chat != null) {
                         MessageEditor editor = findViewById(R.id.message_editor);
@@ -158,10 +157,9 @@ public class MessengerActivity extends JabwaveActivity {
         } else {
             chat = service.getChats().getChatById(chat_id);
             if(isSuperChat) {
-                if(chat instanceof SuperChat superChat) {
-                    if(superChat.isRequiredAuth())
-                        superChat.join(service.getClient(), "tretdm");
-                }
+                assert chat != null;
+                if(((SuperChat) chat).isRequiredAuth())
+                    ((SuperChat) chat).join(service.getClient(), "tretdm-jabwave");
             }
             chat.loadMessages(service.getClient());
             messages = chat.getMessages();
