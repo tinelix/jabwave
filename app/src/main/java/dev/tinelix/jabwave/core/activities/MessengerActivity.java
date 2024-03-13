@@ -236,4 +236,12 @@ public class MessengerActivity extends JabwaveActivity {
             adapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    protected void handleOnBackPressed() {
+        if(isSuperChat) {
+            ((SuperChat) chat).leave();
+        }
+        super.handleOnBackPressed();
+    }
 }

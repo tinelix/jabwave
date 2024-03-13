@@ -66,4 +66,8 @@ public class SuperChat extends Chat {
     public boolean isJoined() {
         return isJoined;
     }
+
+    public void leave() {
+        isJoined = false;
+    }
 }
