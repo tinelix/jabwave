@@ -1,6 +1,7 @@
 package dev.tinelix.jabwave.core.activities;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -36,6 +37,7 @@ import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.core.utilities.FragmentNavigator;
 import dev.tinelix.jabwave.api.base.SecureStorage;
+import dev.tinelix.jabwave.core.utilities.NotificationChannel;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
@@ -51,6 +53,7 @@ public class AppActivity extends JabwaveActivity
     private JabwaveReceiver jwReceiver;
     private JabwaveApp app;
     public ClientService service;
+    private NotificationChannel serviceChannel;
 
     private final ServiceConnection clientConnection = new ServiceConnection() {
 
@@ -75,6 +78,7 @@ public class AppActivity extends JabwaveActivity
         app = ((JabwaveApp) getApplicationContext());
         findViewById(R.id.app_fragment).setVisibility(View.GONE);
         findViewById(R.id.progress).setVisibility(View.VISIBLE);
+        registerServiceNotificationChannel();
         registerBroadcastReceiver();
         if(service == null) {
             service = new ClientService(app.getCurrentNetworkType());
@@ -87,6 +91,14 @@ public class AppActivity extends JabwaveActivity
         createMainFragment();
         setActionBar();
         drawer = findViewById(R.id.drawer_layout);
+    }
+
+    private void registerServiceNotificationChannel() {
+        serviceChannel = NotificationChannel.Builder.getInstance(this)
+                .setChannelName("network_updates", "Network Updates")
+                .setChannelParameters(false, false, false)
+                .setRingtoneUrl(null)
+                .build();
     }
 
     private void setActionBar() {
@@ -138,7 +150,6 @@ public class AppActivity extends JabwaveActivity
                 e.printStackTrace();
             }
         }
-
     }
 
     private void getAccount() {

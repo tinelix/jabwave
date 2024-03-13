@@ -1,9 +1,12 @@
 package dev.tinelix.jabwave.core.services;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -54,12 +57,31 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
         this.ctx = ctx;
         phone_number = map.get("username");
         if(status.equals("done") || isConnected()) {
+            AlarmManager mgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
             intent = new Intent(ctx, TelegramService.class);
             intent.setAction(ACTION_START);
             intent.putExtra(PHONE_NUMBER, phone_number);
-            ctx.startService(intent);
+            PendingIntent pendingIntent = null;
+
+            // Setting PendingIntent for Android API Level 23 and above
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                pendingIntent = PendingIntent.getService(this, 0, intent,
+                        PendingIntent.FLAG_MUTABLE);
+            } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                pendingIntent = PendingIntent.getService(this, 0, intent,
+                        PendingIntent.FLAG_IMMUTABLE);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ctx.startForegroundService(intent);
+            } else {
+                ctx.startService(intent);
+            }
             Log.d(JabwaveApp.TELEGRAM_SERV_TAG, "Service started.");
             ctx.bindService(intent, connection, BIND_AUTO_CREATE);
+
+            // Wake up service
+            mgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis(), 60 * 1000, pendingIntent);
         } else {
             Log.w(JabwaveApp.TELEGRAM_SERV_TAG, "Service already started.");
         }

@@ -17,6 +17,7 @@ import dev.tinelix.jabwave.api.base.entities.Authenticator;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.models.Chats;
 import dev.tinelix.jabwave.api.base.models.Services;
+import dev.tinelix.jabwave.core.utilities.NotificationChannel;
 
 public class ClientService extends IntentService {
 
@@ -59,8 +60,11 @@ public class ClientService extends IntentService {
 
     }
 
-    public void start(@NonNull Context ctx, ServiceConnection connection, HashMap<String, String> map) {
-
+    public void start(@NonNull Context ctx,
+                      ServiceConnection connection,
+                      HashMap<String, String> map,
+                      NotificationChannel channel) {
+        channel.createNotification(ctx,)
     }
 
     public boolean isConnected() {
