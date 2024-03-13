@@ -67,16 +67,14 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                         full_id,
                                         msg.getBody(),
                                         new Date(System.currentTimeMillis()),
-                                        !msg.getFrom().equals(
-                                                JidCreate.bareFrom(SuperChat.this.occupant_id)
-                                        )
+                                        !full_id.equals(SuperChat.this.occupant_id)
                                 );
                         ChatSender sender = new ChatSender(client, full_id, 0);
                         sender.name = full_id.split("/")[1];
                         message.setSender(sender);
                         messages.add(message);
                         listener.onUpdate(new HashMap<>());
-                    } catch (XmppStringprepException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 };
@@ -116,16 +114,14 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                         msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
                                         msg.getBody(),
                                         new Date(System.currentTimeMillis()),
-                                        !msg.getFrom().equals(
-                                                JidCreate.bareFrom(SuperChat.this.occupant_id)
-                                        )
+                                        !full_id.equals(SuperChat.this.occupant_id)
                                 );
                         ChatSender sender = new ChatSender(client, full_id, 0);
                         sender.name = full_id.split("/")[1];
                         message.setSender(sender);
                         messages.add(message);
                         listener.onUpdate(new HashMap<>());
-                    } catch (XmppStringprepException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 };
