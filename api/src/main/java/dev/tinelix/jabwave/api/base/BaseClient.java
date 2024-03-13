@@ -11,6 +11,7 @@ import dev.tinelix.jabwave.api.base.models.Chats;
 
 public class BaseClient {
 
+    private final Context ctx;
     /** <b>BaseClient</b> - a dummy mediator class between two or more
      *  structurally incompatible API clients.
      *  <br>
@@ -23,7 +24,8 @@ public class BaseClient {
     protected String network_name;
     private Chats chats;
 
-    protected BaseClient(boolean asyncAPI, String network_name) {
+    protected BaseClient(Context ctx, boolean asyncAPI, String network_name) {
+        this.ctx = ctx;
         this.asyncAPI = asyncAPI;
         this.network_name = network_name;
     }
@@ -71,5 +73,9 @@ public class BaseClient {
             map.put("os_version", os_version);
             return map;
         }
+    }
+
+    public Context getServiceContext() {
+        return ctx;
     }
 }

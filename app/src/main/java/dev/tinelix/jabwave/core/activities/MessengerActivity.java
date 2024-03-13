@@ -3,6 +3,8 @@ package dev.tinelix.jabwave.core.activities;
 import android.annotation.SuppressLint;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.api.base.entities.SuperChat;
+import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 import dev.tinelix.jabwave.core.services.base.ClientService;
@@ -111,6 +114,7 @@ public class MessengerActivity extends JabwaveActivity {
         ));
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadChat() {
         if(service.isAsyncAPIs()) {
             service.getChats().loadChat(chat_id, new OnClientAPIResultListener() {
@@ -159,7 +163,16 @@ public class MessengerActivity extends JabwaveActivity {
             if(isSuperChat) {
                 assert chat != null;
                 if(((SuperChat) chat).isRequiredAuth())
-                    ((SuperChat) chat).join(service.getClient(), "tretdm-jabwave");
+                    ((SuperChat) chat).join(
+                            service.getClient(),
+                            "tretdm-jabwave",
+                            map -> {
+                                new Handler(Looper.getMainLooper()).post(
+                                        () -> adapter.notifyDataSetChanged()
+                                );
+                                return false;
+                            }
+                    );
             }
             chat.loadMessages(service.getClient());
             messages = chat.getMessages();

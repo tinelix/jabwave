@@ -23,7 +23,6 @@ import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
 import dev.tinelix.jabwave.net.xmpp.api.stanzas.ClientVersionStanza;
 
 public class XMPPClient extends BaseClient {
-    private final Context ctx;
     private AbstractXMPPConnection conn;
     private final OnClientAPIResultListener listener;
     private ConnectionListener connListener;
@@ -32,10 +31,9 @@ public class XMPPClient extends BaseClient {
     public String server;
 
     public XMPPClient(Context ctx, AbstractXMPPConnection conn, OnClientAPIResultListener listener) {
-        super(false, "xmpp");
+        super(ctx, false, "xmpp");
         this.conn = conn;
         this.listener = listener;
-        this.ctx = ctx;
     }
 
     public void start(String server, String jid, String password) {

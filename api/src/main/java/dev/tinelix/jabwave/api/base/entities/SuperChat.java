@@ -2,6 +2,7 @@ package dev.tinelix.jabwave.api.base.entities;
 
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 
 public class SuperChat extends Chat {
 
@@ -36,7 +37,15 @@ public class SuperChat extends Chat {
 
     }
 
+    public void join(BaseClient client, String nickname, OnClientUpdateListener listener) {
+
+    }
+
     public void join(BaseClient client, String nickname, String password_hash) {
+
+    }
+
+    public void join(BaseClient client, String nickname, String password_hash, OnClientUpdateListener listener) {
 
     }
 

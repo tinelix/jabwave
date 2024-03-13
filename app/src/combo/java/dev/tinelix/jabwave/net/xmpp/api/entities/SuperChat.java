@@ -27,6 +27,7 @@ import java.util.List;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
 public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
@@ -46,13 +47,30 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
     }
 
     @Override
-    public void join(BaseClient client, String nickname) {
+    public void join(BaseClient client, String nickname, OnClientUpdateListener listener) {
         this.nickname = nickname;
+        this.occupant_id = String.format("%s/%s", id, nickname);
         if(client instanceof XMPPClient xmppClient) {
             try {
                 mucm = MultiUserChatManager.getInstanceFor(xmppClient.getConnection());
                 muc = mucm.getMultiUserChat(JidCreate.entityBareFrom((String) id));
                 muc.join(Resourcepart.from(nickname));
+                muc.addMessageListener(msg -> {
+                    try {
+                        if(msg.getBody() != null) {
+                            dev.tinelix.jabwave.api.base.entities.Message message =
+                                    new dev.tinelix.jabwave.api.base.entities.Message(
+                                            message_counter++, msg.getFrom(), msg.getFrom(),
+                                            msg.getBody(), new Date(System.currentTimeMillis()),
+                                            !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
+                                    );
+                            messages.add(message);
+                            listener.onUpdate(new HashMap<>());
+                        }
+                    } catch (XmppStringprepException e) {
+                        e.printStackTrace();
+                    }
+                });
                 isJoined = true;
                 requiredAuth = false;
             } catch (Exception e) {
@@ -62,7 +80,7 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
     }
 
     @Override
-    public void join(BaseClient client, String nickname, String password_hash) {
+    public void join(BaseClient client, String nickname, String password_hash, OnClientUpdateListener listener) {
         this.nickname = nickname;
         this.occupant_id = String.format("%s/%s", id, nickname);
         if(password_hash == null) {
@@ -87,6 +105,7 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                         !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
                                 );
                         messages.add(message);
+                        listener.onUpdate(new HashMap<>());
                     } catch (XmppStringprepException e) {
                         e.printStackTrace();
                     }

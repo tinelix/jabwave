@@ -25,13 +25,13 @@ public class TDLibClient extends BaseClient implements Client.ResultHandler, Cli
    public static final String TELEGRAM_SERV_TAG = "TelegramService";
 
    @SuppressWarnings("ConstantConditions")
-   public TDLibClient(Context app_ctx,
+   public TDLibClient(Context ctx,
                       ApiHandler apiHandler,
                       ClientHandler handler,
                       SecureStorage storage,
                       ClientIdentityParams params
    ) {
-      super(true, "Telegram");
+      super(ctx, true, "Telegram");
       this.apiHandler = apiHandler;
       this.handler = handler;
       this.params = new TdApi.TdlibParameters();
@@ -44,8 +44,8 @@ public class TDLibClient extends BaseClient implements Client.ResultHandler, Cli
       try {
          this.params.apiId = api_map.containsKey("app_id") ? (int) api_map.get("app_id") : 0;
          this.params.apiHash = (String) api_map.get("app_hash");
-         this.params.databaseDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
-         this.params.filesDirectory = app_ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
+         this.params.databaseDirectory = ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
+         this.params.filesDirectory = ctx.getExternalFilesDir(null).getAbsolutePath() + "/";
          this.params.systemLanguageCode = Locale.getDefault().toString();
          sendTdlibParameters();
       } catch (Exception ex) {
@@ -53,8 +53,8 @@ public class TDLibClient extends BaseClient implements Client.ResultHandler, Cli
       }
    }
 
-   public TDLibClient(TdApi.TdlibParameters params) {
-      super(true, "Telegram");
+   public TDLibClient(Context ctx, TdApi.TdlibParameters params) {
+      super(ctx, true, "Telegram");
       this.params = params;
       this.client = Client.create(this, null,this);
       sendTdlibParameters();
