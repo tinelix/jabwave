@@ -58,15 +58,16 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                 muc.join(Resourcepart.from(nickname));
                 muc.addMessageListener(msg -> {
                     try {
+                        String msg_author = msg.getFrom().asFullJidIfPossible().toString().split("/")[1];
                         if(msg.getBody() != null) {
                             dev.tinelix.jabwave.api.base.entities.Message message =
                                     new dev.tinelix.jabwave.api.base.entities.Message(
                                             message_counter++,
                                             msg.getFrom(),
-                                            msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
+                                            msg_author,
                                             msg.getBody(),
                                             new Date(System.currentTimeMillis()),
-                                            !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
+                                            !msg_author.equals(this.nickname)
                                     );
                             ChatSender sender = new ChatSender(
                                     client,
