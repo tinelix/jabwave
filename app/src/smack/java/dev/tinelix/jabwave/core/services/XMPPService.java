@@ -150,7 +150,7 @@ public class XMPPService extends ClientService {
                 Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
                 status = "authorized";
                 buildHelloPresence(conn);
-                roster = new Roster(((XMPPClient) client), map -> {
+                roster = new Roster(this, ((XMPPClient) client), map -> {
                     sendMessageToActivity("presence_changed");
                     return false;
                 });
@@ -232,24 +232,18 @@ public class XMPPService extends ClientService {
     private void sendMessageToActivity(String status) {
         Intent intent = new Intent();
         switch (status) {
-            case "error":
-                intent.putExtra("msg", HandlerMessages.NO_INTERNET_CONNECTION);
-                break;
-            case "authorized":
-                intent.putExtra("msg", HandlerMessages.AUTHORIZED);
-                break;
-            case "done":
-                intent.putExtra("msg", HandlerMessages.DONE);
-                break;
-            case "presence_changed":
-                intent.putExtra("msg", HandlerMessages.CHATS_UPDATED);
-                break;
-            case "account_loaded":
-                intent.putExtra("msg", HandlerMessages.ACCOUNT_LOADED);
-                break;
-            default:
-                intent.putExtra("msg", HandlerMessages.UNKNOWN_ERROR);
-                break;
+            case "error" ->
+                    intent.putExtra("msg", HandlerMessages.NO_INTERNET_CONNECTION);
+            case "authorized" ->
+                    intent.putExtra("msg", HandlerMessages.AUTHORIZED);
+            case "done" ->
+                    intent.putExtra("msg", HandlerMessages.DONE);
+            case "presence_changed" ->
+                    intent.putExtra("msg", HandlerMessages.CHATS_UPDATED);
+            case "account_loaded" ->
+                    intent.putExtra("msg", HandlerMessages.ACCOUNT_LOADED);
+            default ->
+                    intent.putExtra("msg", HandlerMessages.UNKNOWN_ERROR);
         }
         intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
         sendBroadcast(intent);
