@@ -68,4 +68,7 @@
     <string name="development_category">Development</string>
     <string name="debug">Debug</string>
     <string name="experiments">Experiments</string>
+
+    <!-- Notifications !-->
+    <string name="background_service_subtitle">Message Delivery Service running in the background mode.</string>
 </resources>

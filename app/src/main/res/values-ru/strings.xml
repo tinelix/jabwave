@@ -69,4 +69,7 @@
     <string name="debug">Отладка</string>
     <string name="experiments">Эксперименты</string>
 
+    <!-- Notifications !-->
+    <string name="background_service_subtitle">Служба доставки сообщений работает в фоновом режиме.</string>
+
 </resources>

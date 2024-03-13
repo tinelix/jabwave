@@ -1,6 +1,7 @@
 package dev.tinelix.jabwave.core.services.base;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.entities.Account;
 import dev.tinelix.jabwave.api.base.entities.Authenticator;
@@ -62,9 +64,8 @@ public class ClientService extends IntentService {
 
     public void start(@NonNull Context ctx,
                       ServiceConnection connection,
-                      HashMap<String, String> map,
-                      NotificationChannel channel) {
-        channel.createNotification(ctx,)
+                      HashMap<String, String> map) {
+
     }
 
     public boolean isConnected() {
@@ -101,6 +102,15 @@ public class ClientService extends IntentService {
 
     public void setChats(Chats chats) {
         this.chats = chats;
+    }
+
+    public void notifyBackground(Context ctx, NotificationChannel channel) {
+        Notification notification = channel.createNotification(
+                R.drawable.ic_notification_icon,
+                ctx.getResources().getString(R.string.app_name),
+                ctx.getResources().getString(R.string.background_service_subtitle)
+        );
+        channel.broadcast(notification);
     }
 
     @Nullable

@@ -47,6 +47,10 @@ public class NotificationChannel {
         }
     }
 
+    public void broadcast(Notification notification) {
+        manager.notify(0, notification);
+    }
+
     public Notification createNotification(int icon, String title, String description) {
         Notification notification;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -113,7 +117,9 @@ public class NotificationChannel {
         }
 
         public NotificationChannel build() {
-
+            return new NotificationChannel(
+                    ctx, id, name, ledIndicate, vibrate, playSound, ringtoneUrl
+            );
         }
     }
 }

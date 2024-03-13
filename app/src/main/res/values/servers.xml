@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string-array name="xmpp_servers">
+        <!-- Server list from yaxim client source code !-->
         <item>yax.im</item>
         <!-- snip -->
         <!-- :r!curl -s http://xmpp.net/services.xml | xml2 | awk -F= '/@jid=/ { print "\t\t<item>" $2 "</item>" }' | sort -n -->

@@ -62,6 +62,9 @@ public class AppActivity extends JabwaveActivity
             ClientService.ClientServiceBinder binder = (ClientService.ClientServiceBinder) service;
             AppActivity.this.service = binder.getService();
             ((JabwaveApp) AppActivity.this.getApplicationContext()).clientService = binder.getService();
+            (((ClientService.ClientServiceBinder) service).getService()).notifyBackground(
+                    AppActivity.this, serviceChannel
+            );
         }
 
         @Override
