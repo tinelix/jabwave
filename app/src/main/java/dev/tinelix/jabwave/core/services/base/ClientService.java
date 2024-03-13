@@ -110,7 +110,7 @@ public class ClientService extends IntentService {
                 ctx.getResources().getString(R.string.app_name),
                 ctx.getResources().getString(R.string.background_service_subtitle)
         );
-        channel.broadcast(notification);
+        channel.broadcast(notification, true);
     }
 
     @Nullable

@@ -47,7 +47,10 @@ public class NotificationChannel {
         }
     }
 
-    public void broadcast(Notification notification) {
+    public void broadcast(Notification notification, boolean isCancelable) {
+        if(isCancelable) {
+            notification.flags |= Notification.FLAG_NO_CLEAR;
+        }
         manager.notify(0, notification);
     }
 
