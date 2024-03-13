@@ -79,7 +79,7 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                             messages.add(message);
                             listener.onUpdate(new HashMap<>());
                         }
-                    } catch (XmppStringprepException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
