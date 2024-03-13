@@ -62,9 +62,6 @@ public class AppActivity extends JabwaveActivity
             ClientService.ClientServiceBinder binder = (ClientService.ClientServiceBinder) service;
             AppActivity.this.service = binder.getService();
             ((JabwaveApp) AppActivity.this.getApplicationContext()).clientService = binder.getService();
-            (((ClientService.ClientServiceBinder) service).getService()).notifyBackground(
-                    AppActivity.this, serviceChannel
-            );
         }
 
         @Override
@@ -81,7 +78,6 @@ public class AppActivity extends JabwaveActivity
         app = ((JabwaveApp) getApplicationContext());
         findViewById(R.id.app_fragment).setVisibility(View.GONE);
         findViewById(R.id.progress).setVisibility(View.VISIBLE);
-        registerServiceNotificationChannel();
         registerBroadcastReceiver();
         if(service == null) {
             service = new ClientService(app.getCurrentNetworkType());
@@ -94,14 +90,6 @@ public class AppActivity extends JabwaveActivity
         createMainFragment();
         setActionBar();
         drawer = findViewById(R.id.drawer_layout);
-    }
-
-    private void registerServiceNotificationChannel() {
-        serviceChannel = NotificationChannel.Builder.getInstance(this)
-                .setChannelName("network_updates", "Network Updates")
-                .setChannelParameters(false, false, false)
-                .setRingtoneUrl(null)
-                .build();
     }
 
     private void setActionBar() {

@@ -33,6 +33,8 @@ public class ClientService extends IntentService {
     protected Services services;
     protected int authType;
     protected ClientServiceBinder binder = new ClientServiceBinder();
+    private Notification notification;
+    private NotificationChannel serviceChannel;
 
     public class ClientServiceBinder extends Binder {
         public OnClientAPIResultListener listener;
@@ -107,19 +109,30 @@ public class ClientService extends IntentService {
         this.chats = chats;
     }
 
-    public void notifyBackground(Context ctx, NotificationChannel channel) {
+    public void createNotification() {
+        serviceChannel = NotificationChannel.Builder.getInstance(this)
+                .setChannelName("network_updates", "Network Updates")
+                .setChannelParameters(false, false, false)
+                .setRingtoneUrl(null)
+                .build();
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification notification = channel.createNotification(
+            notification = serviceChannel.createNotification(
                     R.drawable.ic_notification_icon,
-                    ctx.getResources().getString(R.string.app_name),
-                    ctx.getResources().getString(R.string.background_service_subtitle)
+                    getResources().getString(R.string.app_name),
+                    getResources().getString(R.string.background_service_subtitle),
+                    true
             );
-            channel.broadcast(notification, true);
         } else {
             Log.w(
                     JabwaveApp.APP_TAG,
                     "Background client service notification not needed for Android N and lower."
             );
+        }
+    }
+
+    public void startForeground() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForeground(Notification.FLAG_FOREGROUND_SERVICE, notification);
         }
     }
 
@@ -147,5 +160,12 @@ public class ClientService extends IntentService {
 
     public boolean isAsyncAPIs() {
         return getClient().isAsyncApi();
+    }
+
+    @Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        createNotification();
+        startForeground();
+        return super.onStartCommand(intent, flags, startId);
     }
 }

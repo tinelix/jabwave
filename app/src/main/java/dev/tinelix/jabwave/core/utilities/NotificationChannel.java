@@ -47,14 +47,11 @@ public class NotificationChannel {
         }
     }
 
-    public void broadcast(Notification notification, boolean isCancelable) {
-        if(isCancelable) {
-            notification.flags |= Notification.FLAG_NO_CLEAR;
-        }
+    public void broadcast(Notification notification) {
         manager.notify(0, notification);
     }
 
-    public Notification createNotification(int icon, String title, String description) {
+    public Notification createNotification(int icon, String title, String description, boolean isCancelable) {
         Notification notification;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification.Builder builder =
@@ -75,6 +72,9 @@ public class NotificationChannel {
             if(ledIndicate) notification.defaults = Notification.DEFAULT_LIGHTS;
             if(vibrate) notification.defaults = Notification.DEFAULT_VIBRATE;
             if(playSound) notification.defaults = Notification.DEFAULT_SOUND;
+            if(isCancelable) {
+                notification.flags |= Notification.FLAG_NO_CLEAR;
+            }
         }
         return notification;
     }
