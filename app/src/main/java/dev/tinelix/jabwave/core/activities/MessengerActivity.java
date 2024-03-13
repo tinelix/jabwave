@@ -198,6 +198,9 @@ public class MessengerActivity extends JabwaveActivity {
 
     @Override
     protected void onDestroy() {
+        if(isSuperChat) {
+            ((SuperChat) chat).leave();
+        }
         unregisterBroadcastReceiver();
         super.onDestroy();
     }
@@ -239,9 +242,6 @@ public class MessengerActivity extends JabwaveActivity {
 
     @Override
     protected void handleOnBackPressed() {
-        if(isSuperChat) {
-            ((SuperChat) chat).leave();
-        }
         super.handleOnBackPressed();
     }
 }
