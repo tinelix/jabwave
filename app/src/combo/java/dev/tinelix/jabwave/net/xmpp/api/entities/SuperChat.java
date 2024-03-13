@@ -66,7 +66,7 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                         msg.getFrom(),
                                         full_id,
                                         msg.getBody(),
-                                        new Date(System.currentTimeMillis()),
+                                        new Date(System.currentTimeMillis() / 1000),
                                         !full_id.equals(SuperChat.this.occupant_id)
                                 );
                         ChatSender sender = new ChatSender(client, full_id, 0);
@@ -113,7 +113,7 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                         msg.getFrom(),
                                         msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
                                         msg.getBody(),
-                                        new Date(System.currentTimeMillis()),
+                                        new Date(System.currentTimeMillis() / 1000),
                                         !full_id.equals(SuperChat.this.occupant_id)
                                 );
                         ChatSender sender = new ChatSender(client, full_id, 0);
