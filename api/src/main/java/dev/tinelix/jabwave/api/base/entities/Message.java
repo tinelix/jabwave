@@ -27,7 +27,7 @@ public class Message {
     /**
      * Default constructor of Message class.
      * @param id Message ID
-     * @param id Chat ID
+     * @param chat_id Chat ID
      * @param member_id Chat Sender ID
      * @param text Message body
      * @param timestamp Message timestamp (formatted after creating object)
@@ -40,6 +40,9 @@ public class Message {
         this.member_id = member_id;
         this.timestamp = timestamp;
         this.text = text;
+        if(this.text == null) {
+            this.text = "[Content not available]";
+        }
         this.isIncoming = isIncoming;
         attachments = new ArrayList<>();
     }

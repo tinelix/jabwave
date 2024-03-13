@@ -60,8 +60,11 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                         if(msg.getBody() != null) {
                             dev.tinelix.jabwave.api.base.entities.Message message =
                                     new dev.tinelix.jabwave.api.base.entities.Message(
-                                            message_counter++, msg.getFrom(), msg.getFrom(),
-                                            msg.getBody(), new Date(System.currentTimeMillis()),
+                                            message_counter++,
+                                            msg.getFrom(),
+                                            msg.getFrom(),
+                                            msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
+                                            new Date(System.currentTimeMillis()),
                                             !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
                                     );
                             messages.add(message);
@@ -100,7 +103,9 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                     try {
                         dev.tinelix.jabwave.api.base.entities.Message message =
                                 new dev.tinelix.jabwave.api.base.entities.Message(
-                                        message_counter++, msg.getFrom(), msg.getFrom(),
+                                        message_counter++,
+                                        msg.getFrom(),
+                                        msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
                                         msg.getBody(), new Date(System.currentTimeMillis()),
                                         !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
                                 );
@@ -178,7 +183,15 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
     @Override
     public void sendMessage(BaseClient client, String text, OnClientAPIResultListener listener) {
         try {
+            dev.tinelix.jabwave.api.base.entities.Message message =
+            new dev.tinelix.jabwave.api.base.entities.Message(
+                    message_counter++, occupant_id, occupant_id,
+                    occupant_id, new Date(System.currentTimeMillis()),
+                   false
+            );
+            messages.add(message);
             muc.sendMessage(text);
+            listener.onSuccess(new HashMap<>());
         } catch (Exception e) {
             e.printStackTrace();
             listener.onFail(new HashMap<>(), e);
