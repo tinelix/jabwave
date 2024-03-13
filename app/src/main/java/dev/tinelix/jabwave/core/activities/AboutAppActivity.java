@@ -26,6 +26,7 @@ public class AboutAppActivity extends JabwaveActivity {
         JabwaveActionBar actionbar = findViewById(R.id.actionbar);
         actionbar.setNavigationIconTint(R.color.white);
         setSupportActionBar(actionbar);
+        actionbar.setNavigationOnClickListener(v -> handleOnBackPressed());
     }
 
     private void loadAppInfo() {
