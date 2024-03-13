@@ -59,17 +59,21 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                 muc.join(Resourcepart.from(nickname));
                 msg_listener = msg -> {
                     try {
+                        String full_id = msg.getFrom().asFullJidIfPossible().toString();
                         dev.tinelix.jabwave.api.base.entities.Message message =
                                 new dev.tinelix.jabwave.api.base.entities.Message(
                                         message_counter++,
                                         msg.getFrom(),
-                                        msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
+                                        full_id,
                                         msg.getBody(),
                                         new Date(System.currentTimeMillis()),
                                         !msg.getFrom().equals(
                                                 JidCreate.bareFrom(SuperChat.this.occupant_id)
                                         )
                                 );
+                        ChatSender sender = new ChatSender(client, full_id, 0);
+                        sender.name = full_id.split("/")[1];
+                        message.setSender(sender);
                         messages.add(message);
                         listener.onUpdate(new HashMap<>());
                     } catch (XmppStringprepException e) {
@@ -104,6 +108,7 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                 message_counter = 0;
                 msg_listener = msg -> {
                     try {
+                        String full_id = msg.getFrom().asFullJidIfPossible().toString();
                         dev.tinelix.jabwave.api.base.entities.Message message =
                                 new dev.tinelix.jabwave.api.base.entities.Message(
                                         message_counter++,
@@ -115,6 +120,9 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                                 JidCreate.bareFrom(SuperChat.this.occupant_id)
                                         )
                                 );
+                        ChatSender sender = new ChatSender(client, full_id, 0);
+                        sender.name = full_id.split("/")[1];
+                        message.setSender(sender);
                         messages.add(message);
                         listener.onUpdate(new HashMap<>());
                     } catch (XmppStringprepException e) {
