@@ -26,6 +26,7 @@ import java.util.List;
 
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.entities.ChatSender;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
@@ -67,6 +68,9 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                             new Date(System.currentTimeMillis()),
                                             !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
                                     );
+                            ChatSender sender = message.getSender();
+                            sender.name = msg.getFrom().asFullJidIfPossible().toString().split("/")[1];
+                            message.setSender(sender);
                             messages.add(message);
                             listener.onUpdate(new HashMap<>());
                         }

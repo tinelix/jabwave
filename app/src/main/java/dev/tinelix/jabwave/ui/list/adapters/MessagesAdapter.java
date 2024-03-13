@@ -118,13 +118,20 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                     msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
                     msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
-                    msg_author.setText(
-                            msg.getSender() != null ?
-                                String.format("%s %s",
-                                     msg.getSender().first_name,
-                                     msg.getSender().last_name
-                                ) : chat.title
-                    );
+                    if(msg.getSender() != null) {
+                        if(msg.getSender().first_name != null && msg.getSender().last_name != null) {
+                            msg_author.setText(
+                                    String.format("%s %s",
+                                            msg.getSender().first_name,
+                                            msg.getSender().last_name
+                                    )
+                            );
+                        } else {
+                            msg_author.setText(msg.getSender().name);
+                        }
+                    } else {
+                        msg_author.setText(chat.title);
+                    }
                     msg_author.setVisibility(View.VISIBLE);
                     msg_author.setTextColor(ctx.getResources().getColor(R.color.authorInMessageColor));
                 }
