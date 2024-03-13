@@ -62,8 +62,8 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                     new dev.tinelix.jabwave.api.base.entities.Message(
                                             message_counter++,
                                             msg.getFrom(),
-                                            msg.getFrom(),
                                             msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
+                                            msg.getBody(),
                                             new Date(System.currentTimeMillis()),
                                             !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
                                     );
@@ -106,7 +106,8 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                         message_counter++,
                                         msg.getFrom(),
                                         msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
-                                        msg.getBody(), new Date(System.currentTimeMillis()),
+                                        msg.getBody(),
+                                        new Date(System.currentTimeMillis()),
                                         !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
                                 );
                         messages.add(message);
