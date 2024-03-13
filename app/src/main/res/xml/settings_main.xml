@@ -4,6 +4,7 @@
     app:iconSpaceReserved="false">
     <PreferenceCategory
         android:title="@string/general_category"
+        android:layout="@layout/layout_preference_category"
         app:iconSpaceReserved="false">
         <Preference
             android:key="account"
@@ -45,6 +46,7 @@
 
     <PreferenceCategory
         android:title="@string/network_settings_category"
+        android:layout="@layout/layout_preference_category"
         app:iconSpaceReserved="false">
 
         <Preference
