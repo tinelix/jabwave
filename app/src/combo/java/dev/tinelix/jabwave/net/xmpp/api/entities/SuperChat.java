@@ -68,7 +68,11 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
                                             new Date(System.currentTimeMillis()),
                                             !msg.getFrom().equals(JidCreate.bareFrom(this.occupant_id))
                                     );
-                            ChatSender sender = message.getSender();
+                            ChatSender sender = new ChatSender(
+                                    client,
+                                    msg.getFrom().asFullJidIfPossible().toString().split("/")[1],
+                                    0
+                            );
                             sender.name = msg.getFrom().asFullJidIfPossible().toString().split("/")[1];
                             message.setSender(sender);
                             messages.add(message);
