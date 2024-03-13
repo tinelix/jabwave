@@ -65,10 +65,10 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             PendingIntent pendingIntent = null;
             // Setting PendingIntent for Android API Level 23 and above
             if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                pendingIntent = PendingIntent.getService(this, 0, intent,
+                pendingIntent = PendingIntent.getService(ctx, 0, intent,
                         PendingIntent.FLAG_MUTABLE);
             } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                pendingIntent = PendingIntent.getService(this, 0, intent,
+                pendingIntent = PendingIntent.getService(ctx, 0, intent,
                         PendingIntent.FLAG_IMMUTABLE);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
