@@ -228,7 +228,7 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         unregisterBroadcastReceiver();
-        if(service.isConnected()) {
+        if(service != null && service.isConnected()) {
             service.stopSelf();
         }
         super.onDestroy();
