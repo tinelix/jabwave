@@ -6,12 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.entities.Account;
@@ -105,12 +108,19 @@ public class ClientService extends IntentService {
     }
 
     public void notifyBackground(Context ctx, NotificationChannel channel) {
-        Notification notification = channel.createNotification(
-                R.drawable.ic_notification_icon,
-                ctx.getResources().getString(R.string.app_name),
-                ctx.getResources().getString(R.string.background_service_subtitle)
-        );
-        channel.broadcast(notification, true);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification notification = channel.createNotification(
+                    R.drawable.ic_notification_icon,
+                    ctx.getResources().getString(R.string.app_name),
+                    ctx.getResources().getString(R.string.background_service_subtitle)
+            );
+            channel.broadcast(notification, true);
+        } else {
+            Log.w(
+                    JabwaveApp.APP_TAG,
+                    "Background client service notification not needed for Android N and lower."
+            );
+        }
     }
 
     @Nullable
