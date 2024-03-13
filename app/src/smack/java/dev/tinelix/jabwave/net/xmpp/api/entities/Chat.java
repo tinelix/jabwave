@@ -23,12 +23,21 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
     public String jid;
     public String custom_status;
     public ArrayList<String> groups;
-    public BareJid bareJid;
     private VCard vCard;
 
     public Chat(String title) {
         super(title, 0);
         this.title = title;
+    }
+
+    public Chat(String jid, String title, int type, ArrayList<String> groups, String custom_status, int status) {
+        super(jid, title, type, 0);
+        this.title = title;
+        this.type = type;
+        this.jid = jid;
+        this.groups = groups;
+        this.custom_status = custom_status;
+        this.status = status;
     }
 
     public Chat(String jid, String title, ArrayList<String> groups, String custom_status, int status) {
@@ -40,8 +49,8 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
         this.status = status;
     }
 
-    public Chat(String jid, String title, ArrayList<String> groups, int status) {
-        super(jid, title, 0);
+    public Chat(String jid, String title, int type, ArrayList<String> groups, int status) {
+        super(jid, title, type, 0);
         /* Main statuses in XMPP Contacts:
         /       0 - offline,
         /       1 - online,
@@ -55,8 +64,8 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
         this.status = status;
     }
 
-    public Chat(String jid, String title, int type, ArrayList<String> groups, int status) {
-        super(jid, title, type, 0);
+    public Chat(String jid, String title, ArrayList<String> groups, int status) {
+        super(jid, title, 0);
         /* Main statuses in XMPP Contacts:
         /       0 - offline,
         /       1 - online,

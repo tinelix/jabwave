@@ -42,14 +42,13 @@ public class Services extends dev.tinelix.jabwave.api.base.models.Services {
                         break;
                     }
                 }
-                int type = 0;
                 String node = item.getNode();
                 if(node == null) {
                     node = item.getEntityID().toString();
                 }
                 NetworkService netService = new
-                        dev.tinelix.jabwave.net.xmpp.api.entities.NetworkService(
-                                jid, type, title, node, isConference
+                        dev.tinelix.jabwave.net.xmpp.api.models.NetworkService(
+                                client, jid, 0, title, node, isConference
                         );
 
                 netServices.add(netService);
