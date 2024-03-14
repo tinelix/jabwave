@@ -26,6 +26,7 @@ import dev.tinelix.jabwave.core.utilities.NotificationChannel;
 
 public class ClientService extends IntentService {
 
+    private final String network_name;
     protected Authenticator auth;
     protected Account account;
     protected Chats chats;
@@ -60,6 +61,7 @@ public class ClientService extends IntentService {
      */
     public ClientService(@NonNull String name) {
         super(name);
+        this.network_name = name;
     }
 
     @Override
@@ -118,7 +120,7 @@ public class ClientService extends IntentService {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notification = serviceChannel.createNotification(
                     R.drawable.ic_notification_icon,
-                    getResources().getString(R.string.app_name),
+                    network_name,
                     getResources().getString(R.string.background_service_subtitle),
                     true
             );

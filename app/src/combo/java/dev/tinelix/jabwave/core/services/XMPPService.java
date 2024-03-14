@@ -36,6 +36,8 @@ import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
 
 public class XMPPService extends ClientService {
 
+    public static final String NETWORK_NAME = "XMPP (Smack)";
+
     private static final String ACTION_START = "start_service";
     private static final String ACTION_STOP = "stop_service";
 
@@ -52,7 +54,7 @@ public class XMPPService extends ClientService {
     private XMPPTCPConnection conn;
 
     public XMPPService() {
-        super("XMPPService");
+        super(NETWORK_NAME);
     }
 
     public class XMPPServiceBinder extends Binder {

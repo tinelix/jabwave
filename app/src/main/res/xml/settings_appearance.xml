@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:iconSpaceReserved="false">
+    <Preference
+        android:key="accent_color"
+        android:title="@string/accent_color"
+        app:iconSpaceReserved="false" />
+    <SwitchPreference
+        android:key="appearance_dark_theme"
+        android:summary="@string/dark_theme_summary"
+        android:title="@string/dark_theme"
+        app:iconSpaceReserved="false" />
+    <Preference
+        android:key="@string/theme_presets"
+        android:title="@string/theme_presets"
+        app:iconSpaceReserved="false" />
+</PreferenceScreen>

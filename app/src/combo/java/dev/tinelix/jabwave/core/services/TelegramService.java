@@ -35,6 +35,8 @@ import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
 public class TelegramService extends ClientService implements TDLibClient.ApiHandler, TDLibClient.ClientHandler {
 
+    public static final String NETWORK_NAME = "Telegram (TDLib)";
+
     private static final String ACTION_START = "start_service";
     private static final String ACTION_SEND_CLIENT_CMD = "sendClientCmd";
     private static final String ACTION_STOP = "stop_service";
@@ -50,7 +52,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     private boolean isConnected;
 
     public TelegramService() {
-        super(JabwaveApp.TELEGRAM_SERV_TAG);
+        super(NETWORK_NAME);
     }
 
     @Override

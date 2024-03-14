@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Authorization Activity !-->
+    <string name="auth_twofactor_code_text">Введите код подтверждения, отправленный на другом устройстве.</string>
+    <string name="auth_twofactor_code">Код для входа</string>
+    <string name="auth_cloud_password_text">Введите пароль, привязанный к вашему аккаунту.</string>
+    <string name="auth_cloud_password_code">Пароль</string>
+    <string name="auth_cloud_password_hint_question">Нужна подсказка?</string>
+
+    <!-- Account settings screen !-->
+    <string name="change_account_data">Изменить данные</string>
+    <string name="delete_account">Удалить аккаунт</string>
+</resources>

@@ -2,7 +2,7 @@
 <resources>
 
     <!-- About Application Activity !-->
-    <string name="about_app_version">Версия: %1$s\nКоммит: %2$s</string>
+    <string name="about_app_version">Версия %1$s\nКоммит %2$s</string>
     <string name="source_code">Исходный код</string>
     <string name="about_app_license"><![CDATA[
         Эта программа является свободным программным обеспечением: вы можете распространять и/или
@@ -12,6 +12,9 @@
         <br><br>БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, ВКЛЮЧАЯ КОММЕРЧЕСКУЮ ЦЕННОСТЬ ИЛИ ПРИГОДНОСТЬ ДЛЯ КОНКРЕТНЫХ ЦЕЛЕЙ.
     ]]></string>
 
+    <!-- Notifications !-->
+    <string name="background_service_subtitle">Служба доставки сообщений работает в фоновом режиме.</string>
+
     <!-- Authorization Activity !-->
     <string name="auth_phone_number">Номер телефона</string>
     <string name="auth_password">Пароль</string>
@@ -20,8 +23,6 @@
     <string name="invalid_pn_or_passw">Неверный номер телефона и/или пароль.</string>
     <string name="invalid_jid_or_passw">Неверный Jabber ID и/или пароль.</string>
     <string name="auth_error_network">Нет подключения к Интернету</string>
-    <string name="auth_twofactor_code_text">Введите код подтверждения, отправленный на другом устройстве.</string>
-    <string name="auth_twofactor_code">Код для входа</string>
     <string name="auth_wait">Подождите</string>
     <string name="retry_btn">Повторить</string>
 
@@ -46,15 +47,14 @@
     <string name="message">Сообщение</string>
     <string name="broadcast">Транслируемая публикация</string>
     <string name="no_messages">Нет сообщений</string>
-    <string name="error">Ошибка</string>
 
     <!-- Alert Dialogs !-->
     <string name="open_link_title">Открыть ссылку?</string>
     <string name="open_link_summary">
-        Вы действительно хотите открыть %s?\nМы заботимся о вашей безопасности.
+        Вы действительно хотите открыть ссылку, находящиеся в %s? Она может оказаться небезопасной.
     </string>
 
-    <!-- Main settings screen !-->
+    <!-- Main Settings screen !-->
     <string name="general_settings_category">Общие</string>
     <string name="account">Аккаунт</string>
     <string name="appearance">Внешний вид</string>
@@ -69,7 +69,20 @@
     <string name="debug">Отладка</string>
     <string name="experiments">Эксперименты</string>
 
-    <!-- Notifications !-->
-    <string name="background_service_subtitle">Служба доставки сообщений работает в фоновом режиме.</string>
+    <!-- Main Settings menu !-->
+    <string name="edit_profile">Изменить профиль</string>
 
+    <!-- Account Settings screen !-->
+    <string name="about_account">Об аккаунте</string>
+    <string name="log_out">Выйти</string>
+    <string name="delete_account">Удалить аккаунт</string>
+
+    <!-- Appearance Settings screen !-->
+    <string name="accent_color">Расцветка</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="dark_theme_summary">Делает использование комфортнее в темном помещении и экономит заряд батареи</string>
+    <string name="theme_presets">Предустановки</string>
+
+    <!-- Misc !-->
+    <string name="error">Ошибка</string>
 </resources>
