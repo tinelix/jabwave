@@ -13,7 +13,7 @@
     ]]></string>
 
     <!-- Notifications !-->
-    <string name="mds_subtitle">Служба принимает сообщения в фоновом режиме.</string>
+    <string name="mds_subtitle">Служба принимает сообщения в фоновом режиме</string>
 
     <!-- Authorization Activity !-->
     <string name="auth_phone_number">Номер телефона</string>
