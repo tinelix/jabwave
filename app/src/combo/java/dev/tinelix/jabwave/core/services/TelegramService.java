@@ -141,7 +141,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                     isConnected = true;
                     auth = new Authenticator((TDLibClient) client);
                     ((Authenticator) auth).checkAuthState();
-                    if(!((Authenticator) auth).isAuthorized())
+                    if(!auth.isAuthenticated())
                         ((Authenticator) auth).checkPhoneNumber(phone_number);
                     services = new Services(client);
                 } catch (Exception ex) {

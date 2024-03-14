@@ -22,13 +22,14 @@ import javax.net.ssl.X509TrustManager;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
-public class Authenticator {
+public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authenticator {
 
-    private final XMPPClient client;
     private XMPPTCPConnection conn;
 
     public Authenticator(XMPPClient client) {
-        this.client = client;
+        super(client);
+        isChangeableAuthData = true;
+        authType = dev.tinelix.jabwave.api.base.entities.Authenticator.TYPE_REQUIRES_EMAIL;
     }
 
     public static XMPPTCPConnectionConfiguration buildAuthConfig(

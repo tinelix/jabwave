@@ -11,11 +11,14 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
         implements OnClientAPIResultListener {
 
     private final TDLibClient client;
-    private boolean isAuthorized;
     private TdApi.PhoneNumberAuthenticationSettings phoneAuthSettings;
 
     public Authenticator(TDLibClient client) {
         super(client);
+        isChangeableAuthData = true;
+        authType =
+                dev.tinelix.jabwave.api.base.entities.Authenticator.TYPE_REQUIRES_PHONE_NUMBER
+                        | dev.tinelix.jabwave.api.base.entities.Authenticator.TYPE_STEP_BY_STEP;
         this.client = client;
         checkAuthState();
     }
@@ -26,12 +29,12 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
 
     public void setAuthState(TdApi.AuthorizationState state) {
         if(state.getConstructor() == TdApi.AuthorizationStateReady.CONSTRUCTOR) {
-            isAuthorized = true;
+            isAuthenticated = true;
         }
     }
 
     public void checkPhoneNumber(String phone_number) {
-        if(!isAuthorized) {
+        if(!isAuthenticated) {
             phoneAuthSettings = new TdApi.PhoneNumberAuthenticationSettings();
             phoneAuthSettings.allowFlashCall = false;
             phoneAuthSettings.allowMissedCall = false;
@@ -44,7 +47,7 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
     }
 
     public void sendCloudPassword(String password) {
-        if(!isAuthorized) {
+        if(!isAuthenticated) {
             client.send(
                     new TdApi.CheckAuthenticationPassword(password),
                     this
@@ -53,16 +56,12 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
     }
 
     public void sendAuthCode(String auth_code) {
-        if(!isAuthorized) {
+        if(!isAuthenticated) {
             client.send(
                     new TdApi.CheckAuthenticationCode(auth_code),
                     this
             );
         }
-    }
-
-    public boolean isAuthorized() {
-        return isAuthorized;
     }
 
     @Override

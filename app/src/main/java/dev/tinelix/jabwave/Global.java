@@ -6,12 +6,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.ColorSpace;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorRes;
+import dev.tinelix.jabwave.ui.list.items.ThemePreset;
 
 public class Global {
 
@@ -86,5 +95,60 @@ public class Global {
                         }
                 ).create();
         dialog.show();
+    }
+
+    public static int getColorAttribute(Context ctx, @AttrRes int attr_res) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = ctx.getTheme();
+        theme.resolveAttribute(attr_res, typedValue, true);
+        return typedValue.data;
+    }
+
+    public static void generateDefaultThemePreset(Context ctx, ThemePreset preset) {
+        if(preset.id == -4) {
+            preset.setActionBarColor(
+                    Global.getColorAttribute(
+                            ctx, com.google.android.material.R.attr.colorPrimary
+                    )
+            );
+            preset.setMessengerBackgroundColor(
+                    ctx.getResources().getColor(R.color.messengerBackgroundColor)
+            );
+            preset.setIncomingMessageBubbleColor(
+                    ctx.getResources().getColor(R.color.inMessageColor)
+            );
+            preset.setIncomingMessageTextColor(
+                    ctx.getResources().getColor(R.color.inMessageTextColor)
+            );
+            preset.setOutcomingMessageBubbleColor(
+                    ctx.getResources().getColor(R.color.outMessageColor)
+            );
+            preset.setOutcomingMessageTextColor(
+                    ctx.getResources().getColor(R.color.outMessageTextColor)
+            );
+            preset.setAppThemeBackgroundColor(
+                    Global.getColorAttribute(
+                            ctx, com.google.android.material.R.attr.backgroundColor
+                    )
+            );
+            preset.setAccentColor(
+                    Global.getColorAttribute(
+                            ctx, com.google.android.material.R.attr.colorAccent
+                    )
+            );
+        } else if(preset.id == -3) {
+            preset.setActionBarColor(Color.parseColor("#FFDD6700"));
+            preset.setMessengerBackgroundColor(Color.parseColor("#FFFFCA9C"));
+            preset.setIncomingMessageBubbleColor(Color.parseColor("#FFFFE8D3"));
+            preset.setIncomingMessageTextColor(Color.parseColor("#FF733600"));
+            preset.setOutcomingMessageBubbleColor(Color.parseColor("#FFDD6700"));
+            preset.setOutcomingMessageTextColor(Color.WHITE);
+            preset.setAppThemeBackgroundColor(Color.WHITE);
+            preset.setAccentColor(Color.parseColor("#FFDD6700"));
+        }
+    }
+
+    public static SharedPreferences getThemePresetPreferences(Context ctx, long id) {
+        return ctx.getSharedPreferences(String.format("theme_%s", id), 0);
     }
 }

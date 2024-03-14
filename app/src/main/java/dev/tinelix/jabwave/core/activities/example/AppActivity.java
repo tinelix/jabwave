@@ -74,7 +74,7 @@ public class AppActivity extends JabwaveActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_app);
         app = ((JabwaveApp) getApplicationContext());
         findViewById(R.id.app_fragment).setVisibility(View.GONE);
         findViewById(R.id.progress).setVisibility(View.VISIBLE);

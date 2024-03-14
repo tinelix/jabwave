@@ -1,7 +1,9 @@
 package dev.tinelix.jabwave.core.activities.base;
 
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;

@@ -77,12 +77,24 @@
     <string name="log_out">Выйти</string>
     <string name="delete_account">Удалить аккаунт</string>
 
+    <!-- About Account screen !-->
+    <string name="email">Электронная почта</string>
+    <string name="password">Пароль</string>
+    <string name="change_password_summary">Нажмите, чтобы сменить</string>
+    <string name="registration_date">Дата регистрации</string>
+
     <!-- Appearance Settings screen !-->
+    <string name="theme_presets">Предустановки</string>
+    <string name="theme_personalization">Персонализация</string>
     <string name="accent_color">Расцветка</string>
     <string name="dark_theme">Тёмная тема</string>
     <string name="dark_theme_summary">Делает использование комфортнее в темном помещении и экономит заряд батареи</string>
-    <string name="theme_presets">Предустановки</string>
 
     <!-- Misc !-->
+    <string name="_default">По умолчанию</string>
     <string name="error">Ошибка</string>
+    <string name="not_supported">Не поддерживается</string>
+    <string name="not_supported_by_network">Не поддерживается текущей сетью</string>
+    <string name="not_supported_by_protocol">Не поддерживается текущим протоколом</string>
+    <string name="theme_presets_warning">* Применимо только в окне переписки.</string>
 </resources>
