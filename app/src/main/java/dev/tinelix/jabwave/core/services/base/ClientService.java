@@ -121,7 +121,7 @@ public class ClientService extends IntentService {
             notification = serviceChannel.createNotification(
                     R.drawable.ic_notification_icon,
                     network_name,
-                    getResources().getString(R.string.background_service_subtitle),
+                    getResources().getString(R.string.mds_subtitle),
                     true
             );
         } else {

@@ -12,7 +12,7 @@
     ]]></string>
 
     <!-- Notifications !-->
-    <string name="background_service_subtitle">Message Delivery Service running in the background mode.</string>
+    <string name="mds_subtitle">Service receives messages in background.</string>
 
     <!-- Authorization Activity !-->
     <string name="auth_phone_number">Phone Number</string>
