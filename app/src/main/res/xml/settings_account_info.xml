@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        android:key="email"
+        android:title="@string/auth_phone_number"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="email"
+        android:title="@string/email"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="email"
+        android:title="@string/password"
+        android:summary="@string/change_password_summary"
+        app:iconSpaceReserved="false" />
+</PreferenceScreen>
