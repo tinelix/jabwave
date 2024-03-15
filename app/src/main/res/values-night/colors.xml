@@ -58,7 +58,7 @@
     <color name="actionBarColorOrange">#FF242424</color>
     <color name="statusBarColorOrange">#FF181818</color>
     <color name="accentColorOrange">#FFDD6700</color>
-    <color name="messengerBackgroundColorOrange">#FF6E3300</color>
+    <color name="messengerBackgroundColorOrange">#FF874002</color>
     <color name="inMessageColorOrange">#FF353535</color>
     <color name="inMessageTextColorOrange">#FFFFFF</color>
     <color name="outMessageColorOrange">#FFDD6700</color>
