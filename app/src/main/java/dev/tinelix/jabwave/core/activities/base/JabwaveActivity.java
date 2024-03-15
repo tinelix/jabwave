@@ -12,12 +12,15 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.utilities.ThemePresets;
 
 public class JabwaveActivity extends AppCompatActivity {
+    private SharedPreferences global_prefs;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +35,10 @@ public class JabwaveActivity extends AppCompatActivity {
         );
 
         global_prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if(global_prefs.getBoolean("darkTheme", false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        boolean isDarkTheme = global_prefs.getBoolean("darkTheme", false);
+        AppCompatDelegate.setDefaultNightMode(
+                isDarkTheme ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
 
         setThemePreset();
     }
