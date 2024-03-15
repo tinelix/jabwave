@@ -367,7 +367,7 @@
     </style>
 
     <style name="ApplicationTheme.ProgressBar" parent="Widget.AppCompat.ProgressBar">
-        <item name="colorAccent">@color/accentColor</item>
+        <item name="colorAccent">?colorAccent</item>
     </style>
 
     <style name="ApplicationTheme.Button" parent="Widget.MaterialComponents.Button">

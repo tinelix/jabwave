@@ -17,7 +17,7 @@
     <color name="outSelectedMessageColor">#FF1D549E</color>
     <color name="outMessageTextColor">#FF8DBEFF</color>
     <color name="inMsgTimestampColor">#8EFFFFFF</color>
-    <color name="messengerBackgroundColor">#FF003780</color>
+    <color name="messengerBackgroundColor">#FF3B5C88</color>
     <color name="authorInMessageColor">#FFFFFFFF</color>
     <color name="authorOutMessageColor">#FF64A6FF</color>
 
@@ -30,29 +30,29 @@
     <color name="inMessageTextColorGreen">#FFFFFF</color>
     <color name="outMessageColorGreen">#FF689F38</color>
     <color name="outSelectedMessageColorGreen">#FF537F2D</color>
-    <color name="outMessageTextColorGreen">#FFFFFFFF</color>
+    <color name="outMessageTextColorGreen">#FF2f471a</color>
 
     <!-- Theme attributes. Color #3 (red) !-->
     <color name="actionBarColorRed">#FF242424</color>
     <color name="statusBarColorRed">#FF181818</color>
     <color name="accentColorRed">#FFD04B40</color>
-    <color name="messengerBackgroundColorRed">#FF6C2923</color>
+    <color name="messengerBackgroundColorRed">#FF8E352D</color>
     <color name="inMessageColorRed">#FF353535</color>
     <color name="inMessageTextColorRed">#FFFFFF</color>
-    <color name="outMessageColorRed">#FFD34B41</color>
-    <color name="outSelectedMessageColorRed">#FFC3483F</color>
+    <color name="outMessageColorRed">#FFBE5C55</color>
+    <color name="outSelectedMessageColorRed">#FFA13B34</color>
     <color name="outMessageTextColorRed">#FFFFFFFF</color>
 
     <!-- Theme attributes. Color #4 (violet) !-->
     <color name="actionBarColorViolet">#FF242424</color>
     <color name="statusBarColorViolet">#FF181818</color>
-    <color name="accentColorViolet">#FF6941BB</color>
-    <color name="messengerBackgroundColorViolet">#FF472D7A</color>
+    <color name="accentColorViolet">#FFB08AFF</color>
+    <color name="messengerBackgroundColorViolet">#FF4E406B</color>
     <color name="inMessageColorViolet">#FF353535</color>
     <color name="inMessageTextColorViolet">#FFFFFF</color>
-    <color name="outMessageColorViolet">#FF6941BB</color>
+    <color name="outMessageColorViolet">#FF8969CB</color>
     <color name="outSelectedMessageColorViolet">#FF5b39a0</color>
-    <color name="outMessageTextColorViolet">#FFFFFFFF</color>
+    <color name="outMessageTextColorViolet">#FF412a71</color>
 
     <!-- Theme attributes. Color #5 (orange) !-->
     <color name="actionBarColorOrange">#FF242424</color>
