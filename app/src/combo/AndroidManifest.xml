@@ -75,6 +75,7 @@
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mcc|mnc|uiMode"
             android:hardwareAccelerated="true">
         </activity>
+
     </application>
 
 </manifest>

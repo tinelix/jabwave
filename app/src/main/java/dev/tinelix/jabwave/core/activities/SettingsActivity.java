@@ -71,6 +71,6 @@ public class SettingsActivity extends JabwaveActivity {
             intent.putExtra("fragment_id", extras.getInt("fragment_id"));
         }
         startActivity(intent);
-        finishAffinity();
+        finish();
     }
 }
