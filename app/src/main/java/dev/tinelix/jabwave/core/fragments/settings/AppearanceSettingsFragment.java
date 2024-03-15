@@ -39,7 +39,15 @@ public class AppearanceSettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void listenPreferences() {
-        Preference presetsPref = findPreference("theme_presets");
+        Preference darkThemePref = findPreference("darkTheme");
+        if(darkThemePref != null) {
+            darkThemePref.setOnPreferenceClickListener(preference -> {
+                if(getActivity() instanceof SettingsActivity activity) {
+                    activity.restart();
+                }
+                return false;
+            });
+        }
     }
 
     @SuppressWarnings("rawtypes")
