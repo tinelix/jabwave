@@ -80,7 +80,7 @@
     <color name="actionBarColorOcean">#FF242424</color>
     <color name="statusBarColorOcean">#FF181818</color>
     <color name="accentColorOcean">#FF03ABC0</color>
-    <color name="messengerBackgroundColorOcean">#FF01636F</color>
+    <color name="messengerBackgroundColorOcean">#FF01515B</color>
     <color name="inMessageColorOcean">#FF353535</color>
     <color name="inMessageTextColorOcean">#FFFFFF</color>
     <color name="outMessageColorOcean">#FF008A9C</color>
