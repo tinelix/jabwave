@@ -22,6 +22,7 @@ public class SettingsActivity extends JabwaveActivity {
     private JabwaveReceiver jwReceiver;
     private JabwaveApp app;
     public ClientService service;
+    private boolean neededToRestartApp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class SettingsActivity extends JabwaveActivity {
         if(getIntent().getExtras() != null) {
             Bundle extras = getIntent().getExtras();
             createSettingsFragment(extras.getInt("fragment_id"));
+            neededToRestartApp = extras.getBoolean("needed_to_restart_app");
             registerBroadcastReceiver();
         } else {
             Log.e(JabwaveApp.APP_TAG, "Fragment ID not specified before SettingsActivity starts");
@@ -69,8 +71,17 @@ public class SettingsActivity extends JabwaveActivity {
         if(fragment != null) {
             Bundle extras = getIntent().getExtras();
             intent.putExtra("fragment_id", extras.getInt("fragment_id"));
+            intent.putExtra("needed_to_restart_app", true);
         }
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void handleOnBackPressed() {
+        if(neededToRestartApp) {
+            ((JabwaveApp) getApplication()).restart();
+        }
+        super.handleOnBackPressed();
     }
 }

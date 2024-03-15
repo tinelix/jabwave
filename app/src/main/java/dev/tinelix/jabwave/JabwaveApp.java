@@ -1,6 +1,7 @@
 package dev.tinelix.jabwave;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -9,6 +10,7 @@ import org.jxmpp.jid.parts.Resourcepart;
 
 import java.util.Random;
 
+import dev.tinelix.jabwave.core.activities.MainActivity;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 
 public class JabwaveApp extends Application {
@@ -92,5 +94,13 @@ public class JabwaveApp extends Application {
 
     public String getCurrentNetworkType() {
         return global_prefs.getString("network_type", "");
+    }
+
+    public void restart() {
+        Intent activity = new Intent(this,
+                MainActivity.class);
+        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(activity);
+        System.exit(0);
     }
 }
