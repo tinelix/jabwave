@@ -86,8 +86,8 @@
     <color name="statusBarColorOcean">#028D9F</color>
     <color name="accentColorOcean">#FF03ABC0</color>
     <color name="accentColorOcean_reserve">#FF03ABC0</color>
-    <color name="messengerBackgroundColorOcean">#FFBAF7FF</color>
-    <color name="inMessageColorOcean">#FFE3FCFF</color>
+    <color name="messengerBackgroundColorOcean">#FFCFFAFF</color>
+    <color name="inMessageColorOcean">#FFF4FEFF</color>
     <color name="inMessageTextColorOcean">#FF006B79</color>
     <color name="outMessageColorOcean">#FF008A9C</color>
     <color name="outSelectedMessageColorOcean">#FF0095A8</color>
