@@ -52,7 +52,7 @@
     <color name="inMessageTextColorViolet">#FFFFFF</color>
     <color name="outMessageColorViolet">#FF8969CB</color>
     <color name="outSelectedMessageColorViolet">#FF5b39a0</color>
-    <color name="outMessageTextColorViolet">#FF412a71</color>
+    <color name="outMessageTextColorViolet">#FFFFFFFF</color>
 
     <!-- Theme attributes. Color #5 (orange) !-->
     <color name="actionBarColorOrange">#FF242424</color>
