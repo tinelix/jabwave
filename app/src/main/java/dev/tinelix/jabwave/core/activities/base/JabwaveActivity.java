@@ -30,6 +30,15 @@ public class JabwaveActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        global_prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if(global_prefs.getBoolean("darkTheme", false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         setThemePreset();
     }
 

@@ -53,7 +53,7 @@ public class AppearanceSettingsFragment extends PreferenceFragmentCompat {
                 View view = holder.itemView;
                 Preference preference = getItem(position);
                 if (preference != null) {
-                    if (preference.getKey().equals("theme_presets_list")) {
+                    if (preference.getKey().equals("themePresetsList")) {
                         RecyclerView presets_view = view.findViewById(R.id.presets_view);
                         ArrayList<ThemePreset> presets = new ArrayList<>();
                         loadThemePresets(presets);
