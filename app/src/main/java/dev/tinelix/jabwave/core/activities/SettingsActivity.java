@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.core.activities;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.activities.base.JabwaveFragmentActivity;
+import dev.tinelix.jabwave.core.fragments.settings.AppearanceSettingsFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.core.utilities.FragmentNavigator;
@@ -59,5 +61,16 @@ public class SettingsActivity extends JabwaveActivity {
             Log.e(JabwaveApp.APP_TAG, "Invalid Fragment ID before SettingsActivity starts");
             finish();
         }
+    }
+
+    // Restarting to restore activity to its normal state or to apply theme and font changes
+    public void restart() {
+        Intent intent = new Intent(this, getClass());
+        if(fragment != null) {
+            Bundle extras = getIntent().getExtras();
+            intent.putExtra("fragment_id", extras.getInt("fragment_id"));
+        }
+        startActivity(intent);
+        finishAffinity();
     }
 }

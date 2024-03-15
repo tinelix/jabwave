@@ -11,10 +11,12 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.activities.SettingsActivity;
 import dev.tinelix.jabwave.core.utilities.ThemePresets;
 import dev.tinelix.jabwave.ui.list.items.ThemePreset;
 
@@ -95,9 +97,16 @@ public class ThemePresetsAdapter extends RecyclerView.Adapter<ThemePresetsAdapte
                 lastCheckedButton = (RadioButton) button;
                 ThemePresets.getPreferences(ctx, preset.id);
                 preset.saveThemePreset(ctx);
+                restartActivity(ctx);
             });
             if(app_prefs.getLong("currentThemeId", 0) == preset.id) {
                 button.setChecked(true);
+            }
+        }
+
+        private void restartActivity(Context ctx) {
+            if(ctx instanceof SettingsActivity activity) {
+                activity.restart();
             }
         }
     }

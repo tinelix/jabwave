@@ -51,7 +51,7 @@ public class AppearanceSettingsFragment extends PreferenceFragmentCompat {
                         RecyclerView presets_view = view.findViewById(R.id.presets_view);
                         ArrayList<ThemePreset> presets = new ArrayList<>();
                         loadThemePresets(presets);
-                        presets_view.setAdapter(new ThemePresetsAdapter(getContext(), presets));
+                        presets_view.setAdapter(new ThemePresetsAdapter(getActivity(), presets));
                 }
             }
         };

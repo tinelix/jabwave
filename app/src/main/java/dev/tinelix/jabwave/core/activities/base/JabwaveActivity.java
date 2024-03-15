@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.core.activities.base;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
