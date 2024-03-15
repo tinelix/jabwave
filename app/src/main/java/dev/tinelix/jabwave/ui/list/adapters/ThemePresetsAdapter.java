@@ -97,7 +97,7 @@ public class ThemePresetsAdapter extends RecyclerView.Adapter<ThemePresetsAdapte
                 if (lastCheckedButton != null) {
                     lastCheckedButton.setChecked(false);
                 }
-                lastCheckedButton = (RadioButton) button;
+                lastCheckedButton = button;
                 ThemePresets.getPreferences(ctx, preset.id);
                 preset.saveThemePreset(ctx);
                 restartActivity(ctx);
