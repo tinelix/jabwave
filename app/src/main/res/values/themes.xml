@@ -133,6 +133,11 @@
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColorViolet</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorViolet</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorViolet</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorViolet</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorViolet</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorViolet</item>
     </style>
 
     <style name="ApplicationTheme.Violet.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
