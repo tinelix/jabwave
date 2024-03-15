@@ -28,9 +28,9 @@
     <color name="messengerBackgroundColorGreen">#FF3F5F23</color>
     <color name="inMessageColorGreen">#FF353535</color>
     <color name="inMessageTextColorGreen">#FFFFFF</color>
-    <color name="outMessageColorGreen">#FF689F38</color>
-    <color name="outSelectedMessageColorGreen">#FF537F2D</color>
-    <color name="outMessageTextColorGreen">#FF2f471a</color>
+    <color name="outMessageColorGreen">#FF598830</color>
+    <color name="outSelectedMessageColorGreen">#FF466B26</color>
+    <color name="outMessageTextColorGreen">#FFFFFFFF</color>
 
     <!-- Theme attributes. Color #3 (red) !-->
     <color name="actionBarColorRed">#FF242424</color>
