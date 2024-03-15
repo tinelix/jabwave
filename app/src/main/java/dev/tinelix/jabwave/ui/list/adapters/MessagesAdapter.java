@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.entities.Chat;
@@ -100,23 +101,34 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 msg_timestamp.setText(msg.formatTimestamp());
                 flow_container_space.setVisibility(View.GONE);
                 if(chat.type == 3) {
-                    msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
+                    msg_card.setCardBackgroundColor(
+                            Global.getColorAttribute(ctx, R.attr.inMsgBubbleBackgroundColor)
+                    );
                     msg_text.setMaxWidth((int) (256 * ctx.getResources().getDisplayMetrics().scaledDensity));
-                    msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
+                    msg_text.setTextColor(Global.getColorAttribute(ctx, R.attr.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
                 } else if(chat.type == 0 && msg.isIncoming()) {
-                    msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
-                    msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
+                    msg_card.setCardBackgroundColor(
+                            Global.getColorAttribute(ctx, R.attr.inMsgBubbleBackgroundColor)
+                    );
+                    msg_text.setTextColor(Global.getColorAttribute(ctx, R.attr.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
                 } else if (!msg.isIncoming()) {
                     ((FrameLayout.LayoutParams) msg_card.getLayoutParams()).gravity = Gravity.END;
-                    msg_text.setTextColor(ctx.getResources().getColor(R.color.outMessageTextColor));
+                    msg_text.setTextColor(
+                            Global.getColorAttribute(ctx, R.attr.outMessageTextColor)
+                    );
+                    msg_card.setCardBackgroundColor(
+                            Global.getColorAttribute(ctx, R.attr.outMsgBubbleBackgroundColor)
+                    );
                 } else {
                     if(msg.getAttachments() != null && msg.getAttachments().size() > 0) {
                         flow_container_space.setVisibility(View.VISIBLE);
                     }
-                    msg_card.setCardBackgroundColor(ctx.getResources().getColor(R.color.inMessageColor));
-                    msg_text.setTextColor(ctx.getResources().getColor(R.color.inMessageTextColor));
+                    msg_card.setCardBackgroundColor(
+                            Global.getColorAttribute(ctx, R.attr.inMsgBubbleBackgroundColor)
+                    );
+                    msg_text.setTextColor(Global.getColorAttribute(ctx, R.attr.inMessageTextColor));
                     msg_timestamp.setTextColor(ctx.getResources().getColor(R.color.inMsgTimestampColor));
                     if(msg.getSender() != null) {
                         if(msg.getSender().first_name != null && msg.getSender().last_name != null) {
