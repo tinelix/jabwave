@@ -1,20 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="ApplicationTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/accentColor</item>
-        <item name="colorPrimaryVariant">@color/accentColorVariant</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/accentColor</item>
-        <item name="colorSecondaryVariant">@color/accentColor</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <item name="colorAccent">@color/accentColor</item>
-        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
-    </style>
-
-    <style name="ApplicationTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
 
     <style name="ApplicationTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -24,4 +8,5 @@
         <item name="materialThemeOverlay">@style/ApplicationTheme.Overlay</item>
         <item name="iconTint">@color/accentColor</item>
     </style>
+
 </resources>

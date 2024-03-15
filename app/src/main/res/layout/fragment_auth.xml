@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/auth_sign_in"
-                app:backgroundTint="@color/accentColorVariant"
+                app:backgroundTint="?attr/colorAccent"
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.button.MaterialButton

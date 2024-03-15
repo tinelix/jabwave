@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
-import dev.tinelix.jabwave.Global;
+import dev.tinelix.jabwave.core.utilities.ThemePresets;
 
 public class ThemePreset {
     public final long id;
@@ -19,8 +19,10 @@ public class ThemePreset {
     protected int accentColor;
     protected int primaryTextColor;
     protected int secondaryTextColor;
+    public int styleId;
 
     public ThemePreset(long id, String name) {
+        this.styleId = styleId;
         this.id = id;
         this.name = name;
     }
@@ -112,20 +114,12 @@ public class ThemePreset {
     }
 
     public void saveThemePreset(Context ctx) {
-        SharedPreferences preset_prefs = Global.getThemePresetPreferences(ctx, id);
+        SharedPreferences preset_prefs = ThemePresets.getPreferences(ctx, id);
         SharedPreferences.Editor editor = null;
         if(!preset_prefs.contains("name")) {
             editor = preset_prefs.edit();
             editor.putString("name", name);
-            editor.putInt("actionBarColor", actionBarColor);
-            editor.putInt("msgrBackgroundColor", msgrBackgroundColor);
-            editor.putInt("inMessageBubbleColor", inMessageBubbleColor);
-            editor.putInt("inMessageTextColor", inMessageTextColor);
-            editor.putInt("outMessageTextColor", outMessageBubbleColor);
-            editor.putInt("appThemeBackgroundColor", appThemeBackgroundColor);
-            editor.putInt("accentColor", accentColor);
-            editor.putInt("primaryTextColor", primaryTextColor);
-            editor.putInt("secondaryTextColor", secondaryTextColor);
+            editor.putInt("style_id", styleId);
             editor.apply();
         }
         SharedPreferences app_prefs = PreferenceManager.getDefaultSharedPreferences(ctx);

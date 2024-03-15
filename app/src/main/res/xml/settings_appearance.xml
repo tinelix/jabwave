@@ -5,7 +5,7 @@
     app:iconSpaceReserved="false">
     <PreferenceCategory
         android:key="theme_presets"
-        android:title="@string/theme_presets"
+        android:title="@string/theme_personalization"
         android:layout="@layout/layout_preference_category"
         app:iconSpaceReserved="false">
         <ListPreference
@@ -15,19 +15,9 @@
             android:title="@string/theme_presets"
             tools:ignore="TouchTargetSizeCheck" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:key="personalization"
-        android:title="@string/theme_personalization"
-        android:layout="@layout/layout_preference_category"
-        app:iconSpaceReserved="false">
-        <Preference
-            android:key="accent_color"
-            android:title="@string/accent_color"
-            app:iconSpaceReserved="false" />
-        <SwitchPreference
-            android:key="appearance_dark_theme"
-            android:summary="@string/dark_theme_summary"
-            android:title="@string/dark_theme"
-            app:iconSpaceReserved="false" />
-    </PreferenceCategory>
+    <SwitchPreference
+        android:key="appearance_dark_theme"
+        android:summary="@string/dark_theme_summary"
+        android:title="@string/dark_theme"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

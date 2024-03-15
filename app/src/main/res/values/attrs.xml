@@ -8,8 +8,10 @@
     <attr name="dialogTextColor" format="reference" />
 
     <!-- Attributes -->
-    <attr name="ChatMsgHeaderMeColor" format="reference|color" />
-    <attr name="ChatMsgHeaderYouColor" format="reference|color" />
-    <attr name="ChatNewMessageColor" format="reference|color" />
-    <attr name="ChatStoredMessageColor" format="reference|color" />
+    <attr name="actionBarColor" format="reference|color" />
+    <attr name="msgrBackgroundColor" format="reference|color" />
+    <attr name="inMsgBubbleBackgroundColor" format="reference|color" />
+    <attr name="outMsgBubbleBackgroundColor" format="reference|color" />
+    <attr name="inMessageTextColor" format="reference|color" />
+    <attr name="outMessageTextColor" format="reference|color" />
 </resources>

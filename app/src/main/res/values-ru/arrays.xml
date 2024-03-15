@@ -7,4 +7,14 @@
         <item name="na">Недоступен</item>
         <item name="dnd">Не беспокоить</item>
     </string-array>
+
+    <string-array name="theme_presets">
+        <item name="default">По умолчанию</item>
+        <item name="green">Зелёная</item>
+        <item name="red">Красная</item>
+        <item name="violet">Фиолетовая</item>
+        <item name="orange">Оранжевая</item>
+        <item name="teal">Бирюзовая</item>
+        <item name="teal">Морская</item>
+    </string-array>
 </resources>

@@ -23,7 +23,7 @@
                     android:id="@+id/actionbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/actionBarColor"
+                    android:background="?attr/actionBarColor"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="@style/ApplicationTheme.Toolbar.Dark"
                     app:layout_constraintEnd_toEndOf="parent"

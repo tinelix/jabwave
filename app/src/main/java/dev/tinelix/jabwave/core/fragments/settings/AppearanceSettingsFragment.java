@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.SettingsActivity;
+import dev.tinelix.jabwave.core.utilities.ThemePresets;
 import dev.tinelix.jabwave.ui.list.adapters.ThemePresetsAdapter;
 import dev.tinelix.jabwave.ui.list.items.ThemePreset;
 
@@ -49,16 +50,21 @@ public class AppearanceSettingsFragment extends PreferenceFragmentCompat {
                     if (preference.getKey().equals("theme_presets_list")) {
                         RecyclerView presets_view = view.findViewById(R.id.presets_view);
                         ArrayList<ThemePreset> presets = new ArrayList<>();
-                        ThemePreset preset = new ThemePreset(-4, getResources().getString(R.string._default));
-                        Global.generateDefaultThemePreset(getContext(), preset);
-                        presets.add(preset);
-                        preset = new ThemePreset(-3, "Tinelix Design 2022");
-                        Global.generateDefaultThemePreset(getContext(), preset);
-                        presets.add(preset);
+                        loadThemePresets(presets);
                         presets_view.setAdapter(new ThemePresetsAdapter(getContext(), presets));
-                    }
                 }
             }
         };
+    };
+}
+
+    private void loadThemePresets(ArrayList<ThemePreset> presets) {
+        for(int i = 0; i < 7; i++) {
+            ThemePreset preset = new ThemePreset(-7 + i,
+                    getResources().getStringArray(R.array.theme_presets)[i]
+            );
+            ThemePresets.generateThemePreset(getContext(), preset);
+            presets.add(preset);
+        }
     }
 }

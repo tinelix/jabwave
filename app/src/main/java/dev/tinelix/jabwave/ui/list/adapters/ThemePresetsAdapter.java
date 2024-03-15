@@ -15,6 +15,7 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.utilities.ThemePresets;
 import dev.tinelix.jabwave.ui.list.items.ThemePreset;
 
 public class ThemePresetsAdapter extends RecyclerView.Adapter<ThemePresetsAdapter.Holder> {
@@ -92,7 +93,7 @@ public class ThemePresetsAdapter extends RecyclerView.Adapter<ThemePresetsAdapte
                     lastCheckedButton.setChecked(false);
                 }
                 lastCheckedButton = (RadioButton) button;
-                Global.getThemePresetPreferences(ctx, preset.id);
+                ThemePresets.getPreferences(ctx, preset.id);
                 preset.saveThemePreset(ctx);
             });
             if(app_prefs.getLong("currentThemeId", 0) == preset.id) {
