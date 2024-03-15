@@ -4,7 +4,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Default heme attributes !-->
+    <!-- Default theme attributes !-->
     <color name="actionBarColor">#FF1779FE</color>
     <color name="actionBarColorNight">#FF424242</color>
     <color name="accentColor">#FF1779fe</color>
