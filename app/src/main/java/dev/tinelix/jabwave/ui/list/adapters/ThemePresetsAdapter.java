@@ -90,6 +90,9 @@ public class ThemePresetsAdapter extends RecyclerView.Adapter<ThemePresetsAdapte
             presetTitleLayout.setBackgroundColor(preset.getAppThemeBackgroundColor());
             presetName.setTextColor(preset.getAccentColor());
             presetName.setSelected(true);
+            if(app_prefs.getLong("currentThemeId", 0) == preset.id) {
+                button.setChecked(true);
+            }
             button.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (lastCheckedButton != null) {
                     lastCheckedButton.setChecked(false);
@@ -99,9 +102,6 @@ public class ThemePresetsAdapter extends RecyclerView.Adapter<ThemePresetsAdapte
                 preset.saveThemePreset(ctx);
                 restartActivity(ctx);
             });
-            if(app_prefs.getLong("currentThemeId", 0) == preset.id) {
-                button.setChecked(true);
-            }
         }
 
         private void restartActivity(Context ctx) {
