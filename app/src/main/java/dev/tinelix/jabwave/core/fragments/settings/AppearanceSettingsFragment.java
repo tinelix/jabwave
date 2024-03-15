@@ -18,6 +18,7 @@ import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.activities.AppActivity;
 import dev.tinelix.jabwave.core.activities.SettingsActivity;
 import dev.tinelix.jabwave.core.utilities.ThemePresets;
 import dev.tinelix.jabwave.ui.list.adapters.ThemePresetsAdapter;
@@ -30,6 +31,11 @@ public class AppearanceSettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.settings_appearance, null);
         listenPreferences();
+        if(getActivity() instanceof SettingsActivity activity) {
+            activity.getSupportActionBar().setTitle(
+                    getResources().getString(R.string.appearance)
+            );
+        }
     }
 
     private void listenPreferences() {

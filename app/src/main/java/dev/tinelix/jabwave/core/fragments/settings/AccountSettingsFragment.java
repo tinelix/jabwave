@@ -17,6 +17,11 @@ public class AccountSettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.settings_account, null);
         listenPreferences();
+        if(getActivity() instanceof SettingsActivity activity) {
+            activity.getSupportActionBar().setTitle(
+                    getResources().getString(R.string.account)
+            );
+        }
     }
 
     private void listenPreferences() {

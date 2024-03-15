@@ -11,6 +11,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.core.activities.AppActivity;
 import dev.tinelix.jabwave.core.activities.SettingsActivity;
 import dev.tinelix.jabwave.core.utilities.FragmentNavigator;
 
@@ -35,6 +36,11 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         ta.recycle();
         tintIcons(getPreferenceScreen(), iconColor);
         listenPreferences();
+        if(getActivity() instanceof AppActivity activity) {
+            activity.getSupportActionBar().setTitle(
+                    getResources().getString(R.string.settings)
+            );
+        }
     }
 
     private void listenPreferences() {
