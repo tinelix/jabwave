@@ -153,9 +153,7 @@ public class MessengerActivity extends JabwaveActivity {
             if(isSuperChat) {
                 assert chat != null;
                 if(((SuperChat) chat).isRequiredAuth())
-                    ((SuperChat) chat).join(
-                            service.getClient(),
-                            "tretdm-jabwave",
+                    ((SuperChat) chat).join(service.getClient(), "tretdm-jabwave",
                             map -> {
                                 new Handler(Looper.getMainLooper()).post(
                                         () -> adapter.notifyDataSetChanged()
@@ -219,7 +217,7 @@ public class MessengerActivity extends JabwaveActivity {
         Message msg = chat.messages.get(msg_pos);
         int attach_pos = msg.getAttachmentIndex(file_id);
         Attachment attachment = msg.getAttachments().get(attach_pos);
-        if(data.getBoolean("updateComplete")) {
+        if(data.getBoolean("updatingCompleted")) {
             attachment.updateState(2);
             ArrayList<Attachment> attachments = msg.getAttachments();
             attachments.set(attach_pos, attachment);

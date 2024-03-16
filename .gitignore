@@ -17,3 +17,4 @@ tdlib/build
 app/.signing
 *.so
 .idea/deploymentTargetDropDown.xml
+/temp

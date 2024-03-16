@@ -302,8 +302,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                 }
             }
             sendMessageToActivity(status);
-        } else if(object instanceof TdApi.UpdateUserStatus) {
-            TdApi.UpdateUserStatus userStatus = ((TdApi.UpdateUserStatus) object);
+        } else if(object instanceof TdApi.UpdateUserStatus userStatus) {
             Chat chat = null;
             if(getChats().getChatById(userStatus.userId) instanceof Chat) {
                 switch (userStatus.status.getConstructor()) {
@@ -326,24 +325,58 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                     }
                 }
             }
-        } else if(object instanceof TdApi.UpdateFile) {
-            TdApi.UpdateFile updateFile = ((TdApi.UpdateFile) object);
+        } else if(object instanceof TdApi.UpdateFile updateFile) {
             Bundle data = new Bundle();
+            boolean updatingCompleted = updateFile.file.local.isDownloadingCompleted
+                    || updateFile.file.remote.isUploadingCompleted;
+            boolean isUpload = updateFile.file.remote.isUploadingActive
+                    || updateFile.file.remote.isUploadingCompleted;
             data.putInt("file_id", updateFile.file.id);
             data.putLong("updateSize", updateFile.file.local.downloadedSize);
             data.putLong("fullSize", updateFile.file.size);
-            data.putBoolean("updateComplete", updateFile.file.local.isDownloadingCompleted
-                    || updateFile.file.remote.isUploadingCompleted);
-            data.putBoolean("isUpload", updateFile.file.remote.isUploadingActive
-                    || updateFile.file.remote.isUploadingCompleted);
-            Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
-                    String.format(
-                            "Downloading file #%s: %s/%s KB...",
-                            updateFile.file.id,
-                            updateFile.file.local.downloadedSize / 1024,
-                            updateFile.file.size / 1024
-                    )
-            );
+            data.putBoolean("updatingCompleted", updatingCompleted);
+            data.putBoolean("isUpload", isUpload);
+            if(updatingCompleted) {
+                if (isUpload)
+                    Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                            String.format(
+                                    "Upload completed (File ID #%s, %s): %s/%s KB...",
+                                    updateFile.file.id,
+                                    updateFile.file.local.path,
+                                    updateFile.file.local.downloadedSize / 1024,
+                                    updateFile.file.size / 1024
+                            )
+                    );
+                else
+                    Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                            String.format(
+                                    "Download completed (File ID #%s, %s): %s/%s KB...",
+                                    updateFile.file.id,
+                                    updateFile.file.local.path,
+                                    updateFile.file.local.downloadedSize / 1024,
+                                    updateFile.file.size / 1024
+                            )
+                    );
+            } else {
+                if (isUpload)
+                    Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                            String.format(
+                                    "Uploading file #%s: %s/%s KB...",
+                                    updateFile.file.id,
+                                    updateFile.file.local.downloadedSize / 1024,
+                                    updateFile.file.size / 1024
+                            )
+                    );
+                else
+                    Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                            String.format(
+                                    "Downloading file #%s: %s/%s KB...",
+                                    updateFile.file.id,
+                                    updateFile.file.local.downloadedSize / 1024,
+                                    updateFile.file.size / 1024
+                            )
+                    );
+            }
             status = "update_file";
             sendMessageToActivity(status, data);
         }

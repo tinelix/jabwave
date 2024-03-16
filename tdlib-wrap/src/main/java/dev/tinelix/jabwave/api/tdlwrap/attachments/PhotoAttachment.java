@@ -1,7 +1,5 @@
 package dev.tinelix.jabwave.api.tdlwrap.attachments;
 
-import android.util.Log;
-
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.io.FileInputStream;
@@ -9,7 +7,6 @@ import java.util.HashMap;
 
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
-import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
 
 public class PhotoAttachment
         extends dev.tinelix.jabwave.api.base.attachments.PhotoAttachment {
@@ -59,12 +56,10 @@ public class PhotoAttachment
                         } else if (id == file.id) {
                             try {
                                 array = new byte[file.local.downloadedSize];
-                                if (file.local.isDownloadingCompleted) {
-                                    FileInputStream fis = new FileInputStream(file.local.path);
-                                    fis.read(array);
-                                    state = 2;
-                                    listener.onSuccess(null);
-                                }
+                                FileInputStream fis = new FileInputStream(file.local.path);
+                                fis.read(array);
+                                state = 2;
+                                listener.onSuccess(null);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 listener.onFail(null, e);
