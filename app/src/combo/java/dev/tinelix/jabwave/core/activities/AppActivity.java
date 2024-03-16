@@ -1,12 +1,15 @@
 package dev.tinelix.jabwave.core.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +31,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.fragments.app.ChatsFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
@@ -154,7 +158,44 @@ public class AppActivity extends JabwaveActivity
         if(fragment instanceof ChatsFragment) {
             ((ChatsFragment) fragment).loadContacts();
             findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
+            listenMessages();
         }
+    }
+
+    private void listenMessages() {
+        NotificationChannel directMsgChannel =
+                NotificationChannel.Builder
+                        .getInstance(this)
+                        .setChannelName(
+                                "direct_messages",
+                                getResources().getString(R.string.dm_notifications)
+                        )
+                        .setChannelParameters(true, true, true)
+                        .build();
+        service.getChats().listenMessages(map -> {
+            new Handler(Looper.getMainLooper()).post(() -> {
+                String msg_author = (String) map.get("msg_author");
+                String msg_text = (String) map.get("msg_text");
+                Notification notification = directMsgChannel.createNotification(
+                        R.drawable.ic_notification_icon,
+                        msg_author,
+                        msg_text,
+                        true
+                );
+                directMsgChannel.broadcast(notification);
+                Intent intent = new Intent();
+                intent.putExtra("msg_author", msg_author);
+                intent.putExtra("msg_text", msg_text);
+                if(app.getCurrentNetworkType().equals("telegram")) {
+                    intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
+                } else {
+                    intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
+                }
+                intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
+                sendBroadcast(intent);
+            });
+            return false;
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")

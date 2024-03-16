@@ -92,6 +92,11 @@
     <string name="dark_theme">Тёмная тема</string>
     <string name="dark_theme_summary">Делает использование комфортнее в темном помещении и экономит заряд батареи</string>
 
+    <!-- Notification Channels !-->
+    <string name="service_notifications">Служебные уведомления</string>
+    <string name="dm_notifications">Личные сообщения</string>
+    <string name="muc_notifications">Суперчаты</string>
+
     <!-- Misc !-->
     <string name="_default">По умолчанию</string>
     <string name="unknown">Неизвестно</string>

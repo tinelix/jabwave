@@ -92,6 +92,11 @@
     <string name="dark_theme_summary">Makes use more comfortable in a dark room and saves battery power</string>
     <string name="accent_color">Accent color</string>
 
+    <!-- Notification Channels !-->
+    <string name="service_notifications">Service Notifications</string>
+    <string name="dm_notifications">Direct Messages</string>
+    <string name="muc_notifications">Superchats</string>
+
     <!-- Misc !-->
     <string name="_default">Default</string>
     <string name="unknown">Unknown</string>

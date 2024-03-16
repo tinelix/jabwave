@@ -212,18 +212,22 @@ public class MessengerActivity extends JabwaveActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void updateFileFromMessage(Bundle data) {
-        int file_id = data.getInt("file_id");
-        int msg_pos = chat.getMessageIndexById(file_id);
-        Message msg = chat.messages.get(msg_pos);
-        int attach_pos = msg.getAttachmentIndex(file_id);
-        Attachment attachment = msg.getAttachments().get(attach_pos);
-        if(data.getBoolean("updatingCompleted")) {
-            attachment.updateState(2);
-            ArrayList<Attachment> attachments = msg.getAttachments();
-            attachments.set(attach_pos, attachment);
-            msg.setAttachments(attachments);
-            chat.messages.set(msg_pos, msg);
-            adapter.notifyDataSetChanged();
+        try {
+            int file_id = data.getInt("file_id");
+            int msg_pos = chat.getMessageIndexById(file_id);
+            Message msg = chat.messages.get(msg_pos);
+            int attach_pos = msg.getAttachmentIndex(file_id);
+            Attachment attachment = msg.getAttachments().get(attach_pos);
+            if (data.getBoolean("updatingCompleted")) {
+                attachment.updateState(2);
+                ArrayList<Attachment> attachments = msg.getAttachments();
+                attachments.set(attach_pos, attachment);
+                msg.setAttachments(attachments);
+                chat.messages.set(msg_pos, msg);
+                adapter.notifyDataSetChanged();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

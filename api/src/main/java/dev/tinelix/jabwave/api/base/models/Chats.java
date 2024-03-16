@@ -1,10 +1,12 @@
 package dev.tinelix.jabwave.api.base.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.entities.Chat;
+import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 
 public class Chats {
     protected final BaseClient client;
@@ -81,5 +83,9 @@ public class Chats {
             }
         }
         return people;
+    }
+
+    public void listenMessages(OnClientUpdateListener listener) {
+
     }
 }

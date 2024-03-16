@@ -5,6 +5,8 @@ import android.util.Log;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.chat2.ChatManager;
+import org.jivesoftware.smack.chat2.IncomingChatMessageListener;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.roster.RosterGroup;
@@ -19,11 +21,13 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.api.base.entities.Message;
 import dev.tinelix.jabwave.api.base.entities.ServiceEntity;
 import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.api.base.models.Chats;
@@ -39,12 +43,14 @@ public class Roster extends Chats {
     private final XMPPConnection conn;
     private final org.jivesoftware.smack.roster.Roster roster;
     private final OnClientUpdateListener listener;
+    private final ChatManager cm;
     private ArrayList<dev.tinelix.jabwave.api.base.entities.Chat> chats;
     private XMPPService service;
 
     public Roster(XMPPService service, XMPPClient client, OnClientUpdateListener listener) {
         super(client);
         this.conn = client.getConnection();
+        cm = ChatManager.getInstanceFor(((XMPPClient) client).getConnection());
         this.roster = org.jivesoftware.smack.roster.Roster.getInstanceFor(conn);
         this.listener = listener;
         this.service = service;
@@ -194,5 +200,30 @@ public class Roster extends Chats {
             }
         }
         return -1;
+    }
+
+    @Override
+    public void listenMessages(OnClientUpdateListener listener) {
+        cm.addIncomingListener((from, message, chat) -> {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("is_incoming", true);
+            map.put("msg_author", from.toString());
+            map.put("msg_text", message.getBody());
+            Chat chat1 = (Chat) getChatById(from.toString());
+            if(!from.toString().equals(((XMPPClient) client).jid)) {
+                if (chat1.messages != null) {
+                    Message msg = new Message(
+                            chat1.messages.size(),
+                            from.toString(),
+                            from.toString(),
+                            message.getBody(),
+                            new Date(System.currentTimeMillis()),
+                            true
+                    );
+                    chat1.messages.add(msg);
+                }
+                listener.onUpdate(map);
+            }
+        });
     }
 }
