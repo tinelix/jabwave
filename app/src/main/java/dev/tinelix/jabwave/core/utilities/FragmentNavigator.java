@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.core.fragments.app.ChatsFragment;
 import dev.tinelix.jabwave.core.fragments.app.NetworkServicesFragment;
+import dev.tinelix.jabwave.core.fragments.settings.AccountInfoFragment;
 import dev.tinelix.jabwave.core.fragments.settings.AccountSettingsFragment;
 import dev.tinelix.jabwave.core.fragments.settings.AppearanceSettingsFragment;
 import dev.tinelix.jabwave.core.fragments.settings.MainSettingsFragment;
@@ -21,7 +22,7 @@ public class FragmentNavigator {
 
     // Settings Fragments
     public static final int FRAGMENT_ACCOUNT_SETTINGS                   = 20000;
-    public static final int FRAGMENT_ACCOUNT_INFO_SETTINGS              = 20001;
+    public static final int FRAGMENT_ACCOUNT_INFO                       = 20001;
     public static final int FRAGMENT_APPEARANCE_SETTINGS                = 20100;
     public static final int FRAGMENT_SECURITY_SETTINGS                  = 20200;
     public static final int FRAGMENT_STORAGE_SETTINGS                   = 20300;
@@ -38,6 +39,7 @@ public class FragmentNavigator {
             case FRAGMENT_SERVICES -> fragment = new NetworkServicesFragment();
             case FRAGMENT_MAIN_SETTINGS -> fragment = new MainSettingsFragment();
             case FRAGMENT_ACCOUNT_SETTINGS -> fragment = new AccountSettingsFragment();
+            case FRAGMENT_ACCOUNT_INFO -> fragment = new AccountInfoFragment();
             case FRAGMENT_APPEARANCE_SETTINGS -> fragment = new AppearanceSettingsFragment();
         }
         if(fragment != null) {

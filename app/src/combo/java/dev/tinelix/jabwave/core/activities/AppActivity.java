@@ -196,7 +196,7 @@ public class AppActivity extends JabwaveActivity
                     String.format("%s %s", account.first_name, account.last_name)
             );
             if(account.username != null) {
-                profile_id.setText(String.format("@%s", account.username));
+                profile_id.setText(account.username);
             } else {
                 profile_id.setVisibility(View.GONE);
             }

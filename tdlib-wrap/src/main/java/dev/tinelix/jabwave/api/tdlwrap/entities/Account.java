@@ -13,9 +13,6 @@ import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
 
 public class Account extends dev.tinelix.jabwave.api.base.entities.Account {
     private TDLibClient client;
-    public String username;
-    private String phone_number;
-    public String about;
 
     public Account(long id, String first_name, String last_name) {
         super(id, first_name, last_name);
@@ -33,7 +30,7 @@ public class Account extends dev.tinelix.jabwave.api.base.entities.Account {
                     id = user.id;
                     first_name = user.firstName;
                     last_name = user.lastName;
-                    username = user.username;
+                    username = "@" + user.username;
                     phone_number = user.phoneNumber;
                     if(user.profilePhoto != null) {
                         downloadPhoto(user.profilePhoto);

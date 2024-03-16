@@ -127,8 +127,6 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
                 return chat;
             }
         }
-        Log.e(TDLibClient.TELEGRAM_SERV_TAG,
-                String.format("Chat not found with ID #%s.", id));
         return null;
     }
 

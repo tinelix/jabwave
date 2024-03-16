@@ -1,9 +1,11 @@
 package dev.tinelix.jabwave.core.fragments.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import dev.tinelix.jabwave.R;
@@ -22,6 +24,8 @@ public class AccountSettingsFragment extends PreferenceFragmentCompat {
                     getResources().getString(R.string.account)
             );
         }
+
+        listenPreferences();
     }
 
     private void listenPreferences() {
@@ -36,11 +40,21 @@ public class AccountSettingsFragment extends PreferenceFragmentCompat {
                         String not_supported = getResources().getString(R.string.not_supported_by_protocol);
                         aboutAccountPref.setEnabled(isChangeable);
                         aboutAccountPref.setSummary(isChangeable ? null : not_supported);
+                        aboutAccountPref.setOnPreferenceClickListener(preference -> {
+                            showPreferenceInNewActivity(FragmentNavigator.FRAGMENT_ACCOUNT_INFO);
+                            return false;
+                        });
                     } else {
                         aboutAccountPref.setVisible(false);
                     }
                 }
             }
         }
+    }
+
+    private void showPreferenceInNewActivity(int fragment_id) {
+        Intent intent = new Intent(getContext(), SettingsActivity.class);
+        intent.putExtra("fragment_id", fragment_id);
+        startActivity(intent);
     }
 }

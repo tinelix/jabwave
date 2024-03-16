@@ -78,6 +78,8 @@
     <string name="delete_account">Удалить аккаунт</string>
 
     <!-- About Account screen !-->
+    <string name="fl_name">Имя и фамилия</string>
+    <string name="username">Имя аккаунта</string>
     <string name="email">Электронная почта</string>
     <string name="password">Пароль</string>
     <string name="change_password_summary">Нажмите, чтобы сменить</string>
@@ -92,6 +94,7 @@
 
     <!-- Misc !-->
     <string name="_default">По умолчанию</string>
+    <string name="unknown">Неизвестно</string>
     <string name="error">Ошибка</string>
     <string name="not_supported">Не поддерживается</string>
     <string name="not_supported_by_network">Не поддерживается текущей сетью</string>

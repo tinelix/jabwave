@@ -45,6 +45,7 @@ public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.Vi
                                         @Override
                                         public boolean onSuccess(HashMap<String, Object> map) {
                                             TdApi.File file = (TdApi.File) map.get("result");
+                                            assert file != null;
                                             onVideoDownloadSuccess(file.id, file.local.path);
                                             listener.onSuccess(new HashMap<>());
                                             return false;

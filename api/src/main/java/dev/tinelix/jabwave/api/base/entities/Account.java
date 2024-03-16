@@ -10,6 +10,9 @@ public class Account {
     public byte[] photo;
     public byte[] photo_small;
     public String username;
+    protected String phone_number;
+    protected String email;
+    public String about;
 
     /**
      * Default constructor for Account class.
@@ -30,5 +33,13 @@ public class Account {
 
     public Account(BaseClient client) {
         this.client = client;
+    }
+
+    public String getPhoneNumber() {
+        return phone_number;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

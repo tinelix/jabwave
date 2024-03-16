@@ -78,6 +78,8 @@
     <string name="delete_account">Delete account</string>
 
     <!-- Account Settings screen !-->
+    <string name="fl_name">First and last name</string>
+    <string name="username">Username</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="change_password_summary">Click to change</string>
@@ -92,6 +94,7 @@
 
     <!-- Misc !-->
     <string name="_default">Default</string>
+    <string name="unknown">Unknown</string>
     <string name="error">Error</string>
     <string name="not_supported">Not supported</string>
     <string name="not_supported_by_network">Not supported by current network type</string>

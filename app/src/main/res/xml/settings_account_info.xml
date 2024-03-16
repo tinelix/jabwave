@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="fl_name"
+        android:title="@string/fl_name"
+        app:enableCopying="true"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="username"
+        android:title="@string/username"
+        app:enableCopying="true"
+        app:iconSpaceReserved="false" />
+
     <Preference
         android:key="phone_number"
         android:title="@string/auth_phone_number"
@@ -19,9 +32,4 @@
         android:summary="@string/change_password_summary"
         app:iconSpaceReserved="false" />
 
-    <Preference
-        android:key="reg_date"
-        android:title="@string/registration_date"
-        app:enableCopying="true"
-        app:iconSpaceReserved="false" />
 </PreferenceScreen>
