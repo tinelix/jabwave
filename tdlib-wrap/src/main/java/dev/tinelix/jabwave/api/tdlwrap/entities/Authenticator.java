@@ -3,6 +3,7 @@ package dev.tinelix.jabwave.api.tdlwrap.entities;
 import org.drinkless.td.libcore.telegram.TdApi;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
@@ -20,11 +21,22 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
                 dev.tinelix.jabwave.api.base.entities.Authenticator.TYPE_REQUIRES_PHONE_NUMBER
                         | dev.tinelix.jabwave.api.base.entities.Authenticator.TYPE_STEP_BY_STEP;
         this.client = client;
-        checkAuthState();
     }
 
-    public void checkAuthState() {
-        client.send(new TdApi.GetAuthorizationState(), this);
+    public void checkAuthState(OnClientAPIResultListener listener) {
+        client.send(new TdApi.GetAuthorizationState(), new OnClientAPIResultListener() {
+            @Override
+            public boolean onSuccess(HashMap<String, Object> map) {
+                setAuthState((TdApi.AuthorizationState) Objects.requireNonNull(map.get("result")));
+                listener.onSuccess(map);
+                return false;
+            }
+
+            @Override
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                return false;
+            }
+        });
     }
 
     public void setAuthState(TdApi.AuthorizationState state) {

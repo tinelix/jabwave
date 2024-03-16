@@ -140,9 +140,19 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                     );
                     isConnected = true;
                     auth = new Authenticator((TDLibClient) client);
-                    ((Authenticator) auth).checkAuthState();
-                    if(!auth.isAuthenticated())
-                        ((Authenticator) auth).checkPhoneNumber(phone_number);
+                    ((Authenticator) auth).checkAuthState(new OnClientAPIResultListener() {
+                        @Override
+                        public boolean onSuccess(HashMap<String, Object> map) {
+                            if(!auth.isAuthenticated())
+                                ((Authenticator) auth).checkPhoneNumber(phone_number);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                            return false;
+                        }
+                    });
                     services = new Services(client);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -242,8 +252,18 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             if(function.getConstructor() == TdApi.SetAuthenticationPhoneNumber.CONSTRUCTOR
                 || function.getConstructor() == TdApi.CheckAuthenticationCode.CONSTRUCTOR
                 || function.getConstructor() == TdApi.CheckAuthenticationPassword.CONSTRUCTOR) {
-                ((Authenticator) auth).checkAuthState();
-                sendMessageToActivity(status);
+                ((Authenticator) auth).checkAuthState(new OnClientAPIResultListener() {
+                    @Override
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        sendMessageToActivity(status);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
+                    }
+                });
             }
         }
     }

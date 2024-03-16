@@ -38,26 +38,28 @@ public class PhotoAttachment
                     if (map.get("result") instanceof TdApi.File) {
                         file = (TdApi.File) map.get("result");
                         assert file != null;
-                        if(state == 0) {
-                            client.send(new TdApi.DownloadFile
-                                            ((int) id, 1, 0, 1, false),
-                                    new OnClientAPIResultListener() {
-                                        @Override
-                                        public boolean onSuccess(HashMap<String, Object> map) {
-                                            state = 1;
-                                            return false;
-                                        }
+                        if(!file.local.isDownloadingCompleted) {
+                            if (state == 0) {
+                                state = 1;
+                                client.send(new TdApi.DownloadFile
+                                                ((int) id, 1, 0, 5, false),
+                                        new OnClientAPIResultListener() {
+                                            @Override
+                                            public boolean onSuccess(HashMap<String, Object> map) {
+                                                return false;
+                                            }
 
-                                        @Override
-                                        public boolean onFail(HashMap<String, Object> map, Throwable t) {
-                                            return false;
+                                            @Override
+                                            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                                                return false;
+                                            }
                                         }
-                                    }
-                            );
+                                );
+                            }
                         } else if (id == file.id) {
                             try {
                                 array = new byte[file.local.downloadedSize];
-                                if(file.local.isDownloadingCompleted) {
+                                if (file.local.isDownloadingCompleted) {
                                     FileInputStream fis = new FileInputStream(file.local.path);
                                     fis.read(array);
                                     state = 2;

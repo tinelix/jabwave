@@ -54,16 +54,6 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
         this.id = id;
     }
 
-    public void loadPhoto(byte[] bytes, File file) {
-        try {
-            DataInputStream dis = new DataInputStream(new FileInputStream(file));
-            dis.readFully(bytes);
-            dis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public Message searchMessageById(long id) {
         for(Message message : messages) {
@@ -76,7 +66,7 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
 
     @Override
     public void loadMessages(BaseClient client, OnClientAPIResultListener listener) {
-        client.send(new TdApi.GetChatHistory(id, 0, -25, 50, false),
+        client.send(new TdApi.GetChatHistory(id, 0, -49, 50, false),
                 new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
