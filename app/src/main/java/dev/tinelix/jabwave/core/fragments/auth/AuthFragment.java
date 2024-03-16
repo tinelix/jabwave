@@ -120,11 +120,9 @@ public class AuthFragment extends Fragment {
 
     public String getNetworkType() {
         Spinner network_spinner = view.findViewById(R.id.networks_spinner);
-        switch (network_spinner.getSelectedItemPosition()) {
-            case 0:
-                return "telegram";
-            default:
-                return "xmpp";
+        if (network_spinner.getSelectedItemPosition() == 0) {
+            return "telegram";
         }
+        return "xmpp";
     }
 }

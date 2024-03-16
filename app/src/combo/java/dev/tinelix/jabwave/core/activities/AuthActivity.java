@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.core.activities;
 
+import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +38,8 @@ import dev.tinelix.jabwave.core.fragments.auth.AuthCloudPasswordFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
+import dev.tinelix.jabwave.core.services.TelegramService;
+import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
@@ -72,6 +76,7 @@ public class AuthActivity extends AppCompatActivity {
             AuthActivity.this.service = null;
         }
     };
+    private JabwaveApp app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +108,7 @@ public class AuthActivity extends AppCompatActivity {
         ft.replace(R.id.fragment, fragment);
         ft.commit();
         registerBroadcastReceiver();
+        app = (JabwaveApp) getApplication();
         global_prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         xmpp_prefs = getSharedPreferences("xmpp", 0);
         telegram_prefs = getSharedPreferences("telegram", 0);
@@ -120,16 +126,26 @@ public class AuthActivity extends AppCompatActivity {
 
     public void signIn(String username, String password) {
         HashMap<String, String> credentials;
-        String[] username_mask = username.split("@");
-        if (username_mask.length == 2) {
-            this.username = username_mask[0];
-            this.server = username_mask[1];
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            this.username = username;
+            credentials = new SecureStorage().createCredentialsMap(this.username);
+        } else {
+            String[] username_mask = username.split("@");
+            if (username_mask.length == 2) {
+                this.username = username_mask[0];
+                this.server = username_mask[1];
+            }
+            this.password = password;
+            credentials = new SecureStorage().createCredentialsMap(
+                    this.username, this.server, this.password
+            );
         }
-        this.password = password;
-        credentials = new SecureStorage().createCredentialsMap(
-                this.username, this.server, this.password
-        );
-        service = new ClientService("base");
+
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            service = new TelegramService();
+        } else {
+            service = new XMPPService();
+        }
         service.start(this, clientConnection, credentials);
 
         ft = getSupportFragmentManager().beginTransaction();
@@ -138,7 +154,7 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void signIn(String signin_code) {
-        if(global_prefs.getString("network_type", "").equals("telegram")) {
+        if(app.getCurrentNetworkType().equals("telegram")) {
             ((dev.tinelix.jabwave.api.tdlwrap.entities.Authenticator) service.getAuthenticator())
                     .sendAuthCode(signin_code);
         }
@@ -148,7 +164,7 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     public void sendCloudPassword(String password) {
-        if(global_prefs.getString("network_type", "").equals("telegram")) {
+        if(app.getCurrentNetworkType().equals("telegram")) {
             ((dev.tinelix.jabwave.api.tdlwrap.entities.Authenticator) service.getAuthenticator())
                     .sendCloudPassword(password);
         }
@@ -160,7 +176,7 @@ public class AuthActivity extends AppCompatActivity {
     public void receiveState(int message, Bundle data) {
         if(message == HandlerMessages.AUTHORIZED) {
             SharedPreferences.Editor editor;
-            if(global_prefs.getString("network_type", "").equals("telegram")) {
+            if(((JabwaveApp) getApplication()).getCurrentNetworkType().equals("telegram")) {
                 editor = telegram_prefs.edit();
                 editor.putString("phone_number", username);
             } else {

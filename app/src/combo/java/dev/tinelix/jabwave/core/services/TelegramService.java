@@ -59,6 +59,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     public void start(@NonNull Context ctx, ServiceConnection connection, HashMap<String, String> map) {
         this.ctx = ctx;
         phone_number = map.get("username");
+        Log.d("PN", phone_number);
         if(status.equals("done") || isConnected()) {
             AlarmManager mgr = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
             intent = new Intent(ctx, TelegramService.class);

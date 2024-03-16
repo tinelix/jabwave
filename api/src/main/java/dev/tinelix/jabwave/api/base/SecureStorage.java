@@ -21,7 +21,8 @@ public class SecureStorage {
     ) {
         HashMap<String, String> map = new HashMap<>();
         map.put("username", username);
-        map.put("password", Base58.encode(password.getBytes(StandardCharsets.UTF_8)));
+        if(password != null)
+            map.put("password", Base58.encode(password.getBytes(StandardCharsets.UTF_8)));
         return map;
     }
 
@@ -33,7 +34,8 @@ public class SecureStorage {
         HashMap<String, String> map = new HashMap<>();
         map.put("server", server);
         map.put("username", username);
-        map.put("password", Base58.encode(password.getBytes(StandardCharsets.UTF_8)));
+        if(password != null)
+            map.put("password", Base58.encode(password.getBytes(StandardCharsets.UTF_8)));
         return map;
     }
 
