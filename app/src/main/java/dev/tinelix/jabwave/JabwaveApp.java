@@ -99,7 +99,7 @@ public class JabwaveApp extends Application {
     public void restart() {
         Intent activity = new Intent(this,
                 MainActivity.class);
-        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(activity);
         System.exit(0);
     }
