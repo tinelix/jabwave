@@ -23,7 +23,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back"
-            app:subtitleTextColor="?android:attr/textColorSecondaryInverse"
             app:title="@string/app_name" />
     </com.google.android.material.appbar.AppBarLayout>
 

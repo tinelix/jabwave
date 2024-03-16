@@ -4,10 +4,6 @@ import android.annotation.SuppressLint;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -19,69 +15,40 @@ import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.attachments.Attachment;
 import dev.tinelix.jabwave.api.base.entities.Message;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
 import dev.tinelix.jabwave.api.tdlwrap.attachments.PhotoAttachment;
 import dev.tinelix.jabwave.api.tdlwrap.attachments.VideoAttachment;
 
-public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
-    // Contact Class used in Contacts list (AppActivity)
-    public String title;
-    public long id;
-    public ArrayList<String> groups;
+public class Channel extends dev.tinelix.jabwave.api.base.entities.Channel {
 
-    public Chat(String title) {
-        super(title, 1);
-        this.title = title;
+    private long secondary_id;
+    private TDLibClient client;
+
+    public Channel(TDLibClient client, String title, int network_type) {
+        super(title, network_type);
+        this.client = client;
     }
 
-    public Chat(long id, String title, ArrayList<String> groups, int status) {
-        super(id, title, 1);
-        this.title = title;
-        this.id = id;
-        this.groups = groups;
-        this.status = status;
+    public Channel(TDLibClient client, Object id, String title, int network_type) {
+        super(id, title, network_type);
+        this.client = client;
+        this.secondary_id = Long.parseLong(String.format("%s", (long) id).substring(4)); // remove -100
     }
 
-    public Chat(long id, int type, String title, ArrayList<String> groups, int status) {
-        super(id, title, type, 1);
-        this.title = title;
-        this.id = id;
-        this.groups = groups;
-        this.status = status;
-    }
-
-    public Chat(long id) {
-        super(id, "(Unknown)", 1);
-        this.id = id;
-    }
-
-    public void loadPhoto(byte[] bytes, File file) {
-        try {
-            DataInputStream dis = new DataInputStream(new FileInputStream(file));
-            dis.readFully(bytes);
-            dis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Channel(TDLibClient client, Object id, String title, int type, int network_type) {
+        super(id, title, type, network_type);
+        this.client = client;
+        this.secondary_id = Long.parseLong(String.format("%s", (long) id).substring(4)); // remove -100
     }
 
     @Override
-    public Message searchMessageById(long id) {
-        for(Message message : messages) {
-            if(message.id == id) {
-                return message;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void loadMessages(BaseClient client, OnClientAPIResultListener listener) {
-        client.send(new TdApi.GetChatHistory(id, 0, -25, 50, false),
+    public void loadPosts(BaseClient client, OnClientAPIResultListener listener) {
+        client.send(new TdApi.GetChatHistory((long) id, 0, -25, 50, false),
                 new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
                         if(map.get("result") instanceof TdApi.Messages) {
-                            loadMessages(
+                            loadPosts(
                                     client, ((TdApi.Messages) Objects.requireNonNull(map.get("result"))),
                                     listener
                             );
@@ -98,7 +65,7 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
     }
 
     @SuppressLint("SwitchIntDef")
-    private void loadMessages(BaseClient client, TdApi.Messages messages,
+    private void loadPosts(BaseClient client, TdApi.Messages messages,
                               OnClientAPIResultListener listener) {
         ArrayList<Message> msgs = new ArrayList<>();
         final CountDownLatch latch = new CountDownLatch(messages.totalCount);
@@ -144,13 +111,13 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
                         Message message = new Message(id, chat_id, author_id, finalText,
-                                new Date(msg.date), !msg.isOutgoing);
+                                new Date(msg.date), true);
                         message.setSender(finalSender);
                         message.setAttachments(attachments);
                         msgs.add(message);
                         latch.countDown();
                         if(latch.getCount() == 0) {
-                            Chat.this.messages = msgs;
+                            Channel.this.messages = msgs;
                             Collections.reverse(msgs);
                             listener.onSuccess(map);
                         }
@@ -163,7 +130,7 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
                     }
                 });
             } else {
-                Message message = new Message(id, chat_id, author_id, text, new Date(msg.date), !msg.isOutgoing);
+                Message message = new Message(id, chat_id, author_id, text, new Date(msg.date), true);
                 message.setAttachments(attachments);
                 msgs.add(message);
                 latch.countDown();
@@ -177,10 +144,10 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
     }
 
     @Override
-    public void sendMessage(BaseClient client, String text, OnClientAPIResultListener listener) {
+    public void broadcast(BaseClient client, String text, OnClientAPIResultListener listener) {
         client.send(
                 new TdApi.SendMessage(
-                        id, 0, 0, null, null,
+                        (long) id, 0, 0, null, null,
                         new TdApi.InputMessageText(
                                 new TdApi.FormattedText(text, null),
                                 false, true
@@ -212,12 +179,30 @@ public class Chat extends dev.tinelix.jabwave.api.base.entities.Chat {
     }
 
     @Override
-    public int getMessageIndexByFileId(int file_id) {
-        for(int i = 0; i < messages.size(); i++) {
-            if(messages.get(i).searchAttachment(file_id) != null) {
-                return i;
+    public ArrayList<Message> getPosts() {
+        return messages;
+    }
+
+    @Override
+    public void getSubscribersCount(OnClientAPIResultListener listener) {
+        client.send(new TdApi.GetSupergroup(secondary_id), new OnClientAPIResultListener() {
+            @Override
+            public boolean onSuccess(HashMap<String, Object> map) {
+                if(map.get("result") instanceof TdApi.Supergroup) {
+                    setSubscribersCount(((TdApi.Supergroup) Objects.requireNonNull(map.get("result"))).memberCount);
+                }
+                listener.onSuccess(map);
+                return false;
             }
-        }
-        return -1;
+
+            @Override
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                return false;
+            }
+        });
+    }
+
+    private void setSubscribersCount(int count) {
+        subscribers_count = count;
     }
 }

@@ -63,7 +63,6 @@ public class JabwaveActivity extends AppCompatActivity {
                 case -1 -> setStatusBar(R.color.statusBarColorOcean);
             }
         }
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

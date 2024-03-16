@@ -8,6 +8,7 @@ public class SuperChat extends Chat {
 
     protected boolean requiredAuth;
     protected boolean isJoined;
+    protected long member_count;
 
     public SuperChat(String title, int network_type, boolean requiredAuth) {
         super(title, network_type);
@@ -70,4 +71,10 @@ public class SuperChat extends Chat {
     public void leave() {
         isJoined = false;
     }
+
+    public long getMemberCount() {
+        return member_count;
+    }
+
+    public void getMemberCount(OnClientAPIResultListener listener) {}
 }

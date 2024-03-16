@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
 import dev.tinelix.jabwave.api.base.entities.Chat;
+import dev.tinelix.jabwave.api.tdlwrap.entities.Channel;
 import dev.tinelix.jabwave.api.tdlwrap.entities.SuperChat;
 
 public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
@@ -90,7 +91,7 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
                     Chat chat;
                     if(chat_type == 2) {
                         chat = new SuperChat(
-                                id, chat_type, td_chat.title, new ArrayList<>(), 0
+                                client, id, chat_type, td_chat.title, new ArrayList<>(), 0
                         );
                     } else {
                         chat = new dev.tinelix.jabwave.api.tdlwrap.entities.Chat(
@@ -164,9 +165,11 @@ public class Chats extends dev.tinelix.jabwave.api.base.models.Chats {
                         }
                         long id = td_chat.id;
                         Chat chat;
-                        if(chat_type == 2) {
+                        if(chat_type == 3) {
+                            chat = new Channel(client, id, td_chat.title, 0);
+                        } else if(chat_type == 2) {
                             chat = new SuperChat(
-                                    id, chat_type, td_chat.title, new ArrayList<>(), 0
+                                    client, id, chat_type, td_chat.title, new ArrayList<>(), 0
                             );
                         } else {
                             chat = new dev.tinelix.jabwave.api.tdlwrap.entities.Chat(

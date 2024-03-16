@@ -38,7 +38,9 @@
                     android:fontFamily="sans-serif-medium"
                     android:text="Author name"
                     android:textColor="@color/white"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:maxWidth="220dp"
+                    tools:ignore="HardcodedText" />
 
                 <LinearLayout
                     android:id="@+id/flow_container"

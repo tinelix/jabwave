@@ -2,18 +2,26 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        android:key="email"
+        android:key="phone_number"
         android:title="@string/auth_phone_number"
+        app:enableCopying="true"
         app:iconSpaceReserved="false" />
 
     <Preference
         android:key="email"
         android:title="@string/email"
+        app:enableCopying="true"
         app:iconSpaceReserved="false" />
 
     <Preference
-        android:key="email"
+        android:key="password"
         android:title="@string/password"
         android:summary="@string/change_password_summary"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        android:key="reg_date"
+        android:title="@string/registration_date"
+        app:enableCopying="true"
         app:iconSpaceReserved="false" />
 </PreferenceScreen>

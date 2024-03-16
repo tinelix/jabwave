@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
+import dev.tinelix.jabwave.api.base.entities.Channel;
 import dev.tinelix.jabwave.api.base.entities.SuperChat;
 import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
@@ -42,6 +44,7 @@ public class MessengerActivity extends JabwaveActivity {
     private Chat chat;
     private MessagesAdapter adapter;
     private boolean isSuperChat;
+    private boolean isChannel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class MessengerActivity extends JabwaveActivity {
         actionBar = getSupportActionBar();
         int network_type = getIntent().getIntExtra("network_type", 0);
         isSuperChat = getIntent().getIntExtra("chat_type", 0) == 2;
+        isChannel = getIntent().getIntExtra("chat_type", 0) == 3;
         if(network_type == 0) {
             chat_id = getIntent().getStringExtra("chat_id");
             if (chat_id != null) {
@@ -126,28 +130,14 @@ public class MessengerActivity extends JabwaveActivity {
                         if(((SuperChat) chat).isRequiredAuth())
                             ((SuperChat) chat).join(service.getClient(), "tretdm-jabwave");
                     }
+                    getMemberCountAsync();
+                    loadMessagesAsync();
                     if (chat != null) {
                         MessageEditor editor = findViewById(R.id.message_editor);
                         editor.getEditorArea().setHint(
-                                chat.type == 3 ?
+                                isChannel ?
                                         getResources().getString(R.string.broadcast) :
                                         getResources().getString(R.string.message)
-                        );
-                        chat.loadMessages(service.getClient(),
-                                new OnClientAPIResultListener() {
-                                    @SuppressLint("NotifyDataSetChanged")
-                                    @Override
-                                    public boolean onSuccess(HashMap<String, Object> map) {
-                                        messages = chat.getMessages();
-                                        createMessagesAdapter();
-                                        return true;
-                                    }
-
-                                    @Override
-                                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
-                                        return false;
-                                    }
-                                }
                         );
                     }
                     return false;
@@ -212,14 +202,13 @@ public class MessengerActivity extends JabwaveActivity {
     @SuppressLint("NotifyDataSetChanged")
     public void receiveState(int msg, Bundle data) {
         switch (msg) {
-            case HandlerMessages.MESSAGE_SENT:
+            case HandlerMessages.MESSAGE_SENT -> {
                 MessageEditor editor = findViewById(R.id.message_editor);
                 editor.getEditorArea().setText("");
                 adapter.notifyDataSetChanged();
-                break;
-            case HandlerMessages.CHATS_LOADED:
-                updateFileFromMessage(data);
-                break;
+            }
+            case HandlerMessages.CHATS_LOADED ->
+                    updateFileFromMessage(data);
         }
     }
 
@@ -243,5 +232,65 @@ public class MessengerActivity extends JabwaveActivity {
     @Override
     protected void handleOnBackPressed() {
         super.handleOnBackPressed();
+    }
+
+    private void getMemberCountAsync() {
+        if(isSuperChat) {
+            ((SuperChat) chat).getMemberCount(new OnClientAPIResultListener() {
+                @Override
+                public boolean onSuccess(HashMap<String, Object> map) {
+                    Objects.requireNonNull(getSupportActionBar()).setSubtitle(
+                            String.format(getResources().getQuantityString(
+                                    R.plurals.members_count,
+                                    Global.getEndNumberFromLong(((SuperChat) chat).getMemberCount())
+                            ), ((SuperChat) chat).getMemberCount())
+                    );
+                    return false;
+                }
+
+                @Override
+                public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                    return false;
+                }
+            });
+        }
+        if(isChannel){
+            ((Channel) chat).getSubscribersCount(new OnClientAPIResultListener() {
+                @Override
+                public boolean onSuccess(HashMap<String, Object> map) {
+                    Objects.requireNonNull(getSupportActionBar()).setSubtitle(
+                            String.format(getResources().getQuantityString(
+                                    R.plurals.subscribers_count,
+                                    Global.getEndNumberFromLong(((Channel) chat).getSubscribersCount())
+                            ), ((Channel) chat).getSubscribersCount())
+                    );
+                    return false;
+                }
+
+                @Override
+                public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                    return false;
+                }
+            });
+        }
+    }
+
+    public void loadMessagesAsync() {
+        chat.loadMessages(service.getClient(),
+                new OnClientAPIResultListener() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        messages = chat.getMessages();
+                        createMessagesAdapter();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
+                    }
+                }
+        );
     }
 }

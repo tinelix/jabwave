@@ -103,4 +103,9 @@ public class Global {
         theme.resolveAttribute(attr_res, typedValue, true);
         return typedValue.data;
     }
+
+    public static int getEndNumberFromLong(long counter) {
+        String str = String.format("%s", counter);
+        return Integer.parseInt(str.substring(str.length() - 1));
+    }
 }

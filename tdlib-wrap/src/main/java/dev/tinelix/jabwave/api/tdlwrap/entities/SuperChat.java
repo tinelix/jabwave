@@ -1,6 +1,7 @@
 package dev.tinelix.jabwave.api.tdlwrap.entities;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import org.drinkless.td.libcore.telegram.TdApi;
 
@@ -19,38 +20,47 @@ import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.attachments.Attachment;
 import dev.tinelix.jabwave.api.base.entities.Message;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
+import dev.tinelix.jabwave.api.tdlwrap.TDLibClient;
 import dev.tinelix.jabwave.api.tdlwrap.attachments.PhotoAttachment;
 import dev.tinelix.jabwave.api.tdlwrap.attachments.VideoAttachment;
 
 public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
+    private long secondary_id;
+    private TDLibClient client;
     public String title;
-    public long id;
     public ArrayList<String> groups;
 
-    public SuperChat(String title) {
+    public SuperChat(TDLibClient client, String title) {
         super(title, 1, false);
+        this.client = client;
         this.title = title;
     }
 
-    public SuperChat(long id, String title, ArrayList<String> groups, int status) {
+    public SuperChat(TDLibClient client, long id, String title, ArrayList<String> groups, int status) {
         super(id, title, 1, false);
+        this.client = client;
         this.title = title;
         this.id = id;
+        this.secondary_id = Long.parseLong(String.format("%s", (long) id).substring(4)); // remove -100
         this.groups = groups;
         this.status = status;
     }
 
-    public SuperChat(long id, int type, String title, ArrayList<String> groups, int status) {
+    public SuperChat(TDLibClient client, long id, int type, String title, ArrayList<String> groups, int status) {
         super(id, title, 2, 1, false);
+        this.client = client;
         this.title = title;
         this.id = id;
+        this.secondary_id = Long.parseLong(String.format("%s", (long) id).substring(4)); // remove -100
         this.groups = groups;
         this.status = status;
     }
 
-    public SuperChat(long id) {
+    public SuperChat(TDLibClient client, long id) {
         super(id, "(Unknown)", 1, false);
+        this.client = client;
         this.id = id;
+        this.secondary_id = Long.parseLong(String.format("%s", (long) id).substring(4)); // remove -100
     }
 
     public void loadPhoto(byte[] bytes, File file) {
@@ -75,7 +85,7 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
 
     @Override
     public void loadMessages(BaseClient client, OnClientAPIResultListener listener) {
-        client.send(new TdApi.GetChatHistory(id, 0, -25, 50, false),
+        client.send(new TdApi.GetChatHistory((long) id, 0, -25, 50, false),
                 new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
@@ -180,7 +190,7 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
     public void sendMessage(BaseClient client, String text, OnClientAPIResultListener listener) {
         client.send(
                 new TdApi.SendMessage(
-                        id, 0, 0, null, null,
+                        (long) id, 0, 0, null, null,
                         new TdApi.InputMessageText(
                                 new TdApi.FormattedText(text, null),
                                 false, true
@@ -219,5 +229,28 @@ public class SuperChat extends dev.tinelix.jabwave.api.base.entities.SuperChat {
             }
         }
         return -1;
+    }
+
+    @Override
+    public void getMemberCount(OnClientAPIResultListener listener) {
+        client.send(new TdApi.GetSupergroup(secondary_id), new OnClientAPIResultListener() {
+            @Override
+            public boolean onSuccess(HashMap<String, Object> map) {
+                if(map.get("result") instanceof TdApi.Supergroup) {
+                    setMemberCount(((TdApi.Supergroup) Objects.requireNonNull(map.get("result"))).memberCount);
+                }
+                listener.onSuccess(map);
+                return false;
+            }
+
+            @Override
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                return false;
+            }
+        });
+    }
+
+    public void setMemberCount(long count) {
+        member_count = count;
     }
 }
