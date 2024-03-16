@@ -37,9 +37,11 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         tintIcons(getPreferenceScreen(), iconColor);
         listenPreferences();
         if(getActivity() instanceof AppActivity activity) {
-            activity.getSupportActionBar().setTitle(
-                    getResources().getString(R.string.settings)
-            );
+            if(activity.getSupportActionBar() != null) {
+                activity.getSupportActionBar().setTitle(
+                        getResources().getString(R.string.settings)
+                );
+            }
         }
     }
 
