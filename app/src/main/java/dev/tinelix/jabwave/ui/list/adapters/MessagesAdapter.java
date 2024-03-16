@@ -165,7 +165,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Holder
                 }
                 msg_card.getLayoutParams().width = (int) (220 * ctx.getResources().getDisplayMetrics().scaledDensity);
             }
-            if(msg.text.length() > 60 || msg.text.split("\n").length > 1) {
+            if(msg.text.length() > 30 || msg.text.split("\n").length > 1) {
                 ((LinearLayout) view.findViewById(R.id.message_text_area))
                         .setOrientation(LinearLayout.VERTICAL);
                 ((LinearLayout.LayoutParams) msg_timestamp.getLayoutParams())
