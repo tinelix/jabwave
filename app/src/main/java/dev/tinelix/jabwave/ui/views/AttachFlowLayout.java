@@ -138,7 +138,6 @@ public class AttachFlowLayout extends FlowLayout {
                                             .error(error_resid)
                                     ).into(iv);
                             iv.setAdjustViewBounds(true);
-                            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         } else {
                             iv.setImageDrawable(
                                     getResources().getDrawable(error_resid)
