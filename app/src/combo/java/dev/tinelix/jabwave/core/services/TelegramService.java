@@ -330,8 +330,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             Bundle data = new Bundle();
             boolean updatingCompleted = updateFile.file.local.isDownloadingCompleted
                     || updateFile.file.remote.isUploadingCompleted;
-            boolean isUpload = updateFile.file.remote.isUploadingActive
-                    || updateFile.file.remote.isUploadingCompleted;
+            boolean isUpload = updateFile.file.remote.isUploadingActive;
             data.putInt("file_id", updateFile.file.id);
             data.putLong("updateSize", updateFile.file.local.downloadedSize);
             data.putLong("fullSize", updateFile.file.size);
@@ -341,7 +340,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                 if (isUpload)
                     Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
                             String.format(
-                                    "Upload completed (File ID #%s, %s): %s/%s KB...",
+                                    "Uploading completed (File ID #%s, %s): %s/%s KB...",
                                     updateFile.file.id,
                                     updateFile.file.local.path,
                                     updateFile.file.local.downloadedSize / 1024,
@@ -351,7 +350,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                 else
                     Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
                             String.format(
-                                    "Download completed (File ID #%s, %s): %s/%s KB...",
+                                    "Downloading completed (File ID #%s, %s): %s/%s KB...",
                                     updateFile.file.id,
                                     updateFile.file.local.path,
                                     updateFile.file.local.downloadedSize / 1024,

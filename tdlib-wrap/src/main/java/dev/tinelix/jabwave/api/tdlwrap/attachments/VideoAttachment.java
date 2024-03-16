@@ -31,7 +31,7 @@ public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.Vi
     @Override
     public void downloadVideo(BaseClient client, OnClientAPIResultListener listener) {
         client.send(new TdApi.DownloadFile
-                        ((int) id, 1, 0, 1, true),
+                        ((int) id, 1, 0, 41943040, false),
                 new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
@@ -42,7 +42,7 @@ public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.Vi
                                 try {
                                     if (file.local.isDownloadingCompleted) {
                                         VideoAttachment.this.local_path = file.local.path;
-                                        state = 1;
+                                        state = 2;
                                         Log.d(TDLibClient.TELEGRAM_SERV_TAG,
                                                 String.format("Downloaded file #%s.", file.id)
                                         );
@@ -71,7 +71,7 @@ public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.Vi
     @Override
     public void downloadThumbnail(BaseClient client, OnClientAPIResultListener listener) {
         client.send(new TdApi.DownloadFile
-                        ((int) thumbnail_id, 1, 0, 1, true),
+                        ((int) thumbnail_id, 1, 0, 2097152, true),
                 new OnClientAPIResultListener() {
                     @SuppressWarnings("ResultOfMethodCallIgnored")
                     @Override

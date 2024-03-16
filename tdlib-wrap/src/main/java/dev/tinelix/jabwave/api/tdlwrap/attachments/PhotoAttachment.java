@@ -39,7 +39,7 @@ public class PhotoAttachment
                             if (state == 0) {
                                 state = 1;
                                 client.send(new TdApi.DownloadFile
-                                                ((int) id, 1, 0, 5, false),
+                                                ((int) id, 1, 0, 2097152, false),
                                         new OnClientAPIResultListener() {
                                             @Override
                                             public boolean onSuccess(HashMap<String, Object> map) {

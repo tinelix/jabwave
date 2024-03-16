@@ -13,10 +13,13 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.io.File;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
+import dev.tinelix.jabwave.BuildConfig;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.services.base.ClientService;
@@ -62,6 +65,7 @@ public class VideoAttachView extends FrameLayout {
                 video.downloadVideo(service.getClient(), new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
+                        startVideoPlayer(video.getLocalPath());
                         return false;
                     }
 
@@ -77,7 +81,11 @@ public class VideoAttachView extends FrameLayout {
     private void startVideoPlayer(String path) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(path));
+        intent.setData(
+                FileProvider.getUriForFile(
+                getContext(), BuildConfig.APPLICATION_ID + ".provider", new File(path)
+                )
+        );
         getContext().startActivity(intent);
         Log.d(JabwaveApp.APP_TAG, String.format("Starting video player by %s...", path));
     }
