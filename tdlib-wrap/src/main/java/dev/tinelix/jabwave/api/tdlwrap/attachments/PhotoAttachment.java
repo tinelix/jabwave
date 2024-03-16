@@ -37,20 +37,10 @@ public class PhotoAttachment
                         assert file != null;
                         if(!file.local.isDownloadingCompleted) {
                             if (state == 0) {
-                                state = 1;
-                                client.send(new TdApi.DownloadFile
-                                                ((int) id, 1, 0, 2097152, false),
-                                        new OnClientAPIResultListener() {
-                                            @Override
-                                            public boolean onSuccess(HashMap<String, Object> map) {
-                                                return false;
-                                            }
-
-                                            @Override
-                                            public boolean onFail(HashMap<String, Object> map, Throwable t) {
-                                                return false;
-                                            }
-                                        }
+                                client.send(
+                                        new TdApi.DownloadFile(
+                                                (int) id, 1, 0, 2097152, false
+                                        ), null
                                 );
                             }
                         } else if (id == file.id) {

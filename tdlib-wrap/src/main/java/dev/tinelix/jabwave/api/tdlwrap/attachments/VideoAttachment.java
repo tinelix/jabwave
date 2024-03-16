@@ -30,42 +30,54 @@ public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.Vi
 
     @Override
     public void downloadVideo(BaseClient client, OnClientAPIResultListener listener) {
-        client.send(new TdApi.DownloadFile
-                        ((int) id, 1, 0, 41943040, false),
-                new OnClientAPIResultListener() {
-                    @Override
-                    public boolean onSuccess(HashMap<String, Object> map) {
-                        if (map.get("result") instanceof TdApi.File) {
-                            TdApi.File file = (TdApi.File) map.get("result");
-                            assert file != null;
-                            if (id == file.id) {
-                                try {
-                                    if (file.local.isDownloadingCompleted) {
-                                        VideoAttachment.this.local_path = file.local.path;
-                                        state = 2;
-                                        Log.d(TDLibClient.TELEGRAM_SERV_TAG,
-                                                String.format("Downloaded file #%s.", file.id)
-                                        );
-                                    } else {
-                                        Log.e(TDLibClient.TELEGRAM_SERV_TAG,
-                                                String.format("Unable to download file #%s.", file.id)
-                                        );
-                                    }
-                                    listener.onSuccess(map);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                        return false;
-                    }
+        client.send(new TdApi.GetFile((int) id), new OnClientAPIResultListener() {
+            @Override
+            public boolean onSuccess(HashMap<String, Object> map) {
+                if (map.get("result") instanceof TdApi.File) {
+                    TdApi.File file = (TdApi.File) map.get("result");
+                    assert file != null;
+                    if (!file.local.isDownloadingCompleted) {
+                        if (state == 0) {
+                            client.send(
+                                    new TdApi.DownloadFile(
+                                            (int) id, 1, 0, 41943040, true
+                                    ), new OnClientAPIResultListener() {
+                                        @Override
+                                        public boolean onSuccess(HashMap<String, Object> map) {
+                                            TdApi.File file = (TdApi.File) map.get("result");
+                                            onVideoDownloadSuccess(file.id, file.local.path);
+                                            listener.onSuccess(new HashMap<>());
+                                            return false;
+                                        }
 
-                    @Override
-                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
-                        return false;
+                                        @Override
+                                        public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                                            return false;
+                                        }
+                                    });
+                        } else if (id == file.id) {
+                            onVideoDownloadSuccess(file.id, file.local.path);
+                            listener.onSuccess(new HashMap<>());
+                        }
+                    } else {
+                        onVideoDownloadSuccess(file.id, file.local.path);
+                        listener.onSuccess(new HashMap<>());
                     }
                 }
-        );
+                return false;
+            }
+
+            @Override
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                return false;
+            }
+        });
+    }
+
+    private void onVideoDownloadSuccess(int id, String local_path) {
+        this.local_path = local_path;
+        state = 2;
+        Log.d(TDLibClient.TELEGRAM_SERV_TAG, String.format("Downloaded file #%s (%s).", id, local_path));
     }
 
     @Override
@@ -109,5 +121,10 @@ public class VideoAttachment extends dev.tinelix.jabwave.api.base.attachments.Vi
                     }
                 }
         );
+    }
+
+    @Override
+    public String getLocalPath() {
+        return local_path;
     }
 }

@@ -17,10 +17,11 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:visibility="gone"
         android:layout_margin="32dp"
-        app:backgroundTint="@color/white"
-        app:cardCornerRadius="240dp">
+        android:visibility="gone"
+        app:backgroundTint="?android:attr/windowBackground"
+        app:cardCornerRadius="20dp"
+        tools:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progress"
@@ -47,6 +48,7 @@
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         app:iconSize="36dp"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+        tools:visibility="visible" />
 
 </FrameLayout>

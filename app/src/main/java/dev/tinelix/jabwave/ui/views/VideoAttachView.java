@@ -3,6 +3,8 @@ package dev.tinelix.jabwave.ui.views;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,15 +59,21 @@ public class VideoAttachView extends FrameLayout {
                     ).into(thumbnail_view);
         }
         findViewById(R.id.play_button).setOnClickListener(v -> {
-            if(video.state == 1) {
+            if(video.state == 2) {
+                findViewById(R.id.play_button).setVisibility(VISIBLE);
+                findViewById(R.id.progress_card).setVisibility(GONE);
                 startVideoPlayer(video.getLocalPath());
-            } else {
+            } else if(video.state == 0) {
                 findViewById(R.id.play_button).setVisibility(GONE);
                 findViewById(R.id.progress_card).setVisibility(VISIBLE);
                 video.downloadVideo(service.getClient(), new OnClientAPIResultListener() {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
-                        startVideoPlayer(video.getLocalPath());
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            findViewById(R.id.play_button).setVisibility(VISIBLE);
+                            findViewById(R.id.progress_card).setVisibility(GONE);
+                            startVideoPlayer(video.getLocalPath());
+                        });
                         return false;
                     }
 
@@ -81,13 +89,15 @@ public class VideoAttachView extends FrameLayout {
     private void startVideoPlayer(String path) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(
-                FileProvider.getUriForFile(
-                getContext(), BuildConfig.APPLICATION_ID + ".provider", new File(path)
-                )
-        );
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        getContext().startActivity(intent);
+        if(path.length() > 0) {
+            intent.setData(
+                    FileProvider.getUriForFile(
+                            getContext(), BuildConfig.APPLICATION_ID + ".provider", new File(path)
+                    )
+            );
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            getContext().startActivity(intent);
+        }
         Log.d(JabwaveApp.APP_TAG, String.format("Starting video player by %s...", path));
     }
 
