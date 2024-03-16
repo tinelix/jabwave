@@ -86,6 +86,7 @@ public class VideoAttachView extends FrameLayout {
                 getContext(), BuildConfig.APPLICATION_ID + ".provider", new File(path)
                 )
         );
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         getContext().startActivity(intent);
         Log.d(JabwaveApp.APP_TAG, String.format("Starting video player by %s...", path));
     }
