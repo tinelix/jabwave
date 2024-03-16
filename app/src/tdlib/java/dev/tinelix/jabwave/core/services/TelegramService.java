@@ -323,7 +323,9 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                     )
             );
             status = "update_file";
-            sendMessageToActivity(status, data);
+            if(updateFile.file.size == updateFile.file.local.downloadedSize) {
+                sendMessageToActivity(status, data);
+            }
         }
     }
 

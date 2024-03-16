@@ -32,78 +32,51 @@ public class PhotoAttachment
 
     @Override
     public void downloadPhoto(BaseClient client, OnClientAPIResultListener listener) {
-        client.send(new TdApi.GetFile((int) id), new OnClientAPIResultListener() {
-            @Override
-            public boolean onSuccess(HashMap<String, Object> map) {
-                if(map.get("result") instanceof TdApi.File) {
-                    file = (TdApi.File) map.get("result");
-                    assert file != null;
-                    if (file.local.downloadedSize != file.size) {
-                        client.send(new TdApi.DownloadFile
-                                        ((int) id, 1, 0, 1, true),
-                                new OnClientAPIResultListener() {
-                                    @SuppressWarnings("ResultOfMethodCallIgnored")
-                                    @Override
-                                    public boolean onSuccess(HashMap<String, Object> map) {
-                                        if (map.get("result") instanceof TdApi.File) {
-                                            TdApi.File file = (TdApi.File) map.get("result");
-                                            assert file != null;
-                                            if (id == file.id) {
-                                                try {
-                                                    array = new byte[file.local.downloadedSize];
-                                                    if (file.local.isDownloadingCompleted) {
-                                                        FileInputStream fis = new FileInputStream(file.local.path);
-                                                        fis.read(array);
-                                                        state = 1;
-                                                        Log.d(TDLibClient.TELEGRAM_SERV_TAG,
-                                                                String.format("Downloaded file #%s.", file.id)
-                                                        );
-                                                    } else {
-                                                        Log.e(TDLibClient.TELEGRAM_SERV_TAG,
-                                                                String.format("Unable to download file #%s.", file.id)
-                                                        );
-                                                    }
-                                                    listener.onSuccess(map);
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
+            client.send(new TdApi.GetFile((int) id), new OnClientAPIResultListener() {
+                @Override
+                public boolean onSuccess(HashMap<String, Object> map) {
+                    if (map.get("result") instanceof TdApi.File) {
+                        file = (TdApi.File) map.get("result");
+                        assert file != null;
+                        if(state == 0) {
+                            client.send(new TdApi.DownloadFile
+                                            ((int) id, 1, 0, 1, false),
+                                    new OnClientAPIResultListener() {
+                                        @Override
+                                        public boolean onSuccess(HashMap<String, Object> map) {
+                                            state = 1;
+                                            return false;
                                         }
-                                        return false;
-                                    }
 
-                                    @Override
-                                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
-                                        return false;
+                                        @Override
+                                        public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                                            return false;
+                                        }
                                     }
-                                }
-                        );
-                    } else {
-                        if (id == file.id) {
+                            );
+                        } else if (id == file.id) {
                             try {
                                 array = new byte[file.local.downloadedSize];
-                                FileInputStream fis = new FileInputStream(file.local.path);
-                                fis.read(array);
-                                state = 1;
-                                Log.d(TDLibClient.TELEGRAM_SERV_TAG,
-                                        String.format("Downloaded file #%s.", file.id)
-                                );
-                                listener.onSuccess(map);
+                                if(file.local.isDownloadingCompleted) {
+                                    FileInputStream fis = new FileInputStream(file.local.path);
+                                    fis.read(array);
+                                    state = 2;
+                                    listener.onSuccess(null);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                listener.onFail(null, e);
                             }
-                            listener.onSuccess(map);
                         }
                     }
+                    return false;
                 }
-                return false;
-            }
 
-            @Override
-            public boolean onFail(HashMap<String, Object> map, Throwable t) {
-                return false;
-            }
-        });
+                @Override
+                public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                    return false;
+                }
+            });
     }
 
     @Override

@@ -129,7 +129,7 @@ public class AttachFlowLayout extends FlowLayout {
                             removeView(iv);
                         }
                         addView(iv);
-                        if(photo.state == 1) {
+                        if(photo.state == 2) {
                             Glide.with(getContext())
                                     .load(photo.getContent())
                                     .apply(new RequestOptions()

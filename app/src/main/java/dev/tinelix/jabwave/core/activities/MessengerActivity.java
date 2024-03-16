@@ -220,7 +220,7 @@ public class MessengerActivity extends JabwaveActivity {
         int attach_pos = msg.getAttachmentIndex(file_id);
         Attachment attachment = msg.getAttachments().get(attach_pos);
         if(data.getBoolean("updateComplete")) {
-            attachment.updateState(1);
+            attachment.updateState(2);
             ArrayList<Attachment> attachments = msg.getAttachments();
             attachments.set(attach_pos, attachment);
             msg.setAttachments(attachments);
@@ -282,7 +282,7 @@ public class MessengerActivity extends JabwaveActivity {
                     @Override
                     public boolean onSuccess(HashMap<String, Object> map) {
                         messages = chat.getMessages();
-                        createMessagesAdapter();
+                        new Handler(Looper.getMainLooper()).post(() -> createMessagesAdapter());
                         return true;
                     }
 
