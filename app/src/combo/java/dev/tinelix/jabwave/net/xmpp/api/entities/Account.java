@@ -32,6 +32,7 @@ public class Account extends dev.tinelix.jabwave.api.base.entities.Account {
                 last_name = "";
             }
             id = String.format("%s@%s", client.jid, client.server);
+            username = String.format("%s@%s", client.jid, client.server);
         } catch (Exception e) {
             e.printStackTrace();
         }

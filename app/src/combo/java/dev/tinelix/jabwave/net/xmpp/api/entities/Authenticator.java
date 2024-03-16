@@ -3,6 +3,8 @@ package dev.tinelix.jabwave.net.xmpp.api.entities;
 import android.annotation.SuppressLint;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smack.util.SslContextFactory;
@@ -10,8 +12,10 @@ import org.jivesoftware.smack.util.TLSUtils;
 import org.jxmpp.jid.parts.Resourcepart;
 import org.jxmpp.stringprep.XmppStringprepException;
 
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
@@ -28,8 +32,10 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
 
     public Authenticator(XMPPClient client) {
         super(client);
+        conn = (XMPPTCPConnection) client.getConnection();
         isChangeableAuthData = true;
-        authType = dev.tinelix.jabwave.api.base.entities.Authenticator.TYPE_REQUIRES_EMAIL;
+        isChangeableEmail = false;
+        isChangeablePhoneNumber = false;
     }
 
     public static XMPPTCPConnectionConfiguration buildAuthConfig(
@@ -114,5 +120,23 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void signIn(Object object) {
+        if(object instanceof HashMap<?,?> map) {
+            String jid = (String) map.get("jid");
+            String password = (String) map.get("password");
+            if(jid != null && password != null) {
+                try {
+                    conn.login(jid, password);
+                    isAuthenticated = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ((XMPPClient) client).start(jid.split("@")[1], jid.split("@")[0], password);
+                    isAuthenticated = true;
+                }
+            }
+        }
     }
 }

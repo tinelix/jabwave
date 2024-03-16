@@ -16,6 +16,7 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
@@ -142,7 +143,12 @@ public class XMPPService extends ClientService {
                 status = "authorizing";
                 listenConnection((XMPPClient) client);
                 try {
-                    ((XMPPClient) client).start(server, username, new String(Base58.decode(password)));
+                    conn.connect();
+                    auth = new Authenticator((XMPPClient) client);
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("jid", String.format("%s@%s", username, server));
+                    map.put("password", new String(Base58.decode(password)));
+                    auth.signIn(map);
                 } catch (Base58Exception e) {
                     Log.e(JabwaveApp.XMPP_SERV_TAG,
                             "Authentication with Base58 failed. Retrying with plain password..."
@@ -274,6 +280,11 @@ public class XMPPService extends ClientService {
             }
         }
         stopSelf();
+    }
+
+    @Override
+    public dev.tinelix.jabwave.api.base.entities.Authenticator getAuthenticator() {
+        return auth;
     }
 
     @Override

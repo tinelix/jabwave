@@ -54,6 +54,10 @@ public class AccountInfoFragment extends PreferenceFragmentCompat {
                     email_pref.setVisible(true);
                     phone_number.setVisible(true);
                 }
+                case 0 -> {
+                    email_pref.setVisible(false);
+                    phone_number.setVisible(false);
+                }
             }
         }
     }
