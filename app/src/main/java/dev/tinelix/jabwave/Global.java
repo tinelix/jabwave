@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,8 @@ import android.view.ContextThemeWrapper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorRes;
@@ -107,5 +110,15 @@ public class Global {
     public static int getEndNumberFromLong(long counter) {
         String str = String.format("%s", counter);
         return Integer.parseInt(str.substring(str.length() - 1));
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String formatDateTime(String pattern, Date date) {
+        return new SimpleDateFormat(pattern).format(date);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String formatDateTime(String pattern, long sec) {
+        return new SimpleDateFormat(pattern).format(new Date(sec * 1000));
     }
 }

@@ -53,6 +53,18 @@
     <string name="open_link_summary">
         Вы действительно хотите открыть ссылку, находящиеся в %s? Она может оказаться небезопасной.
     </string>
+    <string name="change_account_data_title">Смена данных аккаунта</string>
+    <string name="old_phone_number">Старый номер телефона</string>
+    <string name="new_phone_number">Новый номер телефона</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="new_password_again">Новый пароль (ещё раз)</string>
+    <string name="reset_password_wait">
+        Вы можете сменить пароль не раньше %s. Если вы готовы подождать, нажмите ОК.
+    </string>
+    <string name="reset_password_wait_2">
+        Повторите не раньше %s.
+    </string>
+    <string name="reset_password_do_not_match">Оба пароля не совпадают.</string>
 
     <!-- Main Settings screen !-->
     <string name="general_settings_category">Общие</string>
@@ -97,12 +109,17 @@
     <string name="dm_notifications">Личные сообщения</string>
     <string name="muc_notifications">Суперчаты</string>
 
-    <!-- Misc !-->
-    <string name="_default">По умолчанию</string>
-    <string name="unknown">Неизвестно</string>
-    <string name="error">Ошибка</string>
+    <!-- Errors -->
+    <string name="account_access_limited">Доступ к аккаунту ограничен</string>
+    <string name="account_access_limited_reason">Причина: %s</string>
     <string name="not_supported">Не поддерживается</string>
     <string name="not_supported_by_network">Не поддерживается текущей сетью</string>
     <string name="not_supported_by_protocol">Не поддерживается текущим протоколом</string>
+    <string name="error">Ошибка</string>
+
+    <!-- Misc !-->
+    <string name="_default">По умолчанию</string>
+    <string name="unknown">Неизвестно</string>
+    <string name="done">Готово</string>
     <string name="theme_presets_warning">* Применимо только в окне переписки.</string>
 </resources>

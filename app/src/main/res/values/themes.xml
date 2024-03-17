@@ -346,14 +346,14 @@
         <item name="android:ellipsize">marquee</item>
         <item name="android:textSize">11dip</item>
         <item name="android:textColor">#FFFFFFFF</item>
-        <item name="android:text"></item>
+        <item name="android:text" />
     </style>
 
     <style name="ApplicationTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="ApplicationTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ShapeAppearanceOverlay"></style>
+    <style name="ShapeAppearanceOverlay" />
 
     <style name="ShapeAppearanceOverlay.Circle">
         <item name="cornerSize">50%</item>
@@ -371,9 +371,7 @@
         <item name="cornerSize">32dp</item>
     </style>
 
-    <style name="ApplicationTheme.ProgressBar" parent="Widget.AppCompat.ProgressBar">
-        <item name="colorAccent">?attr/colorAccent</item>
-    </style>
+    <style name="ApplicationTheme.ProgressBar" parent="Widget.AppCompat.ProgressBar" />
 
     <style name="ApplicationTheme.Button" parent="Widget.MaterialComponents.Button">
         <item name="materialThemeOverlay">@style/ApplicationTheme.Overlay</item>
@@ -382,5 +380,14 @@
     <style name="ApplicationTheme.Overlay">
         <item name="colorPrimary">?attr/colorAccent</item>
     </style>
+
+    <style name="ApplicationTheme.Toolbar.Title" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ApplicationTheme.Toolbar.Subtitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">14sp</item>
+    </style>
+
 
 </resources>

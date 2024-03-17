@@ -31,7 +31,14 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:navigationIcon="@drawable/ic_back"
                     app:subtitleTextColor="?android:attr/textColorSecondaryInverse"
-                    app:title="@string/app_name" />
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    app:contentInsetStartWithNavigation="0dp"
+                    app:title="@string/app_name">
+
+                    <include layout="@layout/layout_actionbar" />
+
+                </dev.tinelix.jabwave.ui.views.base.JabwaveActionBar>
             </com.google.android.material.appbar.AppBarLayout>
 
         <include

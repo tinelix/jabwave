@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
@@ -50,13 +51,13 @@ public class MessengerActivity extends JabwaveActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messenger);
-        setActionBar();
         app = ((JabwaveApp) getApplicationContext());
         service = app.clientService;
-        actionBar = getSupportActionBar();
         int network_type = getIntent().getIntExtra("network_type", 0);
         isSuperChat = getIntent().getIntExtra("chat_type", 0) == 2;
         isChannel = getIntent().getIntExtra("chat_type", 0) == 3;
+        setActionBar();
+        actionBar = getSupportActionBar();
         if(network_type == 0) {
             chat_id = getIntent().getStringExtra("chat_id");
             if (chat_id != null) {
@@ -177,9 +178,21 @@ public class MessengerActivity extends JabwaveActivity {
         messages_list.setAdapter(adapter);
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void setActionBar() {
         JabwaveActionBar actionbar = findViewById(R.id.actionbar);
         actionbar.setNavigationIconTint(R.color.white);
+        actionbar.setProfilePhotoVisibility(true);
+        if(isChannel) {
+            actionbar.getProfilePhotoView().setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.ic_campaign_accent)
+            );
+        }
+        if(isSuperChat) {
+            actionbar.getProfilePhotoView().setImageDrawable(
+                    ContextCompat.getDrawable(this, R.drawable.ic_group_accent)
+            );
+        }
         setSupportActionBar(actionbar);
         actionbar.setNavigationOnClickListener(v -> handleOnBackPressed());
     }

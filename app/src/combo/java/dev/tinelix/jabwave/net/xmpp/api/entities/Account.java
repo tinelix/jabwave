@@ -2,10 +2,12 @@ package dev.tinelix.jabwave.net.xmpp.api.entities;
 
 import android.util.Log;
 
+import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.vcardtemp.VCardManager;
 import org.jivesoftware.smackx.vcardtemp.packet.VCard;
 
 import dev.tinelix.jabwave.JabwaveApp;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
 public class Account extends dev.tinelix.jabwave.api.base.entities.Account {
@@ -35,6 +37,16 @@ public class Account extends dev.tinelix.jabwave.api.base.entities.Account {
             username = String.format("%s@%s", client.jid, client.server);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void resetPassword(String newPassword, OnClientAPIResultListener listener) {
+        try {
+            AccountManager manager = AccountManager.getInstance(((XMPPClient) client).getConnection());
+            manager.changePassword(newPassword);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

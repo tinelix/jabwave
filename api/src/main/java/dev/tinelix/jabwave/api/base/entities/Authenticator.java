@@ -1,6 +1,9 @@
 package dev.tinelix.jabwave.api.base.entities;
 
+import java.util.HashMap;
+
 import dev.tinelix.jabwave.api.base.BaseClient;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 
 public class Authenticator {
     protected final BaseClient client;
@@ -20,6 +23,22 @@ public class Authenticator {
 
     public void signIn(Object object) {
         client.send(object);
+    }
+
+    public void signIn(Object object, OnClientAPIResultListener listener) {
+        client.send(object, new OnClientAPIResultListener() {
+            @Override
+            public boolean onSuccess(HashMap<String, Object> map) {
+                listener.onSuccess(map);
+                return false;
+            }
+
+            @Override
+            public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                listener.onFail(map, t);
+                return false;
+            }
+        });
     }
 
     protected void setAuthState(boolean value) {

@@ -209,6 +209,11 @@ public class AppActivity extends JabwaveActivity
                 updateNavView();
                 getContacts();
                 break;
+            case HandlerMessages.AUTHENTICATION_ERROR:
+                findViewById(R.id.access_limited_layout).setVisibility(View.VISIBLE);
+                TextView reason_tv = findViewById(R.id.access_limited_reason);
+                reason_tv.setText(data.getString("error_msg"));
+                break;
             case HandlerMessages.CHATS_LOADED:
                 if (fragment instanceof ChatsFragment) {
                     findViewById(R.id.progress).setVisibility(View.GONE);

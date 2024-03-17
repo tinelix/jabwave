@@ -24,6 +24,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import dev.tinelix.jabwave.Global;
+import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
 
 public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authenticator {
@@ -135,6 +136,30 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
                     e.printStackTrace();
                     ((XMPPClient) client).start(jid.split("@")[1], jid.split("@")[0], password);
                     isAuthenticated = true;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void signIn(Object object, OnClientAPIResultListener listener) {
+        if(object instanceof HashMap<?,?> map) {
+            String jid = (String) map.get("jid");
+            String password = (String) map.get("password");
+            if(jid != null && password != null) {
+                try {
+                    conn.login(jid, password);
+                    isAuthenticated = true;
+                    listener.onSuccess(new HashMap<>());
+                } catch (Exception e) {
+                    try {
+                        ((XMPPClient) client).start(jid.split("@")[1], jid.split("@")[0], password);
+                        isAuthenticated = true;
+                        listener.onSuccess(new HashMap<>());
+                    } catch (Exception e1) {
+                        e.printStackTrace();
+                        listener.onFail(new HashMap<>(), e1);
+                    }
                 }
             }
         }

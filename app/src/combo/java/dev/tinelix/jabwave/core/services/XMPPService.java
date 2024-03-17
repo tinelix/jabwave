@@ -18,6 +18,7 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
@@ -148,22 +149,36 @@ public class XMPPService extends ClientService {
                     HashMap<String, String> map = new HashMap<>();
                     map.put("jid", String.format("%s@%s", username, server));
                     map.put("password", new String(Base58.decode(password)));
-                    auth.signIn(map);
+                    auth.signIn(map, new OnClientAPIResultListener() {
+                        @Override
+                        public boolean onSuccess(HashMap<String, Object> map) {
+                            Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
+                            status = "authorized";
+                            buildHelloPresence(conn);
+                            roster = new Roster(XMPPService.this, ((XMPPClient) client), map1 -> {
+                                sendMessageToActivity("presence_changed");
+                                return false;
+                            });
+                            sendMessageToActivity(status);
+                            services = new Services(client);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                            status = "auth_error";
+                            Bundle bundle = new Bundle();
+                            int msg_index = Objects.requireNonNull(t.getMessage()).indexOf("<text");
+                            bundle.putString("error_msg", t.getMessage().substring(msg_index));
+                            sendMessageToActivity(status, bundle);
+                            return false;
+                        }
+                    });
                 } catch (Base58Exception e) {
                     Log.e(JabwaveApp.XMPP_SERV_TAG,
                             "Authentication with Base58 failed. Retrying with plain password..."
                     );
-                    ((XMPPClient) client).start(server, username, password);
                 }
-                Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorized!");
-                status = "authorized";
-                buildHelloPresence(conn);
-                roster = new Roster(this, ((XMPPClient) client), map -> {
-                    sendMessageToActivity("presence_changed");
-                    return false;
-                });
-                sendMessageToActivity(status);
-                services = new Services(client);
             } catch (Exception ex) {
                 status = "error";
                 ex.printStackTrace();
@@ -242,6 +257,8 @@ public class XMPPService extends ClientService {
         switch (status) {
             case "error" ->
                     intent.putExtra("msg", HandlerMessages.NO_INTERNET_CONNECTION);
+            case "auth_error" ->
+                    intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
             case "authorized" ->
                     intent.putExtra("msg", HandlerMessages.AUTHORIZED);
             case "done" ->
@@ -262,6 +279,10 @@ public class XMPPService extends ClientService {
         switch (status) {
             case "presence_changed":
                 intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
+                intent.putExtra("data", data);
+                break;
+            case "auth_error":
+                intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
                 intent.putExtra("data", data);
                 break;
         }

@@ -53,6 +53,19 @@
     <string name="open_link_summary">
         Are you sure you want to open the link located in %s? It may turn out to be unsafe.
     </string>
+    <string name="change_account_data_title">Change account data</string>
+    <string name="old_phone_number">Old phone number</string>
+    <string name="new_phone_number">New phone number</string>
+    <string name="new_password">New password</string>
+    <string name="new_password_again">New password (again)</string>
+    <string name="reset_password_wait">
+        You can change your password no earlier than %s. If you\'re ready, click OK.
+    </string>
+    <string name="reset_password_do_not_match">Both passwords do not match.</string>
+
+    <string name="reset_password_wait_2">
+        Retry no earlier than %s.
+    </string>
 
     <!-- Main settings screen !-->
     <string name="general_settings_category">General</string>
@@ -97,12 +110,17 @@
     <string name="dm_notifications">Direct Messages</string>
     <string name="muc_notifications">Superchats</string>
 
-    <!-- Misc !-->
-    <string name="_default">Default</string>
-    <string name="unknown">Unknown</string>
-    <string name="error">Error</string>
+    <!-- Errors -->
+    <string name="account_access_limited">Access to account is limited</string>
+    <string name="account_access_limited_reason">Reason: %s</string>
     <string name="not_supported">Not supported</string>
     <string name="not_supported_by_network">Not supported by current network type</string>
     <string name="not_supported_by_protocol">Not supported by current protocol</string>
+    <string name="error">Error</string>
+
+    <!-- Misc !-->
+    <string name="_default">Default</string>
+    <string name="unknown">Unknown</string>
+    <string name="done">Done</string>
     <string name="theme_presets_warning">* Applicable only in the chat window.</string>
 </resources>
