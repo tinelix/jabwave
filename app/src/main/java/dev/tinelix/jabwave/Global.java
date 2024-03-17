@@ -107,9 +107,9 @@ public class Global {
         return typedValue.data;
     }
 
-    public static int getEndNumberFromLong(long counter) {
+    public static int getEndNumbersFromLong(long counter) {
         String str = String.format("%s", counter);
-        return Integer.parseInt(str.substring(str.length() - 1));
+        return Integer.parseInt(str.substring(str.length() - 2));
     }
 
     @SuppressLint("SimpleDateFormat")

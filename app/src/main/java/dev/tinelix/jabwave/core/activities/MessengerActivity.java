@@ -257,7 +257,7 @@ public class MessengerActivity extends JabwaveActivity {
                     Objects.requireNonNull(getSupportActionBar()).setSubtitle(
                             String.format(getResources().getQuantityString(
                                     R.plurals.members_count,
-                                    Global.getEndNumberFromLong(((SuperChat) chat).getMemberCount())
+                                    Global.getEndNumbersFromLong(((SuperChat) chat).getMemberCount())
                             ), ((SuperChat) chat).getMemberCount())
                     );
                     return false;
@@ -276,7 +276,7 @@ public class MessengerActivity extends JabwaveActivity {
                     Objects.requireNonNull(getSupportActionBar()).setSubtitle(
                             String.format(getResources().getQuantityString(
                                     R.plurals.subscribers_count,
-                                    Global.getEndNumberFromLong(((Channel) chat).getSubscribersCount())
+                                    Global.getEndNumbersFromLong(((Channel) chat).getSubscribersCount())
                             ), ((Channel) chat).getSubscribersCount())
                     );
                     return false;
