@@ -9,6 +9,7 @@
 
     <!-- Attributes -->
     <attr name="actionBarColor" format="reference|color" />
+    <attr name="actionBarTint" format="reference|color"/>
     <attr name="msgrBackgroundColor" format="reference|color" />
     <attr name="inMsgBubbleBackgroundColor" format="reference|color" />
     <attr name="outMsgBubbleBackgroundColor" format="reference|color" />

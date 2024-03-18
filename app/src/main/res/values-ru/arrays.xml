@@ -16,5 +16,6 @@
         <item name="orange">Оранжевая</item>
         <item name="teal">Бирюзовая</item>
         <item name="teal">Морская</item>
+        <item name="neon">Неоновая</item>
     </string-array>
 </resources>

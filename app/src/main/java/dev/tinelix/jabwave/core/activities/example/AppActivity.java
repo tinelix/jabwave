@@ -25,6 +25,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
@@ -94,7 +95,9 @@ public class AppActivity extends JabwaveActivity
 
     private void setActionBar() {
         JabwaveActionBar actionbar = findViewById(R.id.actionbar);
-        actionbar.setNavigationIconTint(R.color.white);
+        actionbar.setNavigationIconTint(Global.getColorAttribute(
+                this, R.attr.actionBarTint
+        ), false);
         setSupportActionBar(actionbar);
     }
 

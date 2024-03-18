@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
@@ -50,7 +51,9 @@ public class SettingsActivity extends JabwaveActivity {
 
     private void setActionBar() {
         JabwaveActionBar actionbar = findViewById(R.id.actionbar);
-        actionbar.setNavigationIconTint(R.color.white);
+        actionbar.setNavigationIconTint(Global.getColorAttribute(
+                this, R.attr.actionBarTint
+        ), false);
         setSupportActionBar(actionbar);
         actionbar.setNavigationOnClickListener(v -> handleOnBackPressed());
     }

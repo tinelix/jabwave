@@ -73,8 +73,8 @@ public class AppearanceSettingsFragment extends PreferenceFragmentCompat {
 }
 
     private void loadThemePresets(ArrayList<ThemePreset> presets) {
-        for(int i = 0; i < 7; i++) {
-            ThemePreset preset = new ThemePreset(-7 + i,
+        for(int i = 0; i < 8; i++) {
+            ThemePreset preset = new ThemePreset(i + 1,
                     getResources().getStringArray(R.array.theme_presets)[i]
             );
             ThemePresets.generateThemePreset(getContext(), preset);

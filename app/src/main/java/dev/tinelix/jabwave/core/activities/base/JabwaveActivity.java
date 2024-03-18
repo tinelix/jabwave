@@ -54,13 +54,14 @@ public class JabwaveActivity extends AppCompatActivity {
         }
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             switch ((int) themeId) {
-                case -7 -> setStatusBar(R.color.statusBarColor);
-                case -6 -> setStatusBar(R.color.statusBarColorGreen);
-                case -5 -> setStatusBar(R.color.statusBarColorRed);
-                case -4 -> setStatusBar(R.color.statusBarColorViolet);
-                case -3 -> setStatusBar(R.color.statusBarColorOrange);
-                case -2 -> setStatusBar(R.color.statusBarColorTeal);
-                case -1 -> setStatusBar(R.color.statusBarColorOcean);
+                case 1 -> setStatusBar(R.color.statusBarColor);
+                case 2 -> setStatusBar(R.color.statusBarColorGreen);
+                case 3 -> setStatusBar(R.color.statusBarColorRed);
+                case 4 -> setStatusBar(R.color.statusBarColorViolet);
+                case 5 -> setStatusBar(R.color.statusBarColorOrange);
+                case 6 -> setStatusBar(R.color.statusBarColorTeal);
+                case 7 -> setStatusBar(R.color.statusBarColorOcean);
+                case 8 -> setStatusBar(R.color.statusBarColorNeon);
             }
         }
     }

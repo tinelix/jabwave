@@ -16,5 +16,6 @@
         <item name="orange">Orange</item>
         <item name="teal">Teal</item>
         <item name="teal">Ocean</item>
+        <item name="neon">Neon</item>
     </string-array>
 </resources>

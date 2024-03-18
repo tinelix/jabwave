@@ -181,7 +181,9 @@ public class MessengerActivity extends JabwaveActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     private void setActionBar() {
         JabwaveActionBar actionbar = findViewById(R.id.actionbar);
-        actionbar.setNavigationIconTint(R.color.white);
+        actionbar.setNavigationIconTint(Global.getColorAttribute(
+                this, R.attr.actionBarTint
+        ), false);
         actionbar.setProfilePhotoVisibility(true);
         if(isChannel) {
             actionbar.getProfilePhotoView().setImageDrawable(

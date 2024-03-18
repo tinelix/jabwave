@@ -9,9 +9,8 @@ import dev.tinelix.jabwave.ui.list.items.ThemePreset;
 
 public class ThemePresets {
     public static void generateThemePreset(Context ctx, ThemePreset preset) {
-
-        if(preset.id == -7) {
-            preset.styleId = R.style.ApplicationTheme_Default_NoActionBar;
+        if(preset.id == 1) {
+            preset.styleId = R.style.ApplicationTheme_ColorThemes_Default;
             preset.setActionBarColor(ctx.getResources().getColor(R.color.actionBarColor))
                     .setMessengerBackgroundColor(
                             ctx.getResources().getColor(R.color.messengerBackgroundColor)
@@ -26,8 +25,8 @@ public class ThemePresets {
                             )
                     )
                     .setAccentColor(ctx.getResources().getColor(R.color.accentColor));
-        } else if(preset.id == -6) {
-            preset.styleId = R.style.ApplicationTheme_Green_NoActionBar;
+        } else if(preset.id == 2) {
+            preset.styleId = R.style.ApplicationTheme_ColorThemes_Green;
             preset.setActionBarColor(ctx.getResources().getColor(R.color.actionBarColorGreen))
                     .setMessengerBackgroundColor(
                             ctx.getResources().getColor(R.color.messengerBackgroundColorGreen)
@@ -50,8 +49,8 @@ public class ThemePresets {
                             )
                     )
                     .setAccentColor(ctx.getResources().getColor(R.color.accentColorGreen));
-        } else if(preset.id == -5) {
-            preset.styleId = R.style.ApplicationTheme_Red_NoActionBar;
+        } else if(preset.id == 3) {
+            preset.styleId = R.style.ApplicationTheme_ColorThemes_Red;
             preset.setActionBarColor(ctx.getResources().getColor(R.color.actionBarColorRed))
                     .setMessengerBackgroundColor(
                             ctx.getResources().getColor(R.color.messengerBackgroundColorRed)
@@ -74,8 +73,8 @@ public class ThemePresets {
                             )
                     )
                     .setAccentColor(ctx.getResources().getColor(R.color.accentColorRed));
-        } else if(preset.id == -4) {
-            preset.styleId = R.style.ApplicationTheme_Violet_NoActionBar;
+        } else if(preset.id == 4) {
+            preset.styleId = R.style.ApplicationTheme_ColorThemes_Violet;
             preset.setActionBarColor(ctx.getResources().getColor(R.color.actionBarColorViolet))
                     .setMessengerBackgroundColor(
                             ctx.getResources().getColor(R.color.messengerBackgroundColorViolet)
@@ -98,8 +97,8 @@ public class ThemePresets {
                             )
                     )
                     .setAccentColor(ctx.getResources().getColor(R.color.accentColorViolet));
-        } else if(preset.id == -3) {
-            preset.styleId = R.style.ApplicationTheme_Orange_NoActionBar;
+        } else if(preset.id == 5) {
+            preset.styleId = R.style.ApplicationTheme_ColorThemes_Orange;
             preset.setActionBarColor(ctx.getResources().getColor(R.color.actionBarColorOrange))
                     .setMessengerBackgroundColor(
                             ctx.getResources().getColor(R.color.messengerBackgroundColorOrange)
@@ -122,8 +121,8 @@ public class ThemePresets {
                             )
                     )
                     .setAccentColor(ctx.getResources().getColor(R.color.accentColorOrange));
-        } else if(preset.id == -2) {
-            preset.styleId = R.style.ApplicationTheme_Teal_NoActionBar;
+        } else if(preset.id == 6) {
+            preset.styleId = R.style.ApplicationTheme_ColorThemes_Teal;
             preset.setActionBarColor(ctx.getResources().getColor(R.color.actionBarColorTeal))
                     .setMessengerBackgroundColor(
                             ctx.getResources().getColor(R.color.messengerBackgroundColorTeal)
@@ -146,8 +145,8 @@ public class ThemePresets {
                             )
                     )
                     .setAccentColor(ctx.getResources().getColor(R.color.accentColorTeal));
-        } else if(preset.id == -1) {
-            preset.styleId = R.style.ApplicationTheme_Ocean_NoActionBar;
+        } else if(preset.id == 7) {
+            preset.styleId = R.style.ApplicationTheme_ColorThemes_Ocean;
             preset.setActionBarColor(ctx.getResources().getColor(R.color.actionBarColorOcean))
                     .setMessengerBackgroundColor(
                             ctx.getResources().getColor(R.color.messengerBackgroundColorOcean)
@@ -170,6 +169,30 @@ public class ThemePresets {
                             )
                     )
                     .setAccentColor(ctx.getResources().getColor(R.color.accentColorOcean));
+        } else if(preset.id == 8) {
+            preset.styleId = R.style.ApplicationTheme_ColorThemes_Neon;
+            preset.setActionBarColor(ctx.getResources().getColor(R.color.actionBarColorNeon))
+                    .setMessengerBackgroundColor(
+                            ctx.getResources().getColor(R.color.messengerBackgroundColorNeon)
+                    )
+                    .setIncomingMessageBubbleColor(
+                            ctx.getResources().getColor(R.color.inMessageColorNeon)
+                    )
+                    .setIncomingMessageTextColor(
+                            ctx.getResources().getColor(R.color.inMessageTextColorNeon)
+                    )
+                    .setOutcomingMessageBubbleColor(
+                            ctx.getResources().getColor(R.color.outMessageColorNeon)
+                    )
+                    .setOutcomingMessageTextColor(
+                            ctx.getResources().getColor(R.color.outMessageTextColorNeon)
+                    )
+                    .setAppThemeBackgroundColor(
+                            Global.getColorAttribute(
+                                    ctx, com.google.android.material.R.attr.backgroundColor
+                            )
+                    )
+                    .setAccentColor(ctx.getResources().getColor(R.color.accentColorNeon));
         }
     }
 

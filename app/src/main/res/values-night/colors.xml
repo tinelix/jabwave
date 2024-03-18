@@ -87,4 +87,16 @@
     <color name="outSelectedMessageColorOcean">#FF0095A8</color>
     <color name="outMessageTextColorOcean">#FFFFFFFF</color>
 
+    <!-- Theme attributes. Color #7 (neon, referenced from Android Holo Design) !-->
+    <color name="actionBarColorNeon">#FF212121</color>
+    <color name="actionBarTintNeon">#FF50C0E9</color>
+    <color name="accentColorNeon">#FF33B5E5</color>
+    <color name="accentColorNeon_reserve">#FF33B5E5</color>
+    <color name="messengerBackgroundColorNeon">#FF000000</color>
+    <color name="inMessageColorNeon">#FF222222</color>
+    <color name="inMessageTextColorNeon">#FFFFFFFF</color>
+    <color name="outMessageColorNeon">#FF3A3A3A</color>
+    <color name="outSelectedMessageColorNeon">#FF0099CC</color>
+    <color name="outMessageTextColorNeon">#FFA8DFF4</color>
+
 </resources>

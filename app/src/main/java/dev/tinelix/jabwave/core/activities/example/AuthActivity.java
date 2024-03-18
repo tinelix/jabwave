@@ -79,7 +79,7 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.ApplicationTheme_Default_NoActionBar);
+        setTheme(R.style.ApplicationTheme_ColorThemes_Default);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         auth_layout = findViewById(R.id.auth_layout);

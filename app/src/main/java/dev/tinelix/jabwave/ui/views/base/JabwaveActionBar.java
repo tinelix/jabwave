@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.ui.views.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -29,16 +30,26 @@ public class JabwaveActionBar extends Toolbar {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setNavigationIconTint(@ColorRes int color_res) {
-        if(getNavigationIcon() != null) {
-            // Setting correct tint for navigation icon
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getNavigationIcon()
-                        .setTint(getResources().getColor(color_res));
-            } else {
-                getNavigationIcon()
-                        .setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_IN);
+    @SuppressLint("ResourceAsColor")
+    public void setNavigationIconTint(@ColorRes int color_res, boolean fromResources) {
+        try {
+            if (getNavigationIcon() != null) {
+                // Setting correct tint for navigation icon
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getNavigationIcon()
+                            .setTint(
+                                    fromResources ? getResources().getColor(color_res) : color_res
+                            );
+                } else {
+                    getNavigationIcon()
+                            .setColorFilter(
+                                    fromResources ? getResources().getColor(color_res) : color_res,
+                                    PorterDuff.Mode.SRC_IN
+                            );
+                }
             }
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 

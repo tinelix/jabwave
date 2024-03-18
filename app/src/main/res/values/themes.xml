@@ -5,9 +5,10 @@
     </style>
 
     <!-- Theme #1. Blue -->
-    <style name="ApplicationTheme.Default" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="ApplicationTheme.ColorThemes.Default" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColor</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColor</item>
         <item name="colorPrimaryVariant">@color/accentColor</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -21,11 +22,14 @@
         <item name="inMessageTextColor">@color/inMessageTextColor</item>
         <item name="outMsgBubbleBackgroundColor">@color/outMessageColor</item>
         <item name="outMessageTextColor">@color/outMessageTextColor</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Default.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+    <style name="ApplicationTheme.ColorThemes.Default.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColor</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColor</item>
         <item name="colorPrimaryVariant">@color/accentColor</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -38,15 +42,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Default.NoActionBar" parent="ApplicationTheme.Default">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <!-- Theme #2. Green -->
-    <style name="ApplicationTheme.Green" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="ApplicationTheme.ColorThemes.Green" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorGreen</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorGreen</item>
         <item name="colorPrimaryVariant">@color/accentColorGreen</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -60,11 +60,14 @@
         <item name="inMessageTextColor">@color/inMessageTextColorGreen</item>
         <item name="outMsgBubbleBackgroundColor">@color/outMessageColorGreen</item>
         <item name="outMessageTextColor">@color/outMessageTextColorGreen</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Green.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+    <style name="ApplicationTheme.ColorThemes.Green.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorGreen</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorGreen</item>
         <item name="colorPrimaryVariant">@color/accentColorGreen</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -77,15 +80,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Green.NoActionBar" parent="ApplicationTheme.Green">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <!-- Theme #3. Red -->
-    <style name="ApplicationTheme.Red" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="ApplicationTheme.ColorThemes.Red" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorRed</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorRed</item>
         <item name="colorPrimaryVariant">@color/accentColorRed</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -99,11 +98,14 @@
         <item name="inMessageTextColor">@color/inMessageTextColorRed</item>
         <item name="outMsgBubbleBackgroundColor">@color/outMessageColorRed</item>
         <item name="outMessageTextColor">@color/outMessageTextColorRed</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Red.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+    <style name="ApplicationTheme.ColorThemes.Red.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorRed</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorRed</item>
         <item name="colorPrimaryVariant">@color/accentColorRed</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -116,15 +118,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Red.NoActionBar" parent="ApplicationTheme.Red">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <!-- Theme #4. Violet -->
-    <style name="ApplicationTheme.Violet" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="ApplicationTheme.ColorThemes.Violet" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorViolet</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorViolet</item>
         <item name="colorPrimaryVariant">@color/accentColorViolet</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -138,11 +136,14 @@
         <item name="inMessageTextColor">@color/inMessageTextColorViolet</item>
         <item name="outMsgBubbleBackgroundColor">@color/outMessageColorViolet</item>
         <item name="outMessageTextColor">@color/outMessageTextColorViolet</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Violet.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+    <style name="ApplicationTheme.ColorThemes.Violet.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorViolet</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorViolet</item>
         <item name="colorPrimaryVariant">@color/accentColorViolet</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -155,15 +156,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Violet.NoActionBar" parent="ApplicationTheme.Violet">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <!-- Theme #5. Orange -->
-    <style name="ApplicationTheme.Orange" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="ApplicationTheme.ColorThemes.Orange" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorOrange</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorOrange</item>
         <item name="colorPrimaryVariant">@color/accentColorOrange</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -177,11 +174,14 @@
         <item name="inMessageTextColor">@color/inMessageTextColorOrange</item>
         <item name="outMsgBubbleBackgroundColor">@color/outMessageColorOrange</item>
         <item name="outMessageTextColor">@color/outMessageTextColorOrange</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Orange.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+    <style name="ApplicationTheme.ColorThemes.Orange.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorOrange</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorOrange</item>
         <item name="colorPrimaryVariant">@color/accentColorOrange</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -194,15 +194,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Orange.NoActionBar" parent="ApplicationTheme.Orange">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <!-- Theme #6. Teal -->
-    <style name="ApplicationTheme.Teal" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="ApplicationTheme.ColorThemes.Teal" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorTeal</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorTeal</item>
         <item name="colorPrimaryVariant">@color/accentColorTeal</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -216,16 +212,14 @@
         <item name="inMessageTextColor">@color/inMessageTextColorTeal</item>
         <item name="outMsgBubbleBackgroundColor">@color/outMessageColorTeal</item>
         <item name="outMessageTextColor">@color/outMessageTextColorTeal</item>
-    </style>
-
-    <style name="ApplicationTheme.Teal.NoActionBar" parent="ApplicationTheme.Teal">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Teal.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+    <style name="ApplicationTheme.ColorThemes.Teal.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorTeal</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorTeal</item>
         <item name="colorPrimaryVariant">@color/accentColorTeal</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -239,9 +233,10 @@
     </style>
 
     <!-- Theme #7. Ocean -->
-    <style name="ApplicationTheme.Ocean" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="ApplicationTheme.ColorThemes.Ocean" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorOcean</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorOcean</item>
         <item name="colorPrimaryVariant">@color/accentColorOcean</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -255,11 +250,14 @@
         <item name="inMessageTextColor">@color/inMessageTextColorOcean</item>
         <item name="outMsgBubbleBackgroundColor">@color/outMessageColorOcean</item>
         <item name="outMessageTextColor">@color/outMessageTextColorTeal</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Ocean.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+    <style name="ApplicationTheme.ColorThemes.Ocean.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorOcean</item>
+        <item name="actionBarTint">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorOcean</item>
         <item name="colorPrimaryVariant">@color/accentColorOcean</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -272,7 +270,40 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ApplicationTheme.Ocean.NoActionBar" parent="ApplicationTheme.Ocean">
+    <!-- Theme #8. Neon -->
+    <style name="ApplicationTheme.ColorThemes.Neon" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/backgroundDark</item>
+        <item name="actionBarTint">@color/actionBarTintNeon</item>
+        <item name="colorPrimary">@color/accentColorNeon</item>
+        <item name="colorPrimaryVariant">@color/accentColorNeon</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorNeon</item>
+        <item name="colorSecondaryVariant">@color/accentColorNeon</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorNeon</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorNeon</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorNeon</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorNeon</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorNeon</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorNeon</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ApplicationTheme.ColorThemes.Neon.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/actionBarColorNeon</item>
+        <item name="actionBarTint">@color/actionBarTintNeon</item>
+        <item name="colorPrimary">@color/accentColorNeon</item>
+        <item name="colorPrimaryVariant">@color/accentColorNeon</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorNeon</item>
+        <item name="colorSecondaryVariant">@color/accentColorNeon</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorNeon</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -288,8 +319,8 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSecondary">#86ffffff</item>
         <item name="titleTextStyle">?attr/textAppearanceHeadline3</item>
-        <item name="navigationIconTint">@color/white</item>
-        <item name="iconTint">@color/white</item>
+        <item name="navigationIconTint">?attr/actionBarTint</item>
+        <item name="iconTint">?attr/actionBarTint</item>
     </style>
 
     <style name="ApplicationTheme.BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
