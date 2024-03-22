@@ -143,7 +143,6 @@ public class AppActivity extends JabwaveActivity
     private void getContacts() {
         if(fragment instanceof ChatsFragment) {
             ((ChatsFragment) fragment).loadContacts();
-            findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
         }
     }
 
@@ -165,8 +164,6 @@ public class AppActivity extends JabwaveActivity
                 break;
             case HandlerMessages.CHATS_LOADED:
                 if (fragment instanceof ChatsFragment) {
-                    findViewById(R.id.progress).setVisibility(View.GONE);
-                    findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
                     ((ChatsFragment) fragment).loadLocalContacts();
                 }
                 break;

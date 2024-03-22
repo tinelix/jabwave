@@ -10,10 +10,11 @@ import org.jxmpp.jid.parts.Resourcepart;
 
 import java.util.Random;
 
+import androidx.multidex.MultiDexApplication;
 import dev.tinelix.jabwave.core.activities.MainActivity;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 
-public class JabwaveApp extends Application {
+public class JabwaveApp extends MultiDexApplication {
     public String version;
     public ClientService clientService;
     private SharedPreferences global_prefs;

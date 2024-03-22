@@ -41,7 +41,7 @@ public class NetworkServicesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_entity, null);
+        view = inflater.inflate(R.layout.fragment_entities, null);
         loadServices();
         if(getActivity() instanceof AppActivity) {
             AppActivity activity = ((AppActivity) getActivity());
@@ -77,11 +77,11 @@ public class NetworkServicesFragment extends Fragment {
         }
         llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        RecyclerView contactsView = view.findViewById(R.id.entityview);
+        RecyclerView contactsView = view.findViewById(R.id.entities_view);
         contactsView.setLayoutManager(llm);
         contactsView.setAdapter(servicesAdapter);
         contactsView.setVisibility(View.VISIBLE);
-        Objects.requireNonNull(getActivity()).findViewById(R.id.progress).setVisibility(View.GONE);
+        view.findViewById(R.id.progress).setVisibility(View.GONE);
     }
 
     public void refreshAdapter() {
