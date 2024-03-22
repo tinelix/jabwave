@@ -1,14 +1,8 @@
 package dev.tinelix.jabwave;
 
-import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
-
-import org.jxmpp.jid.parts.Resourcepart;
-
-import java.util.Random;
 
 import androidx.multidex.MultiDexApplication;
 import dev.tinelix.jabwave.core.activities.MainActivity;

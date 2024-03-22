@@ -140,11 +140,12 @@ public class XMPPService extends ClientService {
                         return false;
                     }
                 });
-                Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
                 status = "authorizing";
                 listenConnection((XMPPClient) client);
                 try {
+                    Log.d(JabwaveApp.XMPP_SERV_TAG, String.format("Connecting to %s...", server));
                     conn.connect();
+                    Log.d(JabwaveApp.XMPP_SERV_TAG, "Authorizing...");
                     auth = new Authenticator((XMPPClient) client);
                     HashMap<String, String> map = new HashMap<>();
                     map.put("jid", String.format("%s@%s", username, server));
@@ -277,14 +278,14 @@ public class XMPPService extends ClientService {
     private void sendMessageToActivity(String status, Bundle data) {
         Intent intent = new Intent();
         switch (status) {
-            case "presence_changed":
+            case "presence_changed" -> {
                 intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
                 intent.putExtra("data", data);
-                break;
-            case "auth_error":
+            }
+            case "auth_error" -> {
                 intent.putExtra("msg", HandlerMessages.AUTHENTICATION_ERROR);
                 intent.putExtra("data", data);
-                break;
+            }
         }
         intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
         sendBroadcast(intent);

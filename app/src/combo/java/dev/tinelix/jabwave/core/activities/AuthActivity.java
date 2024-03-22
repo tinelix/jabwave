@@ -137,7 +137,7 @@ public class AuthActivity extends AppCompatActivity {
             }
             this.password = password;
             credentials = new SecureStorage().createCredentialsMap(
-                    this.username, this.server, this.password
+                    this.server, this.username, this.password
             );
         }
 
