@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.api.base.entities.SuperChat;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
@@ -160,9 +162,15 @@ public class ChatsGroupSection extends Section {
                 case 1 -> R.drawable.ic_secret_chat_accent;
                 default -> R.drawable.ic_person_accent;
             };
-            contact_avatar.setImageDrawable(
-                    ContextCompat.getDrawable(ctx, placeholder_resid)
-            );
+            Drawable drawable = ContextCompat.getDrawable(ctx, placeholder_resid);
+            contact_avatar.setImageDrawable(drawable);
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                assert drawable != null;
+                drawable.setColorFilter(
+                        Global.getColorAttribute(ctx, com.google.android.material.R.attr.colorAccent),
+                        android.graphics.PorterDuff.Mode.SRC_IN
+                );
+            }
         }
     }
 

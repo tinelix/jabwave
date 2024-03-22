@@ -9,6 +9,7 @@
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColor</item>
         <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/background</item>
         <item name="colorPrimary">@color/accentColor</item>
         <item name="colorPrimaryVariant">@color/accentColor</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -47,6 +48,7 @@
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorGreen</item>
         <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundGreen</item>
         <item name="colorPrimary">@color/accentColorGreen</item>
         <item name="colorPrimaryVariant">@color/accentColorGreen</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -85,6 +87,7 @@
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorRed</item>
         <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundRed</item>
         <item name="colorPrimary">@color/accentColorRed</item>
         <item name="colorPrimaryVariant">@color/accentColorRed</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -123,6 +126,7 @@
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorViolet</item>
         <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundViolet</item>
         <item name="colorPrimary">@color/accentColorViolet</item>
         <item name="colorPrimaryVariant">@color/accentColorViolet</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -161,6 +165,7 @@
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorOrange</item>
         <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundOrange</item>
         <item name="colorPrimary">@color/accentColorOrange</item>
         <item name="colorPrimaryVariant">@color/accentColorOrange</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -181,7 +186,7 @@
     <style name="ApplicationTheme.ColorThemes.Orange.Dialog.IfTablet" parent="Theme.MaterialComponents.DayNight.DialogWhenLarge">
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorOrange</item>
-        <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@android:color/white</item>
         <item name="colorPrimary">@color/accentColorOrange</item>
         <item name="colorPrimaryVariant">@color/accentColorOrange</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -199,6 +204,7 @@
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorTeal</item>
         <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundTeal</item>
         <item name="colorPrimary">@color/accentColorTeal</item>
         <item name="colorPrimaryVariant">@color/accentColorTeal</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -237,6 +243,7 @@
         <!-- Primary brand color. -->
         <item name="actionBarColor">@color/actionBarColorOcean</item>
         <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundOcean</item>
         <item name="colorPrimary">@color/accentColorOcean</item>
         <item name="colorPrimaryVariant">@color/accentColorOcean</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -276,6 +283,7 @@
         <item name="actionBarColor">@color/backgroundDark</item>
         <item name="actionBarTint">@color/actionBarTintNeon</item>
         <item name="colorPrimary">@color/accentColorNeon</item>
+        <item name="android:colorBackground">@color/backgroundNeon</item>
         <item name="colorPrimaryVariant">@color/accentColorNeon</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/accentColorNeon</item>

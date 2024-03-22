@@ -6,6 +6,8 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -92,6 +94,7 @@ public class AppActivity extends JabwaveActivity
         createMainFragment();
         setActionBar();
         drawer = findViewById(R.id.drawer_layout);
+        updateNavView();
     }
 
     private void setActionBar() {
@@ -210,9 +213,9 @@ public class AppActivity extends JabwaveActivity
                 getContacts();
                 break;
             case HandlerMessages.AUTHENTICATION_ERROR:
-                findViewById(R.id.access_limited_layout).setVisibility(View.VISIBLE);
-                TextView reason_tv = findViewById(R.id.access_limited_reason);
-                reason_tv.setText(data.getString("error_msg"));
+//                findViewById(R.id.access_limited_layout).setVisibility(View.VISIBLE);
+//                TextView reason_tv = findViewById(R.id.access_limited_reason);
+//                reason_tv.setText(data.getString("error_msg"));
                 break;
             case HandlerMessages.CHATS_LOADED:
                 if (fragment instanceof ChatsFragment) {
@@ -236,25 +239,39 @@ public class AppActivity extends JabwaveActivity
         TextView profile_name = header.findViewById(R.id.profile_name);
         TextView profile_id = header.findViewById(R.id.screen_name);
         ShapeableImageView profile_photo = header.findViewById(R.id.profile_avatar);
-        dev.tinelix.jabwave.api.base.entities.Account account = service.getAccount();
-        if(app.getCurrentNetworkType().equals("telegram")) {
-            profile_name.setText(
-                    String.format("%s %s", account.first_name, account.last_name)
+        Drawable drawable = profile_photo.getDrawable();
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            assert drawable != null;
+            drawable.setColorFilter(
+                    Global.getColorAttribute(this, com.google.android.material.R.attr.colorAccent),
+                    android.graphics.PorterDuff.Mode.SRC_IN
             );
-            if(account.username != null) {
-                profile_id.setText(account.username);
+        }
+        dev.tinelix.jabwave.api.base.entities.Account account = service.getAccount();
+        if(account != null) {
+            if (app.getCurrentNetworkType().equals("telegram")) {
+                profile_name.setText(
+                        String.format("%s %s", account.first_name, account.last_name)
+                );
+                if (account.username != null) {
+                    profile_id.setText(account.username);
+                } else {
+                    profile_id.setVisibility(View.GONE);
+                }
             } else {
-                profile_id.setVisibility(View.GONE);
+                profile_name.setText(
+                        String.format("%s %s", account.first_name, account.last_name)
+                );
+                if (account.id != null) {
+                    profile_id.setText(String.format("%s", account.id));
+                }
             }
+            profile_id.setVisibility(account.id != null ? View.VISIBLE : View.GONE);
         } else {
             profile_name.setText(
-                    String.format("%s %s", account.first_name, account.last_name)
+                    getResources().getString(R.string.auth_wait)
             );
-            if(account.id != null) {
-                profile_id.setText(String.format("%s", account.id));
-            } else {
-                profile_id.setVisibility(View.GONE);
-            }
+            profile_id.setVisibility(View.GONE);
         }
     }
 

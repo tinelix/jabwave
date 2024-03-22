@@ -2,6 +2,8 @@ package dev.tinelix.jabwave.core.activities;
 
 import android.annotation.SuppressLint;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -185,16 +187,17 @@ public class MessengerActivity extends JabwaveActivity {
                 this, R.attr.actionBarTint
         ), false);
         actionbar.setProfilePhotoVisibility(true);
-        if(isChannel) {
-            actionbar.getProfilePhotoView().setImageDrawable(
-                    ContextCompat.getDrawable(this, R.drawable.ic_campaign_accent)
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_person_accent);
+        if(isChannel) drawable = ContextCompat.getDrawable(this, R.drawable.ic_campaign_accent);
+        if(isSuperChat) drawable = ContextCompat.getDrawable(this, R.drawable.ic_group_accent);
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            assert drawable != null;
+            drawable.setColorFilter(
+                    Global.getColorAttribute(this, com.google.android.material.R.attr.colorAccent),
+                    android.graphics.PorterDuff.Mode.SRC_IN
             );
         }
-        if(isSuperChat) {
-            actionbar.getProfilePhotoView().setImageDrawable(
-                    ContextCompat.getDrawable(this, R.drawable.ic_group_accent)
-            );
-        }
+        actionbar.getProfilePhotoView().setImageDrawable(drawable);
         setSupportActionBar(actionbar);
         actionbar.setNavigationOnClickListener(v -> handleOnBackPressed());
     }

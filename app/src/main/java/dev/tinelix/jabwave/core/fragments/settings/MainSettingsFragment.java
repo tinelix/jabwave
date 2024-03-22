@@ -83,10 +83,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     DrawableCompat.setTint(icon, color);
                 } else {
-                    icon.setColorFilter(
-                            ContextCompat.getColor(Objects.requireNonNull(getContext()), color),
-                            android.graphics.PorterDuff.Mode.SRC_IN
-                    );
+                    icon.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN);
                 }
             }
         }

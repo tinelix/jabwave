@@ -1,5 +1,6 @@
 package dev.tinelix.jabwave.core.fragments.app;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +44,8 @@ public class NetworkServicesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_entities, null);
         loadServices();
-        if(getActivity() instanceof AppActivity) {
-            AppActivity activity = ((AppActivity) getActivity());
-            activity.getSupportActionBar().setTitle(
+        if(getActivity() instanceof AppActivity activity) {
+            Objects.requireNonNull(activity.getSupportActionBar()).setTitle(
                     getResources().getString(R.string.services)
             );
         }
@@ -53,8 +53,7 @@ public class NetworkServicesFragment extends Fragment {
     }
 
     public void loadServices() {
-        if(getActivity() instanceof AppActivity) {
-            AppActivity activity = (AppActivity) getActivity();
+        if(getActivity() instanceof AppActivity activity) {
             Services services = activity.service.getNetworkServices();
             if(services.getServices() == null || services.getServices().size() == 0) {
                 servicesList = services.discoverServices();
@@ -67,12 +66,13 @@ public class NetworkServicesFragment extends Fragment {
 
     private void createServicesAdapter() {
         servicesAdapter = new NetworkServicesAdapter();
-        if(getActivity() instanceof AppActivity) {
-            AppActivity activity = (AppActivity) getActivity();
-            for (NetworkService netService : servicesList) {
-                servicesAdapter.addSection(
-                        new NetworkServiceSection(getContext(), netService, servicesAdapter, activity.service)
-                );
+        if(getActivity() instanceof AppActivity activity) {
+            if(servicesList != null) {
+                for (NetworkService netService : servicesList) {
+                    servicesAdapter.addSection(
+                            new NetworkServiceSection(getContext(), netService, servicesAdapter, activity.service)
+                    );
+                }
             }
         }
         llm = new LinearLayoutManager(getContext());
@@ -84,9 +84,9 @@ public class NetworkServicesFragment extends Fragment {
         view.findViewById(R.id.progress).setVisibility(View.GONE);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void refreshAdapter() {
-        if(getActivity() instanceof AppActivity) {
-            AppActivity activity = (AppActivity) getActivity();
+        if(getActivity() instanceof AppActivity activity) {
             contacts = activity.service.getChats().getList();
             servicesAdapter.notifyDataSetChanged();
         }
