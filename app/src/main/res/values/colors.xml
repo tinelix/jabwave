@@ -106,7 +106,7 @@
     <color name="actionBarTintNeon">#FF50C0E9</color>
     <color name="accentColorNeon">#FF0099CC</color>
     <color name="accentColorNeon_reserve">#FF0099CC</color>
-    <color name="backgroundNeon">#FF959595</color>
+    <color name="backgroundNeon">#FFCBCBCB</color>
     <color name="messengerBackgroundColorNeon">#FF5A5A5A</color>
     <color name="inMessageColorNeon">#FFE2F4FB</color>
     <color name="inMessageTextColorNeon">#FF000000</color>
