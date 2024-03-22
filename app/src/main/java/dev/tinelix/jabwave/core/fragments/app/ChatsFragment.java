@@ -80,9 +80,11 @@ public class ChatsFragment extends Fragment {
                 });
             } else {
                 // not yet optimized
-                contacts = chats.getList();
-                groups = chats.getGroupsList();
-                createContactsAdapter(activity.service);
+                if(chats != null) {
+                    contacts = chats.getList();
+                    groups = chats.getGroupsList();
+                    createContactsAdapter(activity.service);
+                }
             }
         }
     }

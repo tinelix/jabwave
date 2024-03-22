@@ -15,7 +15,7 @@
             android:title="@string/theme_presets"
             tools:ignore="TouchTargetSizeCheck" />
     </PreferenceCategory>
-    <CheckBoxPreference
+    <SwitchPreference
         android:key="darkTheme"
         android:summary="@string/dark_theme_summary"
         android:title="@string/dark_theme"

@@ -32,7 +32,7 @@ public class AccountSettingsFragment extends PreferenceFragmentCompat {
         Preference aboutAccountPref = findPreference("about_account");
         if(getActivity() instanceof SettingsActivity activity) {
             ClientService service = activity.service;
-            if(service != null) {
+            if(service != null && service.getAuthenticator() != null) {
                 boolean isAuthenticated = service.getAuthenticator().isAuthenticated();
                 if (aboutAccountPref != null) {
                     if (isAuthenticated) {
