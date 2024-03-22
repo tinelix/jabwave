@@ -19,6 +19,8 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
@@ -169,21 +171,26 @@ public class XMPPService extends ClientService {
                         public boolean onFail(HashMap<String, Object> map, Throwable t) {
                             status = "auth_error";
                             Bundle bundle = new Bundle();
-                            int msg_index = Objects.requireNonNull(t.getMessage()).indexOf("<text");
-                            bundle.putString("error_msg", t.getMessage().substring(msg_index));
+                            bundle.putString("error_msg", client.getConnectionErrorMessage(
+                                    Objects.requireNonNull(t.getMessage()))
+                            );
                             sendMessageToActivity(status, bundle);
                             return false;
                         }
                     });
                 } catch (Base58Exception e) {
                     Log.e(JabwaveApp.XMPP_SERV_TAG,
-                            "Authentication with Base58 failed. Retrying with plain password..."
+                            "Authentication with Base58 failed"
                     );
                 }
             } catch (Exception ex) {
-                status = "error";
+                status = "auth_error";
                 ex.printStackTrace();
-                sendMessageToActivity(status);
+                Bundle bundle = new Bundle();
+                bundle.putString("error_msg", client.getConnectionErrorMessage(
+                        Objects.requireNonNull(ex.getMessage()))
+                );
+                sendMessageToActivity(status, bundle);
             }
         } else if(action.equals(ACTION_STOP)) {
             try {

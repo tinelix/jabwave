@@ -2,11 +2,15 @@ package dev.tinelix.jabwave.core.fragments.settings;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
@@ -68,7 +72,7 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         startActivity(intent);
     }
 
-    private static void tintIcons(Preference preference, int color) {
+    private void tintIcons(Preference preference, int color) {
         if (preference instanceof PreferenceGroup group) {
             for (int i = 0; i < group.getPreferenceCount(); i++) {
                 tintIcons(group.getPreference(i), color);
@@ -76,7 +80,14 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
         } else {
             Drawable icon = preference.getIcon();
             if (icon != null) {
-                DrawableCompat.setTint(icon, color);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    DrawableCompat.setTint(icon, color);
+                } else {
+                    icon.setColorFilter(
+                            ContextCompat.getColor(Objects.requireNonNull(getContext()), color),
+                            android.graphics.PorterDuff.Mode.SRC_IN
+                    );
+                }
             }
         }
     }

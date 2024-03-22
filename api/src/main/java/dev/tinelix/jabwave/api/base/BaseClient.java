@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Build;
 
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dev.tinelix.jabwave.api.base.entities.Authenticator;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
@@ -77,5 +80,22 @@ public class BaseClient {
 
     public Context getServiceContext() {
         return ctx;
+    }
+
+    public String getConnectionErrorMessage(String message) {
+        int msg_index = message.indexOf("<text");
+        if(msg_index >= 0) {
+            String regex = "<text (.*)>(.*)</text>";
+
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(message.substring(msg_index));
+            if(matcher.find() && matcher.groupCount() > 1) {
+                return matcher.group(2);
+            } else {
+                return matcher.group(2);
+            }
+        } else {
+            return "Unknown";
+        }
     }
 }

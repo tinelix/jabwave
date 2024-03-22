@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 import android.widget.TextView;
 
@@ -153,20 +154,12 @@ public class ChatsGroupSection extends Section {
         private void loadPhotoCache(dev.tinelix.jabwave.api.base.entities.Chat chat) {
             int placeholder_resid;
             chat.type = chat instanceof SuperChat ? 2 : chat.type;
-            switch (chat.type) {
-                case 3:
-                    placeholder_resid = R.drawable.ic_campaign_accent;
-                    break;
-                case 2:
-                    placeholder_resid = R.drawable.ic_group_accent;
-                    break;
-                case 1:
-                    placeholder_resid = R.drawable.ic_secret_chat_accent;
-                    break;
-                default:
-                    placeholder_resid = R.drawable.ic_person_accent;
-                    break;
-            }
+            placeholder_resid = switch (chat.type) {
+                case 3 -> R.drawable.ic_campaign_accent;
+                case 2 -> R.drawable.ic_group_accent;
+                case 1 -> R.drawable.ic_secret_chat_accent;
+                default -> R.drawable.ic_person_accent;
+            };
             contact_avatar.setImageDrawable(
                     ContextCompat.getDrawable(ctx, placeholder_resid)
             );
@@ -196,7 +189,11 @@ public class ChatsGroupSection extends Section {
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
             );
-            arrow.setBounds(0, 0, 90, 90);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                arrow.setBounds(0, 0, 90, 90);
+            } else {
+                arrow.setBounds(0, 0, 60, 60);
+            }
             groupname.setCompoundDrawables(arrow, null, null, null);
             if(header.withOnlineCount) {
                 members_counter.setText(String.format("%s / %s", getOnlineCount(), chats.size()));

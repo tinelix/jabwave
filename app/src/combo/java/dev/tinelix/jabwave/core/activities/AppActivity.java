@@ -124,13 +124,12 @@ public class AppActivity extends JabwaveActivity
     }
 
     private void connect() {
-        HashMap<String, String> credentials;
+        HashMap<String, String> credentials = new HashMap<>();
         if(app.getCurrentNetworkType().equals("telegram")) {
             credentials = new SecureStorage().createCredentialsMap(
                     app.getTelegramPreferences().getString("phone_number", "")
             );
             service = new TelegramService();
-            ((TelegramService) service).start(this, clientConnection, credentials);
         } else {
             try {
                 String server = app.getXmppPreferences().getString("server", "");
@@ -140,11 +139,11 @@ public class AppActivity extends JabwaveActivity
                 ), StandardCharsets.UTF_8);
                 credentials = new SecureStorage().createCredentialsMap(server, username, password);
                 service = new XMPPService();
-                ((XMPPService) service).start(this, clientConnection, credentials);
             } catch (Base58Exception e) {
                 e.printStackTrace();
             }
         }
+        service.start(this, clientConnection, credentials);
     }
 
     private void getAccount() {
