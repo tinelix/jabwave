@@ -104,9 +104,9 @@
     <color name="actionBarColorNeon">#FF212121</color>
     <color name="statusBarColorNeon">#FF181818</color>
     <color name="actionBarTintNeon">#FF50C0E9</color>
-    <color name="accentColorNeon">#FF0099CC</color>
-    <color name="accentColorNeon_reserve">#FF0099CC</color>
-    <color name="backgroundNeon">#FFCBCBCB</color>
+    <color name="accentColorNeon">#FF017EA8</color>
+    <color name="accentColorNeon_reserve">#FF017EA8</color>
+    <color name="backgroundNeon">#FFCFCFCF</color>
     <color name="messengerBackgroundColorNeon">#FF5A5A5A</color>
     <color name="inMessageColorNeon">#FFE2F4FB</color>
     <color name="inMessageTextColorNeon">#FF000000</color>
