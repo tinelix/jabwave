@@ -26,7 +26,7 @@
     <color name="statusBarColorGreen">#FF304A19</color>
     <color name="accentColorGreen">#FF689F38</color>
     <color name="backgroundGreen">#FF213311</color>
-    <color name="messengerBackgroundColorGreen">#FF3F5F23</color>
+    <color name="messengerBackgroundColorGreen">#FF35501d</color>
     <color name="inMessageColorGreen">#FF353535</color>
     <color name="inMessageTextColorGreen">#FFFFFF</color>
     <color name="outMessageColorGreen">#FF598830</color>
@@ -34,11 +34,11 @@
     <color name="outMessageTextColorGreen">#FFFFFFFF</color>
 
     <!-- Theme attributes. Color #3 (red) !-->
-    <color name="actionBarColorRed">#FFC63829</color>
-    <color name="statusBarColorRed">#FF82261C</color>
+    <color name="actionBarColorRed">#FFC04A40</color>
+    <color name="statusBarColorRed">#FF89352E</color>
     <color name="accentColorRed">#FFD04B40</color>
     <color name="backgroundRed">#FF451A14</color>
-    <color name="messengerBackgroundColorRed">#FF8E352D</color>
+    <color name="messengerBackgroundColorRed">#FF702B25</color>
     <color name="inMessageColorRed">#FF353535</color>
     <color name="inMessageTextColorRed">#FFFFFF</color>
     <color name="outMessageColorRed">#FFBE5C55</color>
@@ -46,11 +46,11 @@
     <color name="outMessageTextColorRed">#FFFFFFFF</color>
 
     <!-- Theme attributes. Color #4 (violet) !-->
-    <color name="actionBarColorViolet">#FF6440AE</color>
-    <color name="statusBarColorViolet">#FF482D7E</color>
+    <color name="actionBarColorViolet">#FF644A9B</color>
+    <color name="statusBarColorViolet">#FF413163</color>
     <color name="accentColorViolet">#FFA77CFF</color>
     <color name="backgroundViolet">#FF291B45</color>
-    <color name="messengerBackgroundColorViolet">#FF4E406B</color>
+    <color name="messengerBackgroundColorViolet">#FF423067</color>
     <color name="inMessageColorViolet">#FF353535</color>
     <color name="inMessageTextColorViolet">#FFFFFF</color>
     <color name="outMessageColorViolet">#FF8969CB</color>
@@ -61,7 +61,7 @@
     <color name="actionBarColorOrange">#FFDD6700</color>
     <color name="statusBarColorOrange">#FF994700</color>
     <color name="accentColorOrange">#FFDD6700</color>
-    <color name="messengerBackgroundColorOrange">#FF874002</color>
+    <color name="messengerBackgroundColorOrange">#FF6c3301</color>
     <color name="backgroundOrange">#FF411E01</color>
     <color name="inMessageColorOrange">#FF353535</color>
     <color name="inMessageTextColorOrange">#FFFFFF</color>
@@ -74,7 +74,7 @@
     <color name="statusBarColorTeal">#FF181818</color>
     <color name="accentColorTeal">#FF80CBC4</color>
     <color name="backgroundTeal">#FF2F2F2F</color>
-    <color name="messengerBackgroundColorTeal">#FF005D55</color>
+    <color name="messengerBackgroundColorTeal">#FF00453F</color>
     <color name="inMessageColorTeal">#FF353535</color>
     <color name="inMessageTextColorTeal">#FFFFFF</color>
     <color name="outMessageColorTeal">#FF018579</color>
@@ -86,7 +86,7 @@
     <color name="statusBarColorOcean">#FF025762</color>
     <color name="accentColorOcean">#FF03ABC0</color>
     <color name="backgroundOcean">#FF01353B</color>
-    <color name="messengerBackgroundColorOcean">#FF01515B</color>
+    <color name="messengerBackgroundColorOcean">#FF014D57</color>
     <color name="inMessageColorOcean">#FF353535</color>
     <color name="inMessageTextColorOcean">#FFFFFF</color>
     <color name="outMessageColorOcean">#FF008A9C</color>
