@@ -90,7 +90,7 @@ public class AppActivity extends JabwaveActivity
 
     private void setActionBar() {
         JabwaveActionBar actionbar = findViewById(R.id.actionbar);
-        actionbar.setNavigationIconTint(R.color.white);
+        actionbar.setNavigationIconTint(R.color.white, true);
         setSupportActionBar(actionbar);
     }
 
