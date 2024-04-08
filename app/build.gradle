@@ -71,6 +71,7 @@ android {
                 force 'androidx.core:core:1.12.0'
             }
         }
+        buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave\""
     }
 
     buildTypes {
@@ -97,7 +98,6 @@ android {
             versionNameSuffix '.tdlib'
             applicationId 'dev.tinelix.jabwave.td'
             buildConfigField "String", "BUILD_VARIANT", "\"tdlib\""
-            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
             buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
         }
         smack {
@@ -105,13 +105,11 @@ android {
             versionNameSuffix '.smack'
             applicationId 'dev.tinelix.jabwave.sm'
             buildConfigField "String", "BUILD_VARIANT", "\"smack\""
-            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
         }
         combo {
             dimension 'version'
             buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
             buildConfigField "String", "BUILD_VARIANT", "\"combo\""
-            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
         }
     }
 
