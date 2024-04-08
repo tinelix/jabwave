@@ -12,4 +12,4 @@ Yet another XMPP/Telegram (unofficial) messenger for Android, designed for moder
 4. [TDLib](https://github.com/tdlib/td) (Boost Software License 1.0)
 
 ### Jabwave License
-GNU Affero GPL version 3
+[GNU Affero GPL version 3](https://github.com/tinelix/jabwave/blob/main/LICENSE) or later
