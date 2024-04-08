@@ -35,6 +35,8 @@ import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 
 public class TelegramService extends ClientService implements TDLibClient.ApiHandler, TDLibClient.ClientHandler {
 
+    public static final String NETWORK_NAME = "Telegram (TDLib)";
+
     private static final String ACTION_START = "start_service";
     private static final String ACTION_SEND_CLIENT_CMD = "sendClientCmd";
     private static final String ACTION_STOP = "stop_service";
@@ -50,7 +52,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
     private boolean isConnected;
 
     public TelegramService() {
-        super(JabwaveApp.TELEGRAM_SERV_TAG);
+        super(NETWORK_NAME);
     }
 
     @Override
@@ -65,10 +67,10 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             PendingIntent pendingIntent = null;
             // Setting PendingIntent for Android API Level 23 and above
             if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                pendingIntent = PendingIntent.getService(this, 0, intent,
+                pendingIntent = PendingIntent.getService(ctx, 0, intent,
                         PendingIntent.FLAG_MUTABLE);
             } else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                pendingIntent = PendingIntent.getService(this, 0, intent,
+                pendingIntent = PendingIntent.getService(ctx, 0, intent,
                         PendingIntent.FLAG_IMMUTABLE);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -138,9 +140,19 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                     );
                     isConnected = true;
                     auth = new Authenticator((TDLibClient) client);
-                    ((Authenticator) auth).checkAuthState();
-                    if(!((Authenticator) auth).isAuthorized())
-                        ((Authenticator) auth).checkPhoneNumber(phone_number);
+                    ((Authenticator) auth).checkAuthState(new OnClientAPIResultListener() {
+                        @Override
+                        public boolean onSuccess(HashMap<String, Object> map) {
+                            if(!auth.isAuthenticated())
+                                ((Authenticator) auth).checkPhoneNumber(phone_number);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                            return false;
+                        }
+                    });
                     services = new Services(client);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -240,8 +252,18 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
             if(function.getConstructor() == TdApi.SetAuthenticationPhoneNumber.CONSTRUCTOR
                 || function.getConstructor() == TdApi.CheckAuthenticationCode.CONSTRUCTOR
                 || function.getConstructor() == TdApi.CheckAuthenticationPassword.CONSTRUCTOR) {
-                ((Authenticator) auth).checkAuthState();
-                sendMessageToActivity(status);
+                ((Authenticator) auth).checkAuthState(new OnClientAPIResultListener() {
+                    @Override
+                    public boolean onSuccess(HashMap<String, Object> map) {
+                        sendMessageToActivity(status);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                        return false;
+                    }
+                });
             }
         }
     }
@@ -280,8 +302,7 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                 }
             }
             sendMessageToActivity(status);
-        } else if(object instanceof TdApi.UpdateUserStatus) {
-            TdApi.UpdateUserStatus userStatus = ((TdApi.UpdateUserStatus) object);
+        } else if(object instanceof TdApi.UpdateUserStatus userStatus) {
             Chat chat = null;
             if(getChats().getChatById(userStatus.userId) instanceof Chat) {
                 switch (userStatus.status.getConstructor()) {
@@ -304,28 +325,59 @@ public class TelegramService extends ClientService implements TDLibClient.ApiHan
                     }
                 }
             }
-        } else if(object instanceof TdApi.UpdateFile) {
-            TdApi.UpdateFile updateFile = ((TdApi.UpdateFile) object);
+        } else if(object instanceof TdApi.UpdateFile updateFile) {
             Bundle data = new Bundle();
+            boolean updatingCompleted = updateFile.file.local.isDownloadingCompleted
+                    || updateFile.file.remote.isUploadingCompleted;
+            boolean isUpload = updateFile.file.remote.isUploadingActive;
             data.putInt("file_id", updateFile.file.id);
             data.putLong("updateSize", updateFile.file.local.downloadedSize);
             data.putLong("fullSize", updateFile.file.size);
-            data.putBoolean("updateComplete", updateFile.file.local.isDownloadingCompleted
-                    || updateFile.file.remote.isUploadingCompleted);
-            data.putBoolean("isUpload", updateFile.file.remote.isUploadingActive
-                    || updateFile.file.remote.isUploadingCompleted);
-            Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
-                    String.format(
-                            "Downloading file #%s: %s/%s KB...",
-                            updateFile.file.id,
-                            updateFile.file.local.downloadedSize / 1024,
-                            updateFile.file.size / 1024
-                    )
-            );
-            status = "update_file";
-            if(updateFile.file.size == updateFile.file.local.downloadedSize) {
-                sendMessageToActivity(status, data);
+            data.putBoolean("updatingCompleted", updatingCompleted);
+            data.putBoolean("isUpload", isUpload);
+            if(updatingCompleted) {
+                if (isUpload)
+                    Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                            String.format(
+                                    "Uploading completed (File ID #%s, %s): %s/%s KB...",
+                                    updateFile.file.id,
+                                    updateFile.file.local.path,
+                                    updateFile.file.local.downloadedSize / 1024,
+                                    updateFile.file.size / 1024
+                            )
+                    );
+                else
+                    Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                            String.format(
+                                    "Downloading completed (File ID #%s, %s): %s/%s KB...",
+                                    updateFile.file.id,
+                                    updateFile.file.local.path,
+                                    updateFile.file.local.downloadedSize / 1024,
+                                    updateFile.file.size / 1024
+                            )
+                    );
+            } else {
+                if (isUpload)
+                    Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                            String.format(
+                                    "Uploading file #%s: %s/%s KB...",
+                                    updateFile.file.id,
+                                    updateFile.file.local.downloadedSize / 1024,
+                                    updateFile.file.size / 1024
+                            )
+                    );
+                else
+                    Log.d(JabwaveApp.TELEGRAM_SERV_TAG,
+                            String.format(
+                                    "Downloading file #%s: %s/%s KB...",
+                                    updateFile.file.id,
+                                    updateFile.file.local.downloadedSize / 1024,
+                                    updateFile.file.size / 1024
+                            )
+                    );
             }
+            status = "update_file";
+            sendMessageToActivity(status, data);
         }
     }
 

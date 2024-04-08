@@ -1,0 +1,12 @@
+<resources>
+    <!-- Authorization Activity !-->
+    <string name="auth_twofactor_code_text">Enter the verification code sent on your other device.</string>
+    <string name="auth_twofactor_code">Code for sign-in</string>
+    <string name="auth_cloud_password_text">Enter the password linked to your account.</string>
+    <string name="auth_cloud_password_code">Password</string>
+    <string name="auth_cloud_password_hint_question">Need a hint?</string>
+
+    <!-- Account settings screen !-->
+    <string name="change_account_data">Change Information</string>
+    <string name="delete_account">Delete Account</string>
+</resources>
