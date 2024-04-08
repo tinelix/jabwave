@@ -34,7 +34,6 @@ import androidx.fragment.app.FragmentTransaction;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.fragments.app.ChatsFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
@@ -311,7 +310,7 @@ public class AppActivity extends JabwaveActivity
                     getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_SERVICES
             );
             case R.id.about_app -> {
-                Intent intent = new Intent(this, AboutAppActivity.class);
+                Intent intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
             }
         }

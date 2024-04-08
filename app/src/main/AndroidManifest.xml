@@ -47,7 +47,7 @@
         </activity>
 
         <activity
-            android:name=".core.activities.AboutAppActivity"
+            android:name=".core.activities.AboutActivity"
             android:exported="true"
             android:theme="@style/ApplicationTheme.ColorThemes.Default.Dialog.IfTablet"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mcc|mnc|uiMode"

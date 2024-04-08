@@ -22,23 +22,26 @@
             app:singleLineTitle="true" />
 
         <Preference
+            android:icon="@drawable/ic_security"
             android:key="security"
             android:title="@string/security"
-            android:icon="@drawable/ic_security"
+            app:enabled="false"
             app:iconSpaceReserved="false"
             app:singleLineTitle="true" />
 
         <Preference
+            android:icon="@drawable/ic_storage"
             android:key="storage"
             android:title="@string/storage"
-            android:icon="@drawable/ic_storage"
+            app:enabled="false"
             app:iconSpaceReserved="false"
             app:singleLineTitle="true" />
 
         <Preference
+            android:icon="@drawable/ic_notifications"
             android:key="notifications"
             android:title="@string/notifications"
-            android:icon="@drawable/ic_notifications"
+            app:enabled="false"
             app:iconSpaceReserved="false"
             app:singleLineTitle="true" />
 
@@ -50,23 +53,26 @@
         app:iconSpaceReserved="false">
 
         <Preference
+            android:icon="@drawable/ic_traffic"
             android:key="traffic_savings"
             android:title="@string/traffic_savings"
-            android:icon="@drawable/ic_traffic"
+            app:enabled="false"
             app:iconSpaceReserved="false"
             app:singleLineTitle="true" />
 
         <Preference
+            android:icon="@drawable/ic_protocol"
             android:key="protocol"
             android:title="@string/protocol"
-            android:icon="@drawable/ic_protocol"
+            app:enabled="false"
             app:iconSpaceReserved="false"
             app:singleLineTitle="true" />
 
         <Preference
+            android:icon="@drawable/ic_call_merge"
             android:key="proxy"
             android:title="@string/proxy"
-            android:icon="@drawable/ic_call_merge"
+            app:enabled="false"
             app:iconSpaceReserved="false"
             app:singleLineTitle="true" />
 

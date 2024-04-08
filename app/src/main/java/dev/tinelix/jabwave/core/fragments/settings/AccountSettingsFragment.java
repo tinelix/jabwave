@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import dev.tinelix.jabwave.R;
@@ -41,7 +40,7 @@ public class AccountSettingsFragment extends PreferenceFragmentCompat {
                         aboutAccountPref.setEnabled(isChangeable);
                         aboutAccountPref.setSummary(isChangeable ? null : not_supported);
                         aboutAccountPref.setOnPreferenceClickListener(preference -> {
-                            showPreferenceInNewActivity(FragmentNavigator.FRAGMENT_ACCOUNT_INFO);
+                            showPreferenceInNewActivity();
                             return false;
                         });
                     } else {
@@ -52,9 +51,9 @@ public class AccountSettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void showPreferenceInNewActivity(int fragment_id) {
+    private void showPreferenceInNewActivity() {
         Intent intent = new Intent(getContext(), SettingsActivity.class);
-        intent.putExtra("fragment_id", fragment_id);
+        intent.putExtra("fragment_id", FragmentNavigator.FRAGMENT_ACCOUNT_INFO);
         startActivity(intent);
     }
 }
