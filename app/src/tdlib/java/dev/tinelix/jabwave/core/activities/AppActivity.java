@@ -121,7 +121,9 @@ public class AppActivity extends JabwaveActivity
                 app.getTelegramPreferences().getString("phone_number", "")
         );
         service = new TelegramService();
-        ((TelegramService) service).start(this, clientConnection, credentials);
+        service.start(this, clientConnection, credentials);
+        findViewById(R.id.progress).setVisibility(View.GONE);
+        findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
     }
 
     private void getAccount() {
@@ -152,8 +154,6 @@ public class AppActivity extends JabwaveActivity
                 break;
             case HandlerMessages.CHATS_LOADED:
                 if (fragment instanceof ChatsFragment) {
-                    findViewById(R.id.progress).setVisibility(View.GONE);
-                    findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
                     ((ChatsFragment) fragment).loadLocalContacts();
                 }
                 break;
