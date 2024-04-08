@@ -105,12 +105,13 @@ android {
             versionNameSuffix '.smack'
             applicationId 'dev.tinelix.jabwave.sm'
             buildConfigField "String", "BUILD_VARIANT", "\"smack\""
+            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
         }
         combo {
             dimension 'version'
-            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
             buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
             buildConfigField "String", "BUILD_VARIANT", "\"combo\""
+            buildConfigField "String", "SOURCE_CODE", "\"https://github.com/tinelix/jabwave/tree/tg-main\""
         }
     }
 
