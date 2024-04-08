@@ -234,7 +234,7 @@ public class AppActivity extends JabwaveActivity
                     getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_SERVICES
             );
             case R.id.about_app -> {
-                Intent intent = new Intent(this, AboutAppActivity.class);
+                Intent intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
             }
         }
