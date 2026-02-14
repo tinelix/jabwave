@@ -39,8 +39,8 @@ android {
         applicationId "dev.tinelix.jabwave"
         minSdk 19
         targetSdk 36
-        versionCode 1
-        versionName "0.0.1-prealpha"
+        versionCode 2
+        versionName "0.0.2-prealpha"
         multiDexEnabled true
         buildConfigField "String", "GIT_COMMIT", "\"${getGitHubCommit()}\""
         configurations.configureEach {
