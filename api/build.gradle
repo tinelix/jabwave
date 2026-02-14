@@ -4,13 +4,11 @@ plugins {
 
 android {
     namespace 'dev.tinelix.jabwave.api'
-    compileSdk 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk 19
-        targetSdk 34
-        versionCode 1
-        versionName "0.0.1-prealpha"
+        targetSdk 36
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -19,17 +17,19 @@ android {
         'release-xmpp' {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            versionNameSuffix '-td+smack'
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_16
         targetCompatibility JavaVersion.VERSION_16
     }
+    ndkVersion '19.2.5345600'
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
+    //noinspection GradleDependency
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    //noinspection GradleDependency
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.github.mediapark-pk:Base58-android:0.1'
 }

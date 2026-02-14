@@ -12,6 +12,7 @@ public class Authenticator {
     protected boolean isChangeablePassword;
     protected boolean isChangeableEmail;
     protected boolean isChangeablePhoneNumber;
+    protected boolean isFailed;
     protected int authType;
     public static final int TYPE_REQUIRES_EMAIL             =   1;
     public static final int TYPE_REQUIRES_PHONE_NUMBER      =   2;
@@ -35,6 +36,7 @@ public class Authenticator {
 
             @Override
             public boolean onFail(HashMap<String, Object> map, Throwable t) {
+                isFailed = true;
                 listener.onFail(map, t);
                 return false;
             }
@@ -63,6 +65,10 @@ public class Authenticator {
 
     public boolean isChangeablePhoneNumber() {
         return isChangeablePhoneNumber;
+    }
+
+    public boolean isFailed() {
+        return isFailed;
     }
 
     public int getType() {

@@ -45,8 +45,8 @@ public class SettingsActivity extends JabwaveActivity {
 
     private void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
-        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
-        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
+        //registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
+        //registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
     }
 
     private void setActionBar() {

@@ -72,8 +72,8 @@ public class AppActivity extends JabwaveActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
         app = ((JabwaveApp) getApplicationContext());
-        findViewById(R.id.app_fragment).setVisibility(View.GONE);
-        findViewById(R.id.progress).setVisibility(View.VISIBLE);
+        //findViewById(R.id.app_fragment).setVisibility(View.GONE);
+        //findViewById(R.id.progress).setVisibility(View.VISIBLE);
         registerBroadcastReceiver();
         if(service == null) {
             service = new ClientService(app.getCurrentNetworkType());
@@ -156,6 +156,8 @@ public class AppActivity extends JabwaveActivity
             case HandlerMessages.ACCOUNT_LOADED:
                 updateNavView();
                 getContacts();
+                findViewById(R.id.progress).setVisibility(View.GONE);
+                findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
                 break;
             case HandlerMessages.CHATS_LOADED:
                 if (fragment instanceof ChatsFragment) {
@@ -166,6 +168,8 @@ public class AppActivity extends JabwaveActivity
                 break;
             case HandlerMessages.CHATS_UPDATED:
                 if (fragment instanceof ChatsFragment) {
+                    findViewById(R.id.progress).setVisibility(View.GONE);
+                    findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
                     ((ChatsFragment) fragment).refreshAdapter();
                 }
                 break;

@@ -1,6 +1,6 @@
 package dev.tinelix.jabwave.core.activities;
 
-import android.app.Application;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -38,7 +37,6 @@ import dev.tinelix.jabwave.core.fragments.auth.AuthCloudPasswordFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthTwoFactorFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
-import dev.tinelix.jabwave.core.services.TelegramService;
 import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.SecureStorage;
@@ -114,10 +112,16 @@ public class AuthActivity extends AppCompatActivity {
         telegram_prefs = getSharedPreferences("telegram", 0);
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
-        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
-        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
+        if(Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.TIRAMISU) {
+            registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"), RECEIVER_EXPORTED);
+            registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
+            registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
+        }
     }
 
     public void unregisterBroadcastReceiver() {
@@ -142,7 +146,7 @@ public class AuthActivity extends AppCompatActivity {
         }
 
         if(app.getCurrentNetworkType().equals("telegram")) {
-            service = new TelegramService();
+
         } else {
             service = new XMPPService();
         }
@@ -155,8 +159,7 @@ public class AuthActivity extends AppCompatActivity {
 
     public void signIn(String signin_code) {
         if(app.getCurrentNetworkType().equals("telegram")) {
-            ((dev.tinelix.jabwave.api.tdlwrap.entities.Authenticator) service.getAuthenticator())
-                    .sendAuthCode(signin_code);
+
         }
         ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment, new AuthProgressFragment());
@@ -165,8 +168,7 @@ public class AuthActivity extends AppCompatActivity {
 
     public void sendCloudPassword(String password) {
         if(app.getCurrentNetworkType().equals("telegram")) {
-            ((dev.tinelix.jabwave.api.tdlwrap.entities.Authenticator) service.getAuthenticator())
-                    .sendCloudPassword(password);
+
         }
         ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment, new AuthProgressFragment());

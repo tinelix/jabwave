@@ -36,8 +36,8 @@ import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.fragments.app.ChatsFragment;
+import dev.tinelix.jabwave.core.fragments.settings.MainSettingsFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
-import dev.tinelix.jabwave.core.services.TelegramService;
 import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.core.utilities.FragmentNavigator;
@@ -59,6 +59,8 @@ public class AppActivity extends JabwaveActivity
     private JabwaveApp app;
     public ClientService service;
     private NotificationChannel serviceChannel;
+
+    private boolean isLimited;
 
     private final ServiceConnection clientConnection = new ServiceConnection() {
 
@@ -118,10 +120,17 @@ public class AppActivity extends JabwaveActivity
                     new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE")
             );
         } else {
-            registerReceiver(
-                    jwReceiver,
-                    new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
-            );
+            if(Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.TIRAMISU)
+                registerReceiver(
+                        jwReceiver,
+                        new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"),
+                        RECEIVER_EXPORTED
+                );
+            else
+                registerReceiver(
+                        jwReceiver,
+                        new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
+                );
         }
     }
 
@@ -131,7 +140,6 @@ public class AppActivity extends JabwaveActivity
             credentials = new SecureStorage().createCredentialsMap(
                     app.getTelegramPreferences().getString("phone_number", "")
             );
-            service = new TelegramService();
         } else {
             try {
                 String server = app.getXmppPreferences().getString("server", "");
@@ -212,9 +220,9 @@ public class AppActivity extends JabwaveActivity
                 getContacts();
                 break;
             case HandlerMessages.AUTHENTICATION_ERROR:
-//                findViewById(R.id.access_limited_layout).setVisibility(View.VISIBLE);
-//                TextView reason_tv = findViewById(R.id.access_limited_reason);
-//                reason_tv.setText(data.getString("error_msg"));
+                switchToAccountLimitedMode();
+                TextView reason_tv = findViewById(R.id.access_limited_reason);
+                reason_tv.setText(data.getString("error_msg"));
                 break;
             case HandlerMessages.CHATS_LOADED:
                 if (fragment instanceof ChatsFragment) {
@@ -228,6 +236,24 @@ public class AppActivity extends JabwaveActivity
                     ((ChatsFragment) fragment).refreshAdapter();
                 }
                 break;
+        }
+    }
+
+    private void switchToAccountLimitedMode() {
+        if(fragment instanceof MainSettingsFragment) {
+            findViewById(R.id.progress).setVisibility(View.GONE);
+            findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
+            findViewById(R.id.access_limited_layout).setVisibility(View.GONE);
+        } else if(service == null) {
+            findViewById(R.id.progress).setVisibility(View.GONE);
+            findViewById(R.id.app_fragment).setVisibility(View.GONE);
+            findViewById(R.id.access_limited_layout).setVisibility(View.VISIBLE);
+            isLimited = true;
+        } else if(service.getAuthenticator() == null || service.getAuthenticator().isFailed()) {
+            findViewById(R.id.progress).setVisibility(View.GONE);
+            findViewById(R.id.app_fragment).setVisibility(View.GONE);
+            findViewById(R.id.access_limited_layout).setVisibility(View.VISIBLE);
+            isLimited = true;
         }
     }
 
@@ -248,6 +274,8 @@ public class AppActivity extends JabwaveActivity
         }
         dev.tinelix.jabwave.api.base.entities.Account account = service.getAccount();
         if(account != null) {
+            findViewById(R.id.progress).setVisibility(View.GONE);
+            findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
             if (app.getCurrentNetworkType().equals("telegram")) {
                 profile_name.setText(
                         String.format("%s %s", account.first_name, account.last_name)
@@ -300,12 +328,14 @@ public class AppActivity extends JabwaveActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawer.closeDrawer(GravityCompat.START);
         switch (item.getItemId()) {
-            case R.id.all_chats -> fragment = FragmentNavigator.switchToAnotherFragment(
+            case R.id.all_chats ->
+                fragment = FragmentNavigator.switchToAnotherFragment(
                     getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_CHATS
-            );
-            case R.id.settings -> fragment = FragmentNavigator.switchToAnotherFragment(
+                );
+            case R.id.settings ->
+                fragment = FragmentNavigator.switchToAnotherFragment(
                     getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_MAIN_SETTINGS
-            );
+                );
             case R.id.services -> fragment = FragmentNavigator.switchToAnotherFragment(
                     getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_SERVICES
             );
@@ -314,6 +344,7 @@ public class AppActivity extends JabwaveActivity
                 startActivity(intent);
             }
         }
+        switchToAccountLimitedMode();
         return false;
     }
 

@@ -71,8 +71,8 @@ public class JabwaveApp extends MultiDexApplication {
     }
 
     public boolean isAuthorized() {
-        return getXmppPreferences().getString("server", "").length() > 0 ||
-                getTelegramPreferences().getString("phone_number", "").length() > 0;
+        return !getXmppPreferences().getString("server", "").isEmpty() ||
+                !getTelegramPreferences().getString("phone_number", "").isEmpty();
     }
 
     public SharedPreferences getGlobalPreferences() {

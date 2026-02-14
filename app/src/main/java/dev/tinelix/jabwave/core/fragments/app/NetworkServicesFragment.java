@@ -55,12 +55,13 @@ public class NetworkServicesFragment extends Fragment {
     public void loadServices() {
         if(getActivity() instanceof AppActivity activity) {
             Services services = activity.service.getNetworkServices();
-            if(services.getServices() == null || services.getServices().size() == 0) {
-                servicesList = services.discoverServices();
-            } else {
-                servicesList = services.getServices();
+            if(services != null) {
+                if (services.getServices() == null || services.getServices().isEmpty())
+                    servicesList = services.discoverServices();
+                else
+                    servicesList = services.getServices();
+                createServicesAdapter();
             }
-            createServicesAdapter();
         }
     }
 
@@ -80,8 +81,6 @@ public class NetworkServicesFragment extends Fragment {
         RecyclerView contactsView = view.findViewById(R.id.entities_view);
         contactsView.setLayoutManager(llm);
         contactsView.setAdapter(servicesAdapter);
-        contactsView.setVisibility(View.VISIBLE);
-        view.findViewById(R.id.progress).setVisibility(View.GONE);
     }
 
     @SuppressLint("NotifyDataSetChanged")

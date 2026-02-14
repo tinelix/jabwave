@@ -73,7 +73,7 @@ public class AppActivity extends JabwaveActivity
         setContentView(R.layout.activity_app);
         app = ((JabwaveApp) getApplicationContext());
         findViewById(R.id.app_fragment).setVisibility(View.GONE);
-        findViewById(R.id.progress).setVisibility(View.VISIBLE);
+        //findViewById(R.id.progress).setVisibility(View.VISIBLE);
         registerBroadcastReceiver();
         if(service == null) {
             service = new ClientService(app.getCurrentNetworkType());

@@ -9,30 +9,7 @@ plugins {
 }
 
 def getGitHubCommit = {
-    try {
-        def hashOutput = new ByteArrayOutputStream()
-        def changeOutput = new ByteArrayOutputStream()
-        def gitVersionName
-        exec {
-            commandLine 'git', 'rev-list', '--max-count=1', 'HEAD'
-            standardOutput = hashOutput
-        }
-        exec {
-            commandLine 'git', 'diff-index', '--shortstat', 'HEAD'
-            standardOutput = changeOutput
-        }
-        gitVersionName = hashOutput.toString().trim().substring(0, 7);
-        if (!changeOutput.toString().trim().empty) {
-            def pattern = Pattern.compile("\\d+");
-            def matcher = pattern.matcher(changeOutput.toString().trim())
-            if (matcher.find()) {
-                gitVersionName += "-" + matcher.group()
-            }
-        }
-        return gitVersionName
-    } catch (ignored) {
-        return "UNKNOWN";
-    }
+    return "UNKNOWN";
 }
 
 def getTDAppToken = {
@@ -56,17 +33,17 @@ def getTDAppToken = {
 
 android {
     namespace 'dev.tinelix.jabwave'
-    compileSdk 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId "dev.tinelix.jabwave"
         minSdk 19
-        targetSdk 34
+        targetSdk 36
         versionCode 1
         versionName "0.0.1-prealpha"
         multiDexEnabled true
         buildConfigField "String", "GIT_COMMIT", "\"${getGitHubCommit()}\""
-        configurations.all {
+        configurations.configureEach {
             resolutionStrategy {
                 force 'androidx.core:core:1.12.0'
             }
@@ -93,13 +70,6 @@ android {
     }
     flavorDimensions 'version'
     productFlavors {
-        tdlib {
-            dimension 'version'
-            versionNameSuffix '.tdlib'
-            applicationId 'dev.tinelix.jabwave.td'
-            buildConfigField "String", "BUILD_VARIANT", "\"tdlib\""
-            buildConfigField "String", "TDLIB_APP_TOKEN", "\"${getTDAppToken()}\""
-        }
         smack {
             dimension 'version'
             versionNameSuffix '.smack'
@@ -114,11 +84,6 @@ android {
     }
 
     sourceSets {
-        tdlib {
-            java.srcDirs = ['src/tdlib/java']
-            res.srcDirs = ['src/tdlib/res']
-            manifest.srcFile 'src/tdlib/AndroidManifest.xml'
-        }
         smack {
             java.srcDirs = ['src/smack/java']
             res.srcDirs = ['src/smack/res']
@@ -133,37 +98,36 @@ android {
 }
 
 dependencies {
-    // Combo build-specified dependencies
-    comboImplementation project(path: ':tdlib')
-    comboImplementation project(path: ':tdlib-wrap')
     comboImplementation 'org.jxmpp:jxmpp-jid:1.0.3'
-    comboImplementation "org.igniterealtime.smack:smack-tcp:4.4.6"
-    comboImplementation "org.igniterealtime.smack:smack-im:4.4.6"
+    comboImplementation "org.igniterealtime.smack:smack-tcp:4.4.8"
+    comboImplementation "org.igniterealtime.smack:smack-im:4.4.8"
 
     // Smack build-specified dependencies
     smackImplementation 'org.jxmpp:jxmpp-jid:1.0.3'
-    smackImplementation "org.igniterealtime.smack:smack-tcp:4.4.4"
-    smackImplementation "org.igniterealtime.smack:smack-im:4.4.4"
+    smackImplementation "org.igniterealtime.smack:smack-tcp:4.4.8"
+    smackImplementation "org.igniterealtime.smack:smack-im:4.4.8"
 
-    // TDLib build-specified dependencies
-    tdlibImplementation project(path: ':tdlib')
-    tdlibImplementation project(path: ':tdlib-wrap')
-
+    //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    //noinspection GradleDependency
     implementation 'com.google.android.material:material:1.11.0'
+    //noinspection GradleDependency
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    //noinspection GradleDependency
     implementation 'androidx.navigation:navigation-fragment:2.7.7'
+    //noinspection GradleDependency
     implementation 'androidx.navigation:navigation-ui:2.7.7'
     implementation "androidx.preference:preference-ktx:1.2.1"
 
-    implementation ("org.igniterealtime.smack:smack-android-extensions:4.4.0") {
+    implementation ("org.igniterealtime.smack:smack-android-extensions:4.4.8") {
         exclude module: 'xpp3'
     }
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:5.0.5'
     implementation project(path: ':api')
 
-    annotationProcessor ('com.github.bumptech.glide:compiler:4.12.0')
+    annotationProcessor ('com.github.bumptech.glide:compiler:5.0.5')
     implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v3.2.0'
+    //noinspection GradleDependency
     implementation "androidx.emoji2:emoji2:1.4.0"
     implementation 'com.github.mediapark-pk:Base58-android:0.1'
     implementation 'androidx.multidex:multidex:2.0.1'

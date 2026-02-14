@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
+import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.core.activities.AppActivity;
 import dev.tinelix.jabwave.core.activities.AuthActivity;
 import dev.tinelix.jabwave.core.activities.MessengerActivity;
@@ -36,6 +37,11 @@ public class JabwaveReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(JabwaveApp.APP_TAG,
+                String.format("Receiving data from message ID %d",
+                              intent.getIntExtra("msg", 0)
+                )
+        );
         if(ctx instanceof AppActivity activity) {
             activity.receiveState(
                     intent.getIntExtra("msg", 0),

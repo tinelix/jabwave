@@ -50,7 +50,7 @@ public class Roster extends Chats {
     public Roster(XMPPService service, XMPPClient client, OnClientUpdateListener listener) {
         super(client);
         this.conn = client.getConnection();
-        cm = ChatManager.getInstanceFor(((XMPPClient) client).getConnection());
+        cm = ChatManager.getInstanceFor(client.getConnection());
         this.roster = org.jivesoftware.smack.roster.Roster.getInstanceFor(conn);
         this.listener = listener;
         this.service = service;

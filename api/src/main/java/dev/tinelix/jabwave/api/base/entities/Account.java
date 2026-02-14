@@ -29,6 +29,8 @@ public class Account {
     protected String email;
     public String about;
 
+    public boolean isLimited;
+
     /**
      * Default constructor for Account class.
      * @param id Account ID

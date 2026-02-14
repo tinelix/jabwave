@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ApplicationTheme.ColorThemes.Default" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/actionBarColor</item>
+        <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorPrimary">@color/accentColor</item>
+        <item name="colorPrimaryVariant">@color/accentColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColor</item>
+        <item name="colorSecondaryVariant">@color/accentColor</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColor</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColor</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColor</item>
+        <item name="inMessageTextColor">@color/inMessageTextColor</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColor</item>
+        <item name="outMessageTextColor">@color/outMessageTextColor</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+    <!-- Theme #2. Green -->
+    <style name="ApplicationTheme.ColorThemes.Green" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/actionBarColorGreen</item>
+        <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundGreen</item>
+        <item name="colorPrimary">@color/accentColorGreen</item>
+        <item name="colorPrimaryVariant">@color/accentColorGreen</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorGreen</item>
+        <item name="colorSecondaryVariant">@color/accentColorGreen</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorGreen</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorGreen</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorGreen</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorGreen</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorGreen</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorGreen</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+    <!-- Theme #3. Red -->
+    <style name="ApplicationTheme.ColorThemes.Red" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/actionBarColorRed</item>
+        <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundRed</item>
+        <item name="colorPrimary">@color/accentColorRed</item>
+        <item name="colorPrimaryVariant">@color/accentColorRed</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorRed</item>
+        <item name="colorSecondaryVariant">@color/accentColorRed</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorRed</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorRed</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorRed</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorRed</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorRed</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorRed</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+    <!-- Theme #4. Violet -->
+    <style name="ApplicationTheme.ColorThemes.Violet" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/actionBarColorViolet</item>
+        <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundViolet</item>
+        <item name="colorPrimary">@color/accentColorViolet</item>
+        <item name="colorPrimaryVariant">@color/accentColorViolet</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorViolet</item>
+        <item name="colorSecondaryVariant">@color/accentColorViolet</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorViolet</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorViolet</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorViolet</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorViolet</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorViolet</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorViolet</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+    <!-- Theme #5. Orange -->
+    <style name="ApplicationTheme.ColorThemes.Orange" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/actionBarColorOrange</item>
+        <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundOrange</item>
+        <item name="colorPrimary">@color/accentColorOrange</item>
+        <item name="colorPrimaryVariant">@color/accentColorOrange</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorOrange</item>
+        <item name="colorSecondaryVariant">@color/accentColorOrange</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorOrange</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorOrange</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorOrange</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorOrange</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorOrange</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorOrange</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+    <!-- Theme #6. Teal -->
+    <style name="ApplicationTheme.ColorThemes.Teal" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/actionBarColorTeal</item>
+        <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundTeal</item>
+        <item name="colorPrimary">@color/accentColorTeal</item>
+        <item name="colorPrimaryVariant">@color/accentColorTeal</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorTeal</item>
+        <item name="colorSecondaryVariant">@color/accentColorTeal</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorTeal</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorTeal</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorTeal</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorTeal</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorTeal</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorTeal</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+    <!-- Theme #7. Ocean -->
+    <style name="ApplicationTheme.ColorThemes.Ocean" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/actionBarColorOcean</item>
+        <item name="actionBarTint">@android:color/white</item>
+        <item name="android:colorBackground">@color/backgroundOcean</item>
+        <item name="colorPrimary">@color/accentColorOcean</item>
+        <item name="colorPrimaryVariant">@color/accentColorOcean</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorOcean</item>
+        <item name="colorSecondaryVariant">@color/accentColorOcean</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorOcean</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorOcean</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorOcean</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorOcean</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorOcean</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorTeal</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+
+    <!-- Theme #8. Neon -->
+    <style name="ApplicationTheme.ColorThemes.Neon" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="actionBarColor">@color/backgroundDark</item>
+        <item name="actionBarTint">@color/actionBarTintNeon</item>
+        <item name="colorPrimary">@color/accentColorNeon</item>
+        <item name="android:colorBackground">@color/backgroundNeon</item>
+        <item name="colorPrimaryVariant">@color/accentColorNeon</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/accentColorNeon</item>
+        <item name="colorSecondaryVariant">@color/accentColorNeon</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/accentColorNeon</item>
+        <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
+        <item name="msgrBackgroundColor">@color/messengerBackgroundColorNeon</item>
+        <item name="inMsgBubbleBackgroundColor">@color/inMessageColorNeon</item>
+        <item name="inMessageTextColor">@color/inMessageTextColorNeon</item>
+        <item name="outMsgBubbleBackgroundColor">@color/outMessageColorNeon</item>
+        <item name="outMessageTextColor">@color/outMessageTextColorNeon</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+    </style>
+</resources>

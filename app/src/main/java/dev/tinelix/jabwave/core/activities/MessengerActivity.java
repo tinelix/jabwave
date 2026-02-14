@@ -88,8 +88,24 @@ public class MessengerActivity extends JabwaveActivity {
 
     public void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
-        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
-        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
+        if(app.getCurrentNetworkType().equals("telegram")) {
+            registerReceiver(
+                    jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE")
+            );
+        } else {
+            if(Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.TIRAMISU)
+                registerReceiver(
+                        jwReceiver,
+                        new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"),
+                        RECEIVER_EXPORTED
+                );
+            else
+                registerReceiver(
+                        jwReceiver,
+                        new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
+                );
+        }
     }
 
     private void setUiListeners() {

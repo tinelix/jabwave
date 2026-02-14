@@ -107,10 +107,9 @@ public class ChatsFragment extends Fragment {
         if(groups == null) {
             groups = new ArrayList<>();
         }
-        ArrayList<Chat> chats = new ArrayList<>();
-        chats.addAll(this.contacts);
+        ArrayList<Chat> chats = new ArrayList<>(this.contacts);
         ChatsGroupSection entityGroupSection;
-        if(groups.size() > 0) {
+        if(!groups.isEmpty()) {
             for (ChatGroup group : groups) {
                 ArrayList<Chat> groupChats = new ArrayList<>();
                 for (Chat chat : contacts) {
@@ -127,7 +126,7 @@ public class ChatsFragment extends Fragment {
                 ChatGroup account_group = new ChatGroup(
                         getResources().getString(R.string.saved_messages), false, 1
                 );
-                if(chats.size() > 0) {
+                if(!chats.isEmpty()) {
                     if(chats.get(0).id.equals(service.getAccount().id)) {
                         ArrayList<Chat> account_only = new ArrayList<>();
                         Chat chat = chats.get(0);
@@ -170,13 +169,10 @@ public class ChatsFragment extends Fragment {
         RecyclerView contactsView = view.findViewById(R.id.entities_view);
         contactsView.setLayoutManager(llm);
         contactsView.setAdapter(chatsAdapter);
-        contactsView.setVisibility(View.VISIBLE);
-        view.findViewById(R.id.progress).setVisibility(View.GONE);
     }
 
     public void refreshAdapter() {
-        if(getActivity() instanceof AppActivity) {
-            AppActivity activity = (AppActivity) getActivity();
+        if(getActivity() instanceof AppActivity activity) {
             contacts = activity.service.getChats().getList();
             chatsAdapter.notifyDataSetChanged();
         }

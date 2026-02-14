@@ -7,19 +7,17 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 34
-    buildToolsVersion "34.0.0"
+    compileSdkVersion 36
+    buildToolsVersion "36.0.0"
 
     sourceSets.main {
         jniLibs.srcDir 'src/main/libs'
-        jni.srcDirs = [] //disable automatic ndk-build call
+        //disable automatic ndk-build call
     }
 
     defaultConfig {
         minSdkVersion 10
-        targetSdkVersion 34
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 36
     }
     buildTypes {
         release {
@@ -32,6 +30,7 @@ android {
         // use this line to check all rules except those listed
         disable 'InvalidPackage'
     }
+    namespace 'org.drinkless.td.libcore'
 }
 
 dependencies {

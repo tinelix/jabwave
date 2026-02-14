@@ -156,7 +156,7 @@ public class NetworkServiceSection extends Section {
         public void bind() {
             service_title.setText(String.format("%s (%s)", net_service.title, net_service.node));
             service_title.setOnClickListener(v -> toggleGroupList());
-            isOpen = entities.size() != 0;
+            isOpen = !entities.isEmpty();
             Drawable arrow = getResources().getDrawable(
                     isOpen ? R.drawable.ic_arrow_down : R.drawable.ic_arrow_right
             );
@@ -174,7 +174,7 @@ public class NetworkServiceSection extends Section {
                 entities.clear();
                 view.findViewById(R.id.divider).setVisibility(View.INVISIBLE);
             } else {
-                if(net_service.getEntities().size() > 0) {
+                if(!net_service.getEntities().isEmpty()) {
                     view.findViewById(R.id.divider).setVisibility(View.VISIBLE);
                     entities.addAll(net_service.getEntities());
                     adapter.notifyDataSetChanged();

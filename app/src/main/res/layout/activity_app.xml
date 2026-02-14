@@ -6,61 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/access_limited_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:visibility="gone">
-
-        <ImageView
-            android:id="@+id/warning_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="24dp"
-            app:srcCompat="@drawable/ic_warning"
-            app:tint="?attr/colorAccent" />
-
-        <TextView
-            android:id="@+id/access_limited_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/account_access_limited"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/access_limited_reason"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="24dp"
-            android:text="@string/account_access_limited_reason" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="24dp"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/retry_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/retry_btn"
-                app:backgroundTint="@color/accentColorVariant" />
-        </LinearLayout>
-
-    </LinearLayout>
-
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -97,7 +42,8 @@
                         <include layout="@layout/layout_actionbar"/>
 
                     </dev.tinelix.jabwave.ui.views.base.JabwaveActionBar>
-                </com.google.android.material.appbar.AppBarLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/app_fragment"
@@ -107,18 +53,91 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+                app:layout_constraintTop_toBottomOf="@+id/app_bar"
+                tools:visibility="visible" />
 
-            <include
+            <FrameLayout
                 android:id="@+id/progress"
-                layout="@layout/layout_progress"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+                app:layout_constraintTop_toBottomOf="@+id/app_bar">
+
+                <include
+                    layout="@layout/layout_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/app_bar"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/access_limited_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/app_bar">
+
+                <ImageView
+                    android:id="@+id/warning_icon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_warning"
+                    app:tint="?attr/colorAccent" />
+
+                <TextView
+                    android:id="@+id/access_limited_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/account_access_limited"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/access_limited_reason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/account_access_limited_reason" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="24dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/retry_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/retry_btn"
+                        app:backgroundTint="?attr/colorAccent" />
+                </LinearLayout>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
