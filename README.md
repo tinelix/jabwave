@@ -9,7 +9,7 @@ Yet another XMPP/Telegram (unofficial) messenger for Android, designed for moder
 1. [yaxim](https://github.com/yaxim-org/yaxim) (GPLv3)
 2. [JXMPP](https://github.com/igniterealtime/jxmpp) (Apache License v2.0)
 3. [Smack XMPP Client](https://github.com/igniterealtime/Smack) (Apache License v2.0)
-4. [TDLib](https://github.com/tdlib/td) (Boost Software License 1.0)
+4. ~~[TDLib](https://github.com/tdlib/td) (Boost Software License 1.0)~~ (excluded)
 
 ### Jabwave License
 [GNU Affero GPL version 3](https://github.com/tinelix/jabwave/blob/main/LICENSE) or later
