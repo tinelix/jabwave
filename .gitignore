@@ -3,6 +3,8 @@
 /local.properties
 /.idea
 .DS_Store
+/api/base/build
+/api/xmpp/build
 /build
 /captures
 .externalNativeBuild
