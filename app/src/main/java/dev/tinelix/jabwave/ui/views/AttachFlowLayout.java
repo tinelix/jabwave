@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.api.base.services.ClientService;
 import dev.tinelix.jabwave.api.base.attachments.Attachment;
 import dev.tinelix.jabwave.api.base.attachments.PhotoAttachment;
 import dev.tinelix.jabwave.api.base.attachments.VideoAttachment;

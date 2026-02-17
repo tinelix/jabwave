@@ -98,15 +98,6 @@ android {
 }
 
 dependencies {
-    comboImplementation 'org.jxmpp:jxmpp-jid:1.0.3'
-    comboImplementation "org.igniterealtime.smack:smack-tcp:4.4.8"
-    comboImplementation "org.igniterealtime.smack:smack-im:4.4.8"
-
-    // Smack build-specified dependencies
-    smackImplementation 'org.jxmpp:jxmpp-jid:1.0.3'
-    smackImplementation "org.igniterealtime.smack:smack-tcp:4.4.8"
-    smackImplementation "org.igniterealtime.smack:smack-im:4.4.8"
-
     //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.6.1'
     //noinspection GradleDependency
@@ -119,11 +110,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.7.7'
     implementation "androidx.preference:preference-ktx:1.2.1"
 
-    implementation ("org.igniterealtime.smack:smack-android-extensions:4.4.8") {
-        exclude module: 'xpp3'
-    }
     implementation 'com.github.bumptech.glide:glide:5.0.5'
-    implementation project(path: ':api')
+    implementation project(path: ':api:base')
+    smackImplementation project(path: ':api:xmpp')
+    comboImplementation project(path: ':api:xmpp')
 
     annotationProcessor ('com.github.bumptech.glide:compiler:5.0.5')
     implementation 'com.github.luizgrp:SectionedRecyclerViewAdapter:v3.2.0'

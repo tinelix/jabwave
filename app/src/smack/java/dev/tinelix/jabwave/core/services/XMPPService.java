@@ -24,11 +24,11 @@ import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.entities.Account;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.models.Chats;
-import dev.tinelix.jabwave.net.xmpp.api.models.Services;
+import dev.tinelix.jabwave.api.xmpp.models.Services;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
-import dev.tinelix.jabwave.net.xmpp.api.models.Roster;
+import dev.tinelix.jabwave.api.xmpp.entities.Authenticator;
+import dev.tinelix.jabwave.api.xmpp.models.Roster;
 
 /**
  * XMPP (Smack) client service
@@ -276,7 +276,7 @@ public class XMPPService extends ClientService {
 
     @Override
     public Account createAccount() {
-        account = new dev.tinelix.jabwave.net.xmpp.api.entities.Account((XMPPClient) client);
+        account = new dev.tinelix.jabwave.api.xmpp.entities.Account((XMPPClient) client);
         return account;
     }
 

@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.xmpp.api.models;
+package dev.tinelix.jabwave.api.xmpp.models;
 
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.disco.packet.DiscoverInfo;

@@ -16,7 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.api.base.services.ClientService;
 import dev.tinelix.jabwave.api.base.entities.Chat;
 import dev.tinelix.jabwave.api.base.entities.Message;
 import dev.tinelix.jabwave.ui.views.AttachFlowLayout;

@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.xmpp.api.entities;
+package dev.tinelix.jabwave.api.xmpp.entities;
 
 import org.jivesoftware.smack.chat2.ChatManager;
 import org.jivesoftware.smack.packet.Message;

@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.SettingsActivity;
-import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.api.base.services.ClientService;
 import dev.tinelix.jabwave.core.utilities.FragmentNavigator;
 
 public class AccountSettingsFragment extends PreferenceFragmentCompat {

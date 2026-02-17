@@ -1,0 +1,47 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'dev.tinelix.jabwave.api.xmpp'
+    compileSdk {
+        version = release(36)
+    }
+
+    defaultConfig {
+        minSdk 19
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_16
+        targetCompatibility JavaVersion.VERSION_16
+    }
+}
+
+dependencies {
+    implementation project(path: ':api:base')
+    //noinspection GradleDependency
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    //noinspection GradleDependency
+    implementation 'com.google.android.material:material:1.11.0'
+
+    // Smack build-specified dependencies
+    //noinspection NewerVersionAvailable
+    implementation 'org.jxmpp:jxmpp-jid:1.0.3'
+    implementation "org.igniterealtime.smack:smack-tcp:4.4.8"
+    implementation "org.igniterealtime.smack:smack-im:4.4.8"
+
+    implementation ("org.igniterealtime.smack:smack-android-extensions:4.4.8") {
+        exclude module: 'xpp3'
+    }
+
+    implementation 'com.github.mediapark-pk:Base58-android:0.1'
+}

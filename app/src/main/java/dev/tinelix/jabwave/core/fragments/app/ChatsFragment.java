@@ -18,7 +18,7 @@ import dev.tinelix.jabwave.Global;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.core.activities.AppActivity;
-import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.api.base.services.ClientService;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.models.Chats;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;

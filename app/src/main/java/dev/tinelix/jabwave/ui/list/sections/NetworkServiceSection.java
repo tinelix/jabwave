@@ -18,7 +18,7 @@ import java.util.TimerTask;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import dev.tinelix.jabwave.R;
-import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.api.base.services.ClientService;
 import dev.tinelix.jabwave.api.base.entities.ServiceEntity;
 import dev.tinelix.jabwave.api.base.models.NetworkService;
 import dev.tinelix.jabwave.ui.list.adapters.NetworkServicesAdapter;

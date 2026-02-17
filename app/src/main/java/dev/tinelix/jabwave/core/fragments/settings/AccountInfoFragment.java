@@ -1,17 +1,10 @@
 package dev.tinelix.jabwave.core.fragments.settings;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.text.InputType;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
 import java.util.Calendar;
@@ -19,7 +12,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
@@ -30,7 +22,7 @@ import dev.tinelix.jabwave.api.base.entities.Account;
 import dev.tinelix.jabwave.api.base.entities.Authenticator;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.core.activities.SettingsActivity;
-import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.api.base.services.ClientService;
 
 public class AccountInfoFragment extends PreferenceFragmentCompat {
     private ClientService service;

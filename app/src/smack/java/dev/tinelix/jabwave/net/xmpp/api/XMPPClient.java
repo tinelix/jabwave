@@ -19,8 +19,8 @@ import java.util.HashMap;
 import dev.tinelix.jabwave.api.base.BaseClient;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Authenticator;
-import dev.tinelix.jabwave.net.xmpp.api.stanzas.ClientVersionStanza;
+import dev.tinelix.jabwave.api.xmpp.entities.Authenticator;
+import dev.tinelix.jabwave.api.xmpp.stanzas.ClientVersionStanza;
 
 public class XMPPClient extends BaseClient {
     private AbstractXMPPConnection conn;

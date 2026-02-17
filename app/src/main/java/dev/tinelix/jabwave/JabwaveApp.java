@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 import androidx.multidex.MultiDexApplication;
 import dev.tinelix.jabwave.core.activities.MainActivity;
-import dev.tinelix.jabwave.core.services.base.ClientService;
+import dev.tinelix.jabwave.api.base.services.ClientService;
 
 public class JabwaveApp extends MultiDexApplication {
     public String version;

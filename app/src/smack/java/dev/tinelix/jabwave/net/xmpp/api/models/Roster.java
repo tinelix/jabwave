@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.xmpp.api.models;
+package dev.tinelix.jabwave.api.xmpp.models;
 
 import android.util.Log;
 
@@ -30,9 +30,9 @@ import dev.tinelix.jabwave.api.base.models.Chats;
 import dev.tinelix.jabwave.api.base.models.NetworkService;
 import dev.tinelix.jabwave.core.services.XMPPService;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;
-import dev.tinelix.jabwave.net.xmpp.api.entities.Chat;
+import dev.tinelix.jabwave.api.xmpp.entities.Chat;
 import dev.tinelix.jabwave.api.base.models.ChatGroup;
-import dev.tinelix.jabwave.net.xmpp.api.entities.SuperChat;
+import dev.tinelix.jabwave.api.xmpp.entities.SuperChat;
 
 public class Roster extends Chats {
 

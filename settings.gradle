@@ -17,3 +17,5 @@ dependencyResolutionManagement {
 rootProject.name = "Jabwave"
 include ':app'
 include ':api'
+include ':api:base'
+include ':api:xmpp'

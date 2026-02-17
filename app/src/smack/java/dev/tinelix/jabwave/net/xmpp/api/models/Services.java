@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.net.xmpp.api.models;
+package dev.tinelix.jabwave.api.xmpp.models;
 
 import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.disco.packet.DiscoverInfo;
@@ -47,7 +47,7 @@ public class Services extends dev.tinelix.jabwave.api.base.models.Services {
                     node = item.getEntityID().toString();
                 }
                 NetworkService netService = new
-                        dev.tinelix.jabwave.net.xmpp.api.models.NetworkService(
+                        dev.tinelix.jabwave.api.xmpp.models.NetworkService(
                                 client, jid, 0, title, node, isConference
                         );
 
