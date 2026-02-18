@@ -35,7 +35,7 @@ public class NetworkService extends dev.tinelix.jabwave.api.base.models.NetworkS
                 if(entities.size() < 200) {
                     DiscoverInfo info = sdm.discoverInfo(item.getEntityID());
                     String title = "No name";
-                    if (info.getIdentities().size() > 0) {
+                    if (!info.getIdentities().isEmpty()) {
                         title = info.getIdentities().get(0).getName();
                     }
                     for(DiscoverInfo.Feature feat : info.getFeatures()) {

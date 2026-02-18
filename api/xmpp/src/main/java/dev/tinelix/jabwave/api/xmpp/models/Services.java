@@ -32,7 +32,7 @@ public class Services extends dev.tinelix.jabwave.api.base.models.Services {
                 String jid = item.getEntityID().toString();
                 DiscoverInfo info = sdm.discoverInfo(JidCreate.bareFrom(jid));
                 String title = "";
-                if(info.getIdentities().size() > 0) {
+                if(!info.getIdentities().isEmpty()) {
                     title = info.getIdentities().get(0).getName();
                 }
                 boolean isConference = false;
