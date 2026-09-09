@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -107,15 +108,20 @@ public class AppActivity extends JabwaveActivity
 
     private void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
-        if(app.getCurrentNetworkType().equals("telegram")) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             registerReceiver(
                     jwReceiver,
-                    new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE")
+                    app.getCurrentNetworkType().equals("telegram") ?
+                            new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE") :
+                            new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"),
+                    RECEIVER_EXPORTED
             );
         } else {
             registerReceiver(
                     jwReceiver,
-                    new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
+                    app.getCurrentNetworkType().equals("telegram") ?
+                            new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE") :
+                            new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
             );
         }
     }

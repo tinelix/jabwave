@@ -38,7 +38,6 @@ public class XMPPClient extends BaseClient {
     public void start(String server, String jid, String password) {
         this.server = server;
         this.jid = jid;
-        SmackConfiguration.DEBUG = true;
         try {
             XMPPTCPConnectionConfiguration config =
                     Authenticator.buildAuthConfig(
@@ -67,7 +66,6 @@ public class XMPPClient extends BaseClient {
     public void start(String server, String jid, String password, ClientIdentityParams params) {
         this.server = server;
         this.jid = jid;
-        SmackConfiguration.DEBUG = true;
         try {
             XMPPTCPConnectionConfiguration config =
                     Authenticator.buildAuthConfig(

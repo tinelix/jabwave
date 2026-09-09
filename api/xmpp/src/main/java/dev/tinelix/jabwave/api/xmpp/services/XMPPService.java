@@ -12,6 +12,7 @@ import android.util.Log;
 import com.mediaparkpk.base58android.Base58;
 import com.mediaparkpk.base58android.Base58Exception;
 
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Presence;
@@ -203,6 +204,7 @@ public class XMPPService extends ClientService {
     }
 
     private void createAuthConfig(String server, String jid, String password){
+        SmackConfiguration.setDefaultReplyTimeout(30000);
         XMPPTCPConnectionConfiguration config =
                 Authenticator.buildAuthConfig(
                         server,

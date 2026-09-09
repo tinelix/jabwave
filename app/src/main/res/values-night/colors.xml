@@ -22,8 +22,8 @@
     <color name="authorOutMessageColor">#FF64A6FF</color>
 
     <!-- Theme attributes. Color #2 (green) !-->
-    <color name="actionBarColorGreen">#FF466C24</color>
-    <color name="statusBarColorGreen">#FF304A19</color>
+    <color name="actionBarColorGreen">#FF689F38</color>
+    <color name="statusBarColorGreen">#FF537F2D</color>
     <color name="accentColorGreen">#FF689F38</color>
     <color name="backgroundGreen">#FF213311</color>
     <color name="messengerBackgroundColorGreen">#FF35501d</color>
