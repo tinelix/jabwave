@@ -101,7 +101,7 @@ public class NetworkService extends dev.tinelix.jabwave.api.base.models.NetworkS
             int type = 0;
             DiscoverInfo info = sdm.discoverInfo(JidCreate.bareFrom((String) id));
             String title = "No name";
-            if (info.getIdentities().size() > 0) {
+            if (!info.getIdentities().isEmpty()) {
                 title = info.getIdentities().get(0).getName();
             }
             for (DiscoverInfo.Feature feat : info.getFeatures()) {

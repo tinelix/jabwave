@@ -30,7 +30,7 @@
         </receiver>
 
         <service
-            android:name=".core.services.XMPPService"
+            android:name=".api.xmpp.services.XMPPService"
             android:exported="false" />
 
         <activity

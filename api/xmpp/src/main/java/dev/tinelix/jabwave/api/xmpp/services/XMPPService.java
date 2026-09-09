@@ -118,6 +118,7 @@ public class XMPPService extends ClientService {
             final String server = intent.getStringExtra(SERVER);
             final String username = intent.getStringExtra(USERNAME);
             final String password = intent.getStringExtra(PASSWORD);
+            assert action != null;
             handleAction(action, server, username, password);
         }
     }

@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.imageview.ShapeableImageView;
@@ -22,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -29,6 +32,7 @@ import androidx.fragment.app.FragmentTransaction;
 import dev.tinelix.jabwave.JabwaveApp;
 import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.api.base.services.ClientService;
+import dev.tinelix.jabwave.api.xmpp.entities.Account;
 import dev.tinelix.jabwave.core.activities.base.JabwaveActivity;
 import dev.tinelix.jabwave.core.fragments.app.ChatsFragment;
 import dev.tinelix.jabwave.core.receivers.JabwaveReceiver;
@@ -39,6 +43,7 @@ import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.list.adapters.ChatsAdapter;
 import dev.tinelix.jabwave.ui.views.base.JabwaveActionBar;
 
+@SuppressWarnings("CallToPrintStackTrace")
 public class AppActivity extends JabwaveActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -125,7 +130,7 @@ public class AppActivity extends JabwaveActivity
             ), StandardCharsets.UTF_8);
             credentials = new SecureStorage().createCredentialsMap(server, username, password);
             service = new XMPPService();
-            ((XMPPService) service).start(this, clientConnection, credentials);
+            service.start(this, clientConnection, credentials);
         } catch (Base58Exception e) {
             e.printStackTrace();
         }
@@ -171,6 +176,19 @@ public class AppActivity extends JabwaveActivity
                     findViewById(R.id.progress).setVisibility(View.GONE);
                     findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
                     ((ChatsFragment) fragment).refreshAdapter();
+                }
+                break;
+            case HandlerMessages.AUTHENTICATION_ERROR:
+                if (fragment instanceof ChatsFragment) {
+                    findViewById(R.id.progress).setVisibility(View.GONE);
+                    findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
+                    LinearLayout layout = findViewById(R.id.access_limited_layout);
+                    layout.setVisibility(View.VISIBLE);
+                    ((TextView) layout.findViewById(R.id.access_limited_reason)).setText(
+                            getResources().getString(
+                                    R.string.account_access_limited_reason, data.getString("error_msg")
+                            )
+                    );
                 }
                 break;
         }
@@ -237,6 +255,18 @@ public class AppActivity extends JabwaveActivity
             case R.id.services -> fragment = FragmentNavigator.switchToAnotherFragment(
                     getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_SERVICES
             );
+            case R.id.settings -> {
+                fragment = FragmentNavigator.switchToAnotherFragment(
+                    getSupportFragmentManager(), R.id.app_fragment, FragmentNavigator.FRAGMENT_MAIN_SETTINGS
+                );
+                new Handler().postDelayed(
+                        () -> {
+                            findViewById(R.id.progress).setVisibility(View.GONE);
+                            findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
+                        },
+                        50
+                );
+            }
             case R.id.about_app -> {
                 Intent intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);

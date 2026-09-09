@@ -33,12 +33,12 @@ def getTDAppToken = {
 
 android {
     namespace 'dev.tinelix.jabwave'
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId "dev.tinelix.jabwave"
         minSdk 19
-        targetSdk 36
+        targetSdk 37
         versionCode 3
         versionName "0.0.3-prealpha"
         multiDexEnabled true

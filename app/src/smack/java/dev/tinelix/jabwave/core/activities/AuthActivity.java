@@ -1,5 +1,7 @@
 package dev.tinelix.jabwave.core.activities;
 
+import static dev.tinelix.jabwave.api.base.BaseClient.API_CLIENT_TAG;
+
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -126,8 +129,9 @@ public class AuthActivity extends AppCompatActivity {
         }
         this.password = password;
         credentials = new SecureStorage().createCredentialsMap(
-                this.username, this.server, this.password
+                this.server, this.username, this.password
         );
+
         service = new XMPPService();
         service.start(this, clientConnection, credentials);
 

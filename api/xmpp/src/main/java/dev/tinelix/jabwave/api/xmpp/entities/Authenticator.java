@@ -1,6 +1,7 @@
 package dev.tinelix.jabwave.api.xmpp.entities;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
@@ -125,8 +126,10 @@ public class Authenticator extends dev.tinelix.jabwave.api.base.entities.Authent
         if(object instanceof HashMap<?,?> map) {
             String jid = (String) map.get("jid");
             String password = (String) map.get("password");
+
             if(jid != null && password != null) {
                 try {
+                    Log.d("Jabwave", "Authorization with XMPPConnection");
                     conn.login(jid, password);
                     isAuthenticated = true;
                 } catch (Exception e) {

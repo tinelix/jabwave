@@ -3,12 +3,16 @@ package dev.tinelix.jabwave.core.activities.base;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Insets;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
+import android.view.View;
+import android.view.WindowInsets;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,23 +56,37 @@ public class JabwaveActivity extends AppCompatActivity {
         if(styleId != 0) {
             setTheme(styleId);
         }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            switch ((int) themeId) {
-                case 1 -> setStatusBar(R.color.statusBarColor);
-                case 2 -> setStatusBar(R.color.statusBarColorGreen);
-                case 3 -> setStatusBar(R.color.statusBarColorRed);
-                case 4 -> setStatusBar(R.color.statusBarColorViolet);
-                case 5 -> setStatusBar(R.color.statusBarColorOrange);
-                case 6 -> setStatusBar(R.color.statusBarColorTeal);
-                case 7 -> setStatusBar(R.color.statusBarColorOcean);
-                case 8 -> setStatusBar(R.color.statusBarColorNeon);
-            }
+
+        int statusBarColorRes = R.color.statusBarColor;
+
+        switch ((int) themeId) {
+            case 2 -> statusBarColorRes = R.color.statusBarColorGreen;
+            case 3 -> statusBarColorRes = R.color.statusBarColorRed;
+            case 4 -> statusBarColorRes = R.color.statusBarColorViolet;
+            case 5 -> statusBarColorRes = R.color.statusBarColorOrange;
+            case 6 -> statusBarColorRes = R.color.statusBarColorTeal;
+            case 7 -> statusBarColorRes = R.color.statusBarColorOcean;
+            case 8 -> statusBarColorRes = R.color.statusBarColorNeon;
         }
+
+        setStatusBar(getResources().getColor(statusBarColorRes));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setStatusBar(@ColorRes int statusBarColor) {
-        getWindow().setStatusBarColor(getResources().getColor(statusBarColor));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            getWindow().getDecorView().setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsets onApplyWindowInsets(@NonNull View view, @NonNull WindowInsets insets) {
+                    Insets statusBarInsets = insets.getInsets(WindowInsets.Type.statusBars());
+                    view.setBackgroundColor(statusBarColor);
+                    view.setPadding(0, statusBarInsets.top, 0, 0);
+                    return insets;
+                }
+            });
+        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(statusBarColor);
+        }
     }
 
     protected void handleOnBackPressed() {

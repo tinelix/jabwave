@@ -17,6 +17,7 @@
         <item name="colorSecondaryVariant">@color/accentColor</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColor</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="msgrBackgroundColor">@color/messengerBackgroundColor</item>
         <item name="inMsgBubbleBackgroundColor">@color/inMessageColor</item>
@@ -56,6 +57,7 @@
         <item name="colorSecondaryVariant">@color/accentColorGreen</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColorGreen</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="msgrBackgroundColor">@color/messengerBackgroundColorGreen</item>
         <item name="inMsgBubbleBackgroundColor">@color/inMessageColorGreen</item>
@@ -95,6 +97,7 @@
         <item name="colorSecondaryVariant">@color/accentColorRed</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColorRed</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="msgrBackgroundColor">@color/messengerBackgroundColorRed</item>
         <item name="inMsgBubbleBackgroundColor">@color/inMessageColorRed</item>
@@ -134,6 +137,7 @@
         <item name="colorSecondaryVariant">@color/accentColorViolet</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColorViolet</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="msgrBackgroundColor">@color/messengerBackgroundColorViolet</item>
         <item name="inMsgBubbleBackgroundColor">@color/inMessageColorViolet</item>
@@ -173,6 +177,7 @@
         <item name="colorSecondaryVariant">@color/accentColorOrange</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColorOrange</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="msgrBackgroundColor">@color/messengerBackgroundColorOrange</item>
         <item name="inMsgBubbleBackgroundColor">@color/inMessageColorOrange</item>
@@ -212,6 +217,7 @@
         <item name="colorSecondaryVariant">@color/accentColorTeal</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColorTeal</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="msgrBackgroundColor">@color/messengerBackgroundColorTeal</item>
         <item name="inMsgBubbleBackgroundColor">@color/inMessageColorTeal</item>
@@ -251,6 +257,7 @@
         <item name="colorSecondaryVariant">@color/accentColorOcean</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColorOcean</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="msgrBackgroundColor">@color/messengerBackgroundColorOcean</item>
         <item name="inMsgBubbleBackgroundColor">@color/inMessageColorOcean</item>
@@ -290,6 +297,7 @@
         <item name="colorSecondaryVariant">@color/accentColorNeon</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorAccent">@color/accentColorNeon</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="preferenceTheme">@style/ApplicationTheme.Preference</item>
         <item name="msgrBackgroundColor">@color/messengerBackgroundColorNeon</item>
         <item name="inMsgBubbleBackgroundColor">@color/inMessageColorNeon</item>
