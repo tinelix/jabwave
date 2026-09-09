@@ -116,8 +116,14 @@ public class AuthActivity extends AppCompatActivity {
     public void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
         if(Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.TIRAMISU) {
-            registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"), RECEIVER_EXPORTED);
-            registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"), RECEIVER_EXPORTED);
+            registerReceiver(
+                    jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"), RECEIVER_EXPORTED
+            );
+            registerReceiver(
+                    jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"), RECEIVER_EXPORTED
+            );
         } else {
             registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
             registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));

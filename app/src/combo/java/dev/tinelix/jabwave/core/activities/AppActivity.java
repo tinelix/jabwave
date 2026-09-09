@@ -112,25 +112,35 @@ public class AppActivity extends JabwaveActivity
         );
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
-        if(app.getCurrentNetworkType().equals("telegram")) {
-            registerReceiver(
-                    jwReceiver,
-                    new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE")
-            );
-        } else {
-            if(Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.TIRAMISU)
+        if(Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.TIRAMISU) {
+            if (app.getCurrentNetworkType().equals("irc")) {
+                registerReceiver(
+                        jwReceiver,
+                        new IntentFilter("dev.tinelix.jabwave.IRC_RECEIVE"),
+                        RECEIVER_EXPORTED
+                );
+            } else {
                 registerReceiver(
                         jwReceiver,
                         new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"),
                         RECEIVER_EXPORTED
                 );
-            else
+            }
+        } else {
+            if (app.getCurrentNetworkType().equals("irc")) {
+                registerReceiver(
+                        jwReceiver,
+                        new IntentFilter("dev.tinelix.jabwave.IRC_RECEIVE")
+                );
+            } else {
                 registerReceiver(
                         jwReceiver,
                         new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
                 );
+            }
         }
     }
 
@@ -196,10 +206,25 @@ public class AppActivity extends JabwaveActivity
                 Intent intent = new Intent();
                 intent.putExtra("msg_author", msg_author);
                 intent.putExtra("msg_text", msg_text);
-                if(app.getCurrentNetworkType().equals("telegram")) {
-                    intent.setAction("dev.tinelix.jabwave.TELEGRAM_RECEIVE");
+                if(Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.TIRAMISU) {
+                    if (app.getCurrentNetworkType().equals("irc"))
+                        intent.setAction("dev.tinelix.jabwave.IRC_RECEIVE")
+                                .setClassName(
+                                        getPackageName(),
+                                        JabwaveReceiver.class.getPackageName()
+                                );
+                    else
+                        intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE")
+                                .setClassName(
+                                        getPackageName(),
+                                        JabwaveReceiver.class.getPackageName()
+                                );
                 } else {
-                    intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
+                    if (app.getCurrentNetworkType().equals("irc")) {
+                        intent.setAction("dev.tinelix.jabwave.IRC_RECEIVE");
+                    } else {
+                        intent.setAction("dev.tinelix.jabwave.XMPP_RECEIVE");
+                    }
                 }
                 intent.putExtra("msg", HandlerMessages.CHATS_LOADED);
                 sendBroadcast(intent);
@@ -276,7 +301,7 @@ public class AppActivity extends JabwaveActivity
         if(account != null) {
             findViewById(R.id.progress).setVisibility(View.GONE);
             findViewById(R.id.app_fragment).setVisibility(View.VISIBLE);
-            if (app.getCurrentNetworkType().equals("telegram")) {
+            if (app.getCurrentNetworkType().equals("irc")) {
                 profile_name.setText(
                         String.format("%s %s", account.first_name, account.last_name)
                 );

@@ -20,10 +20,10 @@ import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import dev.tinelix.jabwave.JabwaveApp;
-import dev.tinelix.jabwave.core.services.base.ClientService;
 import dev.tinelix.jabwave.api.base.entities.Account;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.models.Chats;
+import dev.tinelix.jabwave.api.base.services.ClientService;
 import dev.tinelix.jabwave.api.xmpp.models.Services;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.net.xmpp.api.XMPPClient;

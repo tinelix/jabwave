@@ -17,7 +17,7 @@ public class AuthTwoFactorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auth_2fa, container, false);
         TextView twofactor_edit = view.findViewById(R.id.twofactor_edit);
-        ((MaterialButton) view.findViewById(R.id.twofactor_confirm_btn)).setOnClickListener(
+        view.findViewById(R.id.twofactor_confirm_btn).setOnClickListener(
                 view12 -> {
                     if (getActivity() != null) {
                         if (getActivity() instanceof AuthActivity) {
@@ -25,7 +25,7 @@ public class AuthTwoFactorFragment extends Fragment {
                         }
                     }
                 });
-        ((MaterialButton) view.findViewById(R.id.twofactor_cancel_btn)).setOnClickListener(
+        view.findViewById(R.id.twofactor_cancel_btn).setOnClickListener(
                 view1 -> {
                     if(getActivity() != null) {
                         getActivity();//((AuthActivity) getActivity()).changeFragment("auth_form");

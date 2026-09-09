@@ -1,4 +1,4 @@
-package dev.tinelix.jabwave.api.xmpp.entities;
+package dev.tinelix.jabwave.net.xmpp.api.entities;
 
 import android.util.Log;
 

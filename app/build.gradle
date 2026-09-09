@@ -16,15 +16,15 @@ def getTDAppToken = {
     /*
          HOW TO STORE TELEGRAM API KEY SAFELY?
 
-         1.  Create file named 'tdlib.prop' in '.signing' directory.
+         1.  Create file named 'irc.prop' in '.signing' directory.
          2.  Generate Base58 hash according to the format of the original string:
              '<api_id>.<api_hash>'
              (without quotation marks)
-         3.  Store 'tdlib.prop' in a place inaccessible to third parties.
+         3.  Store 'irc.prop' in a place inaccessible to third parties.
     */
     Properties tdlib_props = new Properties();
-    if (file('.signing/tdlib.prop').exists()) {
-        tdlib_props.load(new FileInputStream(file(".signing/tdlib.prop")))
+    if (file('.signing/irc.prop').exists()) {
+        tdlib_props.load(new FileInputStream(file(".signing/irc.prop")))
         return "${tdlib_props['APP_TOKEN']}"
     } else {
         return "UNKNOWN.UNKNOWN"
@@ -110,7 +110,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.7.7'
     implementation "androidx.preference:preference-ktx:1.2.1"
 
-    implementation 'com.github.bumptech.glide:glide:5.0.5'
+    implementation 'com.github.bumptech.glide:glide:5.0.9'
     implementation project(path: ':api:base')
     smackImplementation project(path: ':api:xmpp')
     comboImplementation project(path: ':api:xmpp')
