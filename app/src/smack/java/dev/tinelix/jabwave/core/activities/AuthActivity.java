@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,11 +18,14 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -108,12 +112,39 @@ public class AuthActivity extends AppCompatActivity {
         global_prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         xmpp_prefs = getSharedPreferences("xmpp", 0);
         telegram_prefs = getSharedPreferences("telegram", 0);
+
+        getWindow().getDecorView().setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+            @NonNull
+            @Override
+            public WindowInsets onApplyWindowInsets(@NonNull View view, @NonNull WindowInsets insets) {
+                Insets statusBarInsets = insets.getInsets(WindowInsets.Type.statusBars());
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                view.setPadding(0, statusBarInsets.top, 0, 0);
+                return insets;
+            }
+        });
     }
 
     public void registerBroadcastReceiver() {
         jwReceiver = new JabwaveReceiver(this);
-        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"));
-        registerReceiver(jwReceiver, new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"));
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            registerReceiver(jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE"),
+                    RECEIVER_EXPORTED
+            );
+            registerReceiver(jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE"),
+                    RECEIVER_EXPORTED
+            );
+        } else {
+            registerReceiver(jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.XMPP_RECEIVE")
+            );
+            registerReceiver(jwReceiver,
+                    new IntentFilter("dev.tinelix.jabwave.TELEGRAM_RECEIVE")
+            );
+        }
     }
 
     public void unregisterBroadcastReceiver() {
