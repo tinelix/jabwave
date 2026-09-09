@@ -26,9 +26,9 @@ import dev.tinelix.jabwave.api.base.services.ClientService;
 import dev.tinelix.jabwave.api.base.entities.Account;
 import dev.tinelix.jabwave.api.base.listeners.OnClientAPIResultListener;
 import dev.tinelix.jabwave.api.base.models.Chats;
+import dev.tinelix.jabwave.api.xmpp.XMPPClient;
 import dev.tinelix.jabwave.api.xmpp.models.Services;
 import dev.tinelix.jabwave.api.base.enums.HandlerMessages;
-import dev.tinelix.jabwave.api.xmpp.XMPPClient;
 import dev.tinelix.jabwave.api.xmpp.entities.Authenticator;
 import dev.tinelix.jabwave.api.xmpp.models.Roster;
 

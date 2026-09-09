@@ -26,11 +26,11 @@ import dev.tinelix.jabwave.api.base.entities.ServiceEntity;
 import dev.tinelix.jabwave.api.base.listeners.OnClientUpdateListener;
 import dev.tinelix.jabwave.api.base.models.Chats;
 import dev.tinelix.jabwave.api.base.models.NetworkService;
-import dev.tinelix.jabwave.api.xmpp.services.XMPPService;
 import dev.tinelix.jabwave.api.xmpp.XMPPClient;
 import dev.tinelix.jabwave.api.xmpp.entities.Chat;
 import dev.tinelix.jabwave.api.base.models.ChatGroup;
 import dev.tinelix.jabwave.api.xmpp.entities.SuperChat;
+import dev.tinelix.jabwave.api.xmpp.services.XMPPService;
 
 public class Roster extends Chats {
 

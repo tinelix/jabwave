@@ -35,7 +35,7 @@ import dev.tinelix.jabwave.R;
 import dev.tinelix.jabwave.api.base.services.ClientService;
 import dev.tinelix.jabwave.core.fragments.auth.AuthFragment;
 import dev.tinelix.jabwave.core.fragments.auth.AuthProgressFragment;
-import dev.tinelix.jabwave.core.services.XMPPService;
+import dev.tinelix.jabwave.api.xmpp.services.XMPPService;
 import dev.tinelix.jabwave.api.base.SecureStorage;
 import dev.tinelix.jabwave.ui.enums.HandlerMessages;
 import dev.tinelix.jabwave.ui.views.base.XConstraintLayout;
